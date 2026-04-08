@@ -472,3 +472,9 @@ UIコンポーネントとナビゲーションは操作可能でなければな
 - `animate-ui` — アニメーション実装時の prefers-reduced-motion 対応に参照
 - `typeset-ui` — タイポグラフィ設定時のアクセシブルなフォントサイズ・コントラスト確保に参照
 - UIレビュー時のアクセシビリティチェックリストとして使う
+
+**関連リファレンス:**
+- `color-system.md` — コントラスト比・色覚多様性・ダークモードのアクセシビリティ
+- `interaction.md` — フォーカスリング・キーボードナビゲーション・ARIA属性の実装
+- `motion-design.md` — `prefers-reduced-motion` 対応の詳細
+- `typography.md` — フォントサイズ・行間のアクセシビリティ基準

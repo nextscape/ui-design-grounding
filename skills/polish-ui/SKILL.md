@@ -9,14 +9,18 @@ argument-hint: "[対象 (画面、コンポーネント、機能...)]"
 
 ## 準備（MANDATORY PREPARATION）
 
-ui-design-grounding スキルを呼び出し、必要に応じて全リファレンスを参照する。
-特に以下を優先的に読み込む:
+ui-design-grounding スキルを呼び出し、以下のリファレンスを読み込む:
 
 - `ui-design-grounding/reference/interaction.md`
 - `ui-design-grounding/reference/typography.md`
 - `ui-design-grounding/reference/color-system.md`
 - `ui-design-grounding/reference/spatial-layout.md`
 - `ui-design-grounding/reference/anti-patterns.md`
+- `ui-design-grounding/reference/accessibility.md`
+- `ui-design-grounding/reference/responsive-design.md`
+- `ui-design-grounding/reference/wording.md`
+- `ui-design-grounding/reference/design-tokens.md`
+- `ui-design-grounding/reference/motion-design.md`
 
 ## 注意
 

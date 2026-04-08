@@ -348,5 +348,9 @@ const observer = new IntersectionObserver(
 - `implement-ui` — UI実装時のモーション・トランジション実装に参照
 - `boost-ui` — 視覚的インパクト強化時のモーション演出に参照
 - `calm-ui` — 視覚的ノイズ軽減時のアニメーション抑制・prefers-reduced-motion 対応に参照
-- `reference/interaction.md` のフィードバック設計時にも参照する（インタラクション状態のトランジション設計）
 - デュレーションとイージングの選定時にデフォルト値として参照する
+
+**関連リファレンス:**
+- `interaction.md` — 8つのインタラクティブ状態のフィードバック設計
+- `accessibility.md` — `prefers-reduced-motion` 対応の詳細基準
+- `anti-patterns.md` — バウンス/エラスティック・レイアウトプロパティアニメーション等のモーションアンチパターン

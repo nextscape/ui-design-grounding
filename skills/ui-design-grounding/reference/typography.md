@@ -453,5 +453,8 @@ h1 { font-size: 32px; }
 - `calm-ui` — 視覚的ノイズ軽減時のタイポグラフィ簡素化に参照
 - `score-ui` — UI品質スコアリングのタイポグラフィ評価時に参照
 - `arrange-ui` — レイアウト調整時の垂直リズム・行長設計に参照
-- カラー設計との関連は `reference/color-system.md` を併せて参照する
-- アクセシビリティの詳細は `reference/accessibility.md` を併せて参照する
+**関連リファレンス:**
+- `color-system.md` — テキスト色・コントラスト比・ダークモードでのウェイト調整
+- `accessibility.md` — フォントサイズ・行間のアクセシビリティ基準
+- `spatial-layout.md` — 垂直リズムとグリッドシステムとの連携
+- `anti-patterns.md` — 使い古されたフォント・モノスペース安易使用等のアンチパターン

@@ -1,10 +1,10 @@
 {
   "name": "ui-design-grounding",
-  "description": "UI/UXの設計・実装における判断軸と知識ベースを提供するプラグイン。設計、監査、スコアリング、最適化など18のスキルを含む。",
+  "description": "UI/UXの設計・実装における判断軸と知識ベースを提供するプラグイン。ナレッジベース1件と17件のコマンドスキルで構成。",
   "version": "1.0.0",
   "author": {
     "name": "Nextscape Inc."
   },
-  "repository": "https://github.com/nextscape/ns-plugins",
+  "repository": "https://github.com/nextscape/ui-design-grounding",
   "license": "MIT"
 }
