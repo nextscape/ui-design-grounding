@@ -274,6 +274,8 @@ DESIGN.md の有無で動作が分岐する:
 - Button padding: ??px ??px
 - Card internal padding: ??px
 - Section vertical spacing: ??px〜??px
+- Small control min padding: ??px ??px（タグ・バッジ等の小コントロール最小値）
+- Control group min gap: ??px（隣接コントロール間の最小間隔）
 
 ### Grid & Container
 - Max container width: ??px
@@ -426,6 +428,7 @@ UI生成・修正時は DESIGN.md の値のみを使用すること。
 - [ ] **Section 2** の各色が `**セマンティック名** (\`#hex\`): 説明` 形式で記述されている
 - [ ] **Section 3** に Markdown テーブル（Hierarchy）と Principles サブセクションがある
 - [ ] **Section 4** の各コンポーネントバリアントが CSS 値リスト（Background / Text / Padding / Radius 等）を持つ
+- [ ] **Section 5** に Small control min padding と Control group min gap が含まれている
 - [ ] **Section 5** に Border Radius Scale と Whitespace Philosophy がある
 - [ ] **Section 6** が Markdown テーブルで、Shadow Philosophy の叙述がある
 - [ ] **Section 7** の各 Do/Don't にインライン値と理由がある
