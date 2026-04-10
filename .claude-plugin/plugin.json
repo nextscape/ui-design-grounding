@@ -1,7 +1,7 @@
 {
   "name": "ui-design-grounding",
   "description": "UI/UXの設計・実装における判断軸と知識ベースを提供するプラグイン。ナレッジベース1件と17件のコマンドスキルで構成。",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": {
     "name": "Nextscape Inc."
   },
