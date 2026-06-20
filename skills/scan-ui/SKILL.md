@@ -45,7 +45,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 | フラグ | 取得内容 | 取得方法 |
 |--------|---------|---------|
 | `--motion` | ランタイムアニメーションの choreography（duration / easing / iterations） | `document.getAnimations()` を別パスで集計 |
-| `--interactions` | hover / focus / active の状態差分（色・transform・shadow の delta） | 代表要素を `browser_hover`/`focus` してから再評価し静止状態と差分 |
+| `--interactions` | hover / focus / active の状態差分（色・transform・shadow の delta） | 代表要素を `browser_hover`、focus は `browser_press_key`（Tab）でフォーカスしてから再評価し静止状態と差分 |
 | `--dark` | ダークモード変種パレット | `prefers-color-scheme: dark` をエミュレート（or サイトのダークトグル）して再抽出し light と対にする |
 | `--responsive` | ブレイクポイントごとのレイアウト変形 | ビューポートを 320 / 768 / 1024 / 1280px にリサイズして再抽出し差分を記録 |
 
@@ -161,10 +161,13 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 
 ### 追加パス: インタラクション状態差分（`--interactions`）
 
-代表的なインタラクティブ要素（CTA ボタン・カード・リンク）について、静止状態を記録 → `browser_hover`/`focus` で状態遷移 → 再評価して **delta**（背景色・文字色・transform・shadow の変化）を抽出する。:hover は JS で合成できないため、必ず実際のポインタ操作（MCP: `browser_hover` / CLI: `locator.hover()`）を挟む。
+代表的なインタラクティブ要素（CTA ボタン・カード・リンク）について、静止状態を記録 → hover/focus で状態遷移 → 再評価して **delta**（背景色・文字色・transform・shadow の変化）を抽出する。:hover は JS で合成できないため、必ず実際のポインタ操作（MCP: `browser_hover` / CLI: `locator.hover()`）を挟む。focus は MCP では `browser_press_key`（Tab）、CLI では `locator.focus()` で当てる。
+
+> セレクタの埋め込み方は手段で異なる。MCP の `browser_evaluate` は任意文字列引数を素直に渡せないため、関数内にセレクタを直書きするか対象要素 ref を渡す。CLI は `page.evaluate(fn, selector)` で引数を渡せる。
 
 ```js
 // 状態スナップショット（静止/hover/focus それぞれで呼び、差分をとる）
+// MCP では SELECTOR を直書き、CLI では (selector) 引数で受ける
 (selector) => {
   const el = document.querySelector(selector);
   if (!el) return null;
@@ -181,6 +184,8 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - **レスポンシブ**: ビューポートを 320 / 768 / 1024 / 1280px に順次リサイズ（MCP: `browser_resize` / CLI: `page.setViewportSize()`）し、各幅で単一パススニペットを再実行。レイアウト・余白・表示要素の差分から**ブレイクポイント**と変形ルールを推定する。
 
 ### CLI スクリプト雛形（フォールバック時）
+
+この雛形は再実行できる成果物として dark / responsive / motion を**無条件で全取得**する（MCP 経路のようにフラグで重ねない）。不要なパスは削ってよい。`--interactions`（hover/focus delta）は要素特定が要るため雛形では省略 — 必要なら対象セレクタごとに `locator.hover()`/`locator.focus()` → 上記「状態スナップショット」関数を `page.evaluate(fn, selector)` で前後評価して差分を足す。
 
 ```js
 // scan-extract.js — node scan-extract.js <url> [url2 ...]
@@ -254,7 +259,7 @@ const VIEWPORTS = [320, 768, 1024, 1280];
 - シャドウ＋z-index → `## Elevation & Depth`
 - 角丸 → `## Shapes`
 - 状態差分 → `## Components`（front matter `components` の `-hover` 等）
-- ランタイムモーション → 末尾の追加セクション `## Motion`（spec の「順序の最後に置けば保持される」に従う）
+- 静的トランジション（単一パスの `transitionDuration`）＋ランタイムモーション → 末尾の追加セクション `## Motion`（spec の「順序の最後に置けば保持される」に従う）
 
 全色を sRGB 変換し WCAG コントラストを検証する。
 
@@ -310,6 +315,7 @@ DESIGN.md 本体は `reference/design-md-spec.md` のフォーマットに従っ
 - **:hover を JS で合成しない**: `el.matches(':hover')` や疑似的なクラス付与では実際の hover スタイルは取れない。必ず実ポインタ操作（`browser_hover`/`locator.hover()`）を挟んでから再評価する。
 - **ランタイムモーションのタイミング**: エントランスアニメは初回ロード時に終わっていることが多い。`getAnimations()` は遷移直後・スクロール後に取ると拾える。
 - **gap と padding の混在**: 単一パスでは両方を `spacing` に集約している。ベースユニット推定時はレイアウト用 gap と内部 padding を分けて見る。
+- **shadow DOM / iframe は辿らない**: `querySelectorAll('body *')` は Web Components の shadow DOM 内や iframe 内の要素を走査しない。これらを多用するサイトではトークンを取りこぼすため、スクショ目視や個別の shadowRoot 走査で補う。
 
 ## 推奨される次のステップ
 
