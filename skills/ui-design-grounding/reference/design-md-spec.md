@@ -253,7 +253,7 @@ DESIGN.md を読み書きするスキルから参照される:
 - `audit-ui` — 準拠率・トークン整合を確認する際の正規定義
 - `polish-ui` — リリース前チェックで DESIGN.md と実装の整合を確認する際の参照
 - `scan-ui` — 外部 URL を分析して DESIGN.md を生成する際の出力契約
-- `recolor-ui` — `colors` front matter を再配色する際の書式・`{}` 参照構文
+- `recolor-ui` — `colors` front matter を再配色する際の書式
 
 **関連リファレンス:**
 - `design-tokens.md` — トークンの階層構造・命名・段階導入の理論（2層トークンの「なぜ」）

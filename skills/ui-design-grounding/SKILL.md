@@ -125,7 +125,7 @@ UI設計・実装の判断は、明示／暗黙いずれかのルールや前提
 
 - `design-system.md` — コンポーネント設計、Atomic Design、バリアント
 - `design-tokens.md` — Primitive/Semantic/Component トークン、命名、段階的導入
-- `design-md-spec.md` — DESIGN.md のフォーマット仕様・設計思想（front matter／本文8セクション／`{}` 参照構文）
+- `design-md-spec.md` — DESIGN.md のフォーマット仕様・設計思想（front matter／本文8セクション）
 - `implementation.md` — コンポーネント粒度、責務分離、UI状態管理
 
 ### 品質

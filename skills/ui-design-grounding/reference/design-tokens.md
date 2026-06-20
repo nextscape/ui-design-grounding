@@ -109,5 +109,5 @@ CSS へのレンダリング規則：役割名をそのまま変数化する（`
 **関連リファレンス:**
 - `color-system.md` — 色のセマンティックトークン設計・ダークモード対応
 - `design-system.md` — デザインシステム全体の構成とトークンの位置づけ
-- `design-md-spec.md` — DESIGN.md における2層トークンの具体的な書式（front matter / `{}` 参照構文）
+- `design-md-spec.md` — DESIGN.md における2層トークンの具体的な書式
 - `spatial-layout.md` — スペーシングトークンのグリッドシステムとの連携

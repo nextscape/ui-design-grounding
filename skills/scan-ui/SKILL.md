@@ -22,8 +22,8 @@ argument-hint: "[URL] [--site（サイト全体クロール）]"
 
 ui-design-grounding スキルを呼び出し、以下のリファレンスを読み込む:
 
-- `ui-design-grounding/reference/design-md-spec.md` — **出力契約（必須）**: front matter 構造・`{}` 参照構文・CLI 処理規則・本文8セクション
-- `ui-design-grounding/reference/design-tokens.md` — 2層トークン理論・役割語彙（Material 3 系）
+- `ui-design-grounding/reference/design-md-spec.md`
+- `ui-design-grounding/reference/design-tokens.md`
 - `ui-design-grounding/reference/color-system.md`
 - `ui-design-grounding/reference/typography.md`
 - `ui-design-grounding/reference/spatial-layout.md`
