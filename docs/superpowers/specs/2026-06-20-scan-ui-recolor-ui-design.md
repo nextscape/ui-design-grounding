@@ -26,7 +26,7 @@ designlang はヘッドレスブラウザを任意の URL に向け、生きた 
 | **`scan-ui`（新規）** | **外部の生きたサイト(URL)** | **DESIGN.md** | 他サイトのデザイン言語を逆算・参照 |
 | **`recolor-ui`（新規）** | 自分の DESIGN.md / CSS トークン | 再配色後のトークン（+本文 Colors 更新） | 既存パレットを別 primary で塗り替え |
 
-- `scan-ui` の出力は `init-design` の「モードC（リバース生成）」と同一フォーマットの DESIGN.md。違いは**ソースが外部 URL かつ分析手段が Playwright** という点のみ。DESIGN.md のフォーマット仕様は `init-design` を**参照**し二重定義しない。
+- `scan-ui` の出力は `init-design` の「モードC（リバース生成）」と同一フォーマットの DESIGN.md。違いは**ソースが外部 URL かつ分析手段が Playwright** という点のみ。DESIGN.md のフォーマット仕様は単一情報源 `reference/design-md-spec.md`（front matter 構造・`{}` 参照構文・CLI 処理規則・本文8セクション）を**参照**し二重定義しない。
 - `extract-ui` と統合しない（入力＝ファイル vs ブラウザ、出力＝移行計画 vs DESIGN.md、意図が異なる）。
 
 ## スキル1: `scan-ui`
@@ -79,8 +79,9 @@ argument-hint: "[URL] [--site（サイト全体クロール）]"
 
 ### 準備（MANDATORY PREPARATION）
 
-`init-design` 同様、ui-design-grounding のリファレンスを読み込む:
-- `color-system.md` / `typography.md` / `spatial-layout.md` / `design-tokens.md` / `interaction.md` / `motion.md` / `anti-patterns.md`
+ui-design-grounding のリファレンスを読み込む:
+- **`design-md-spec.md`（出力契約＝必須）** — DESIGN.md の front matter 構造・`{}` 参照構文・CLI 処理規則・本文8セクションの正規定義。
+- `design-tokens.md`（2層トークン理論・役割語彙）/ `color-system.md` / `typography.md` / `spatial-layout.md` / `interaction.md` / `motion.md` / `anti-patterns.md`
 
 ### 推奨される次のステップ
 
@@ -126,7 +127,7 @@ argument-hint: "[--primary <hex/oklch>] [対象 DESIGN.md / トークン]"
 
 ### 準備（MANDATORY PREPARATION）
 
-- `color-system.md` / `design-tokens.md`
+- `color-system.md` / `design-tokens.md` / `design-md-spec.md`（front matter `colors` の書式・`{}` 参照構文を踏襲するため）
 
 ### 推奨される次のステップ
 
@@ -142,8 +143,9 @@ argument-hint: "[--primary <hex/oklch>] [対象 DESIGN.md / トークン]"
 2. **`skills/ui-help/SKILL.md`** — コマンド一覧に2件追加。
 3. **`skills/ui-design-grounding/SKILL.md`** — コマンドスキル数の記載があれば更新。`extract-ui` / `init-design` の説明に scan-ui との相互参照を追記。
 4. **`extract-ui` / `init-design` の description** — 相互参照の一文を追記（混同防止）。
-5. **`.claude-plugin/plugin.json`** — バージョン更新（運用に従う）。
-6. **`README.md`** — スキル一覧・件数の更新。
+5. **`skills/ui-design-grounding/reference/design-md-spec.md`** — 末尾「このreferenceの使い方」の利用者リストに `scan-ui`（外部URL→DESIGN.md 生成）と `recolor-ui`（colors front matter の再配色）を追記。
+6. **`.claude-plugin/plugin.json`** — バージョン更新（運用に従う）。
+7. **`README.md`** — スキル一覧・件数の更新。
 
 ## 非目標（YAGNI）
 
