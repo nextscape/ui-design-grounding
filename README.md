@@ -57,7 +57,7 @@ skills/
 |---------|-----------|---------------|
 | `/design-ui` | 要件からUI構造・画面設計を整理 | UX目的の明文化、画面遷移フロー設計、UI状態マトリックス（初期/ローディング/成功/エラー/空）、情報階層とナビゲーション設計。見た目ではなく「構造と考え方」に専念 |
 | `/implement-ui` | デザインを実装構造に翻訳 | Atomic Design（Atoms→Molecules→Organisms）でコンポーネント分解、責務整理（表示/ロジック/データ）、5状態マトリックス、既存資産の再利用判定 |
-| `/init-design` | DESIGN.md を生成・更新 | Google Stitch / getdesign.md 互換の9セクション構成。既存CSS・トークンからの自動抽出に対応。AIエージェントが直接参照可能なインライン具体値（hex, px, shadow値）で記述 |
+| `/init-design` | DESIGN.md を生成・更新 | google-labs-code/design.md 仕様（alpha）準拠。YAML front matter の機械可読トークン（colors/typography/rounded/spacing/components）+ 8セクションの散文。`{colors.primary}` 参照構文・既存CSS/トークンからの自動抽出に対応 |
 
 ### 評価
 

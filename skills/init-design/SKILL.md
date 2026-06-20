@@ -1,6 +1,6 @@
 ---
 name: init-design
-description: プロジェクトルートにDESIGN.mdを作成・更新する。既存コード・CSS・デザイントークンを分析し、Google Stitch / getdesign.md 互換の9セクション構成（Visual Theme, Color Palette, Typography, Components, Layout, Elevation, Do's/Don'ts, Responsive, Agent Prompt Guide）でデザインシステムドキュメントを生成する。各セクションはAIエージェントが直接参照して実装に使えるレベルの具体値（hex, px, CSS shadow値等）をインラインで含む。DESIGN.md作成・デザインシステム定義・ガイドライン策定・デザイントークン整理・ブランド定義を依頼されたときに使用する。デザインガイドラインが不明確な場合にも使用する。
+description: プロジェクトルートに DESIGN.md（リポジトリの視覚的アイデンティティ定義）を作成・更新する。google-labs-code/design.md 仕様に準拠し、YAML front matter の機械可読デザイントークン（色・タイポグラフィ・余白・コンポーネント）と散文のデザイン指針を、既存コード・CSS・トークンの分析から生成する。DESIGN.md作成・デザインシステム定義・ガイドライン策定・デザイントークン整理・ブランド定義を依頼されたとき、またデザインガイドラインが不明確なときに使用する。
 user-invocable: true
 argument-hint: "[プロダクト情報、既存デザイン、ブランド方針...]"
 ---
@@ -11,460 +11,341 @@ argument-hint: "[プロダクト情報、既存デザイン、ブランド方針
 
 プロジェクトルートに **DESIGN.md** を作成・メンテナンスする。
 
-DESIGN.md は「リポジトリの見た目の憲法」であり、AI エージェント（Claude Code, Cursor, Copilot 等）がスキル呼び出しなしで自動参照できるデザインシステムドキュメントである。
+DESIGN.md は「リポジトリの視覚的アイデンティティの憲法」であり、AI コーディングエージェント（Claude Code, Cursor, Copilot 等）がスキル呼び出しなしで自動参照できるデザインシステム文書である。**google-labs-code/design.md** フォーマット（`version: alpha`）に準拠する。
+
+**二層構造**:
+- **YAML front matter** — 機械可読のデザイントークン（`colors` / `typography` / `rounded` / `spacing` / `components`）。コントラスト検証や自動処理の対象。
+- **Markdown 本文** — 人間（とエージェント）が読むデザインの根拠・適用指針。8セクション固定。
 
 **DESIGN.md の価値**:
-- **ツール横断**: 特定のAIツールに依存しない（Markdown 1枚でどのエージェントも参照可能）
+- **ツール横断**: 特定の AI ツールに依存しない（Markdown 1枚でどのエージェントも参照可能）
 - **自動参照**: プロジェクトルートに置くだけでエージェントが読み込む
-- **プロンプト削減**: デザイン指示をプロンプトに毎回書く必要がなくなる（最大70%削減）
-- **一元管理**: デザインの正規値を1ファイルに集約、Git で履歴追跡可能
+- **プロンプト削減**: デザイン指示を毎回書く必要がなくなる
+- **一元管理**: トークンの正規値を1ファイルに集約、Git で履歴追跡可能
 
-**DESIGN.md の位置づけ**:
-- DESIGN.md は「判断に迷ったときに立ち戻るための軸」と「具体的なデザイン値」の両方を1ファイルに統合したもの
-- 見た目の具体値（色コード、フォントサイズ等）はここに集約する
-- コンポーネント一覧やレイアウトの細則も DESIGN.md に含める
-- 厚くしすぎないこと: 10分以内に全体を読める分量が目安
+厚くしすぎないこと。10分以内に全体を読める分量が目安。
+
+## 設計思想（design.md の哲学）
+
+**重要 — design.md は具体値の網羅よりも散文の質を最優先する。**
+
+- **散文 > 精密な値**: 生成される UI の品質は、値の精度より「意図がどれだけ明確に記述されているか」で決まる。
+- **具体的な参照 > 汎用形容詞**: 「モダンでクリーン、信頼感」より「1970年代の大学講義ハンドアウト」のような**具体的な参照**のほうが情報量を持つ。本文には固有名詞・質感・比喩を盛り込む。
+- **強い参照は禁止事項を内包する**: 講義ハンドアウトには gradient も glow もヒーローも存在しない。禁止リストを延々と並べるより、鮮明な参照を1つ置くほうが設計空間を自然に制約する。
+- **トークンは指示でなく文脈**: front matter の値は人間理解のための参照点であって、硬直したレンダリング命令ではない。`why`（本文）が `what`（トークン）を導く。
 
 ## 準備（MANDATORY PREPARATION）
 
 ui-design-grounding スキルを呼び出し、以下のリファレンスを読み込む:
 
+- `ui-design-grounding/reference/design-tokens.md`
 - `ui-design-grounding/reference/color-system.md`
 - `ui-design-grounding/reference/typography.md`
 - `ui-design-grounding/reference/spatial-layout.md`
 - `ui-design-grounding/reference/interaction.md`
 - `ui-design-grounding/reference/responsive-design.md`
 - `ui-design-grounding/reference/anti-patterns.md`
-- `ui-design-grounding/reference/design-tokens.md`
+
+## フォーマット仕様
+
+### YAML front matter
+
+```yaml
+---
+version: alpha          # 任意（現行は "alpha"）
+name: <string>          # 必須 — デザインシステム名
+description: <string>   # 任意
+
+colors:                 # 2層構造（primitive → semantic）を標準とする
+  # --- Tier 1: primitive（原色パレット） --- 単一の源色を literal で定義。ヒュー×階調で命名
+  blue-400: "#7c9eff"   # hex / 名前付き / rgb() / hsl() / oklch() 等。内部で sRGB 変換し WCAG コントラスト検証
+  ink-900: "#0a0e1a"
+  neutral-0: "#0e1018"
+  neutral-900: "#e6e8f0"
+  # ramp は使う範囲だけ定義（例 blue-50..900 / neutral-0..1000）。M3 流の tonal 命名 primary-40 等も可
+  # --- Tier 2: semantic（役割） --- primitive を {} で参照する（重複なし＝単一情報源）。参照先は leaf の primitive（group 不可）
+  primary: "{colors.blue-400}"        # primary は最低限必須
+  on-primary: "{colors.ink-900}"
+  surface: "{colors.neutral-0}"
+  on-surface: "{colors.neutral-900}"
+  # semantic 命名は Material 3 系を推奨: primary / on-primary / primary-container / on-primary-container /
+  #   secondary… / tertiary… / error… / surface / surface-container(-low/-high…) /
+  #   on-surface / on-surface-variant / outline / outline-variant / background / on-background
+  # components 層は semantic を {colors.primary} で参照する
+
+typography:             # 9〜15 レベル推奨。命名は headline-* / body-* / label-*（xl/lg/md/sm）
+  <token>:
+    fontFamily: <string>
+    fontSize: <dimension>          # px / rem / em
+    fontWeight: <number>           # "400" / "700" 等
+    lineHeight: <dimension|number> # 寸法 or 無単位倍率
+    letterSpacing: <dimension>     # 例 -0.02em
+    fontFeature: <string>          # 任意 — OpenType feature
+    fontVariation: <string>        # 任意 — variable font 設定
+
+rounded:                # 角丸スケール
+  sm: <dimension>
+  DEFAULT: <dimension>
+  md: <dimension>
+  lg: <dimension>
+  xl: <dimension>
+  full: 9999px
+
+spacing:                # 余白・寸法スケール
+  unit: <dimension>           # ベースユニット（例 8px）
+  container-max: <dimension>
+  gutter: <dimension>
+  margin-mobile: <dimension>
+  margin-desktop: <dimension>
+
+components:             # アトムのスタイル。バリアントは <name>-<variant> キーで表現
+  <component-name>:
+    backgroundColor: <color | {参照}>
+    textColor: <color | {参照}>
+    typography: "{typography.<token>}"
+    rounded: "{rounded.<level>}"
+    padding: <dimension>
+    height: <dimension>        # size / width も可
+  <component-name>-hover:      # 状態違いは別キー（例 button-primary / button-primary-hover）
+    backgroundColor: <color | {参照}>
+---
+```
+
+**トークン参照構文**: 値の重複を避けるため、波括弧 + ドット記法で他トークンを参照する。例: `{colors.primary}` / `{typography.label-md}` / `{rounded.lg}` / `{spacing.gutter}`。`colors` を含むどのグループの値でも使える（color の semantic → primitive 参照も可）。参照先は **leaf のトークン**であること（`colors` のようなグループ自体は指せない）。
+
+**処理規則（CLI 検証の挙動）**:
+- 未知セクション・未知トークン名は、値が妥当なら**保持**される（拡張可能）
+- **重複見出しはエラー**になる
+- 未知のコンポーネントプロパティは**警告付きで許容**
+- 色は全て sRGB に変換され WCAG コントラスト検証の対象になる
+
+### 本文8セクション（順序固定）
+
+`##` 見出しで以下の順に記述する。各セクションは**散文中心**で、上の哲学に従い具体的な参照・質感を込める。
+
+| # | セクション | 内容 |
+|---|-----------|------|
+| 1 | **Overview** | ブランドの人格・ターゲット・UI が喚起すべき感情。look & feel の全体像。**具体的な参照**で世界観を1〜2段落。 |
+| 2 | **Colors** | カラーパレットと各ロールの意味。最低限 primary を定義。どの primitive をどの semantic ロールに割り当てたかの意図と、60-30-10 や明暗の物語を散文で。 |
+| 3 | **Typography** | タイポグラフィレベル（9〜15）。フォント選定理由、ウェイト・字間の使い分け方針。 |
+| 4 | **Layout** | グリッドモデルと余白戦略。ベースユニット、コンテナ幅、グルーピング原則。**レスポンシブのブレイクポイント・モバイル/デスクトップの変形もここに統合**する。 |
+| 5 | **Elevation & Depth** | 視覚階層の表現方法。ドロップシャドウか、ボーダー／色コントラスト／glassmorphism 等の代替か。 |
+| 6 | **Shapes** | 角丸の方針。どのコンポーネントにどのスケールを当てるか、形の言語。 |
+| 7 | **Components** | アトム（buttons, inputs, chips, lists, tooltips, checkboxes, radios 等）のスタイル指針。front matter の `components` を散文で補足する。 |
+| 8 | **Do's and Don'ts** | 実践的な指針と典型的な落とし穴。設計時のガードレール。**タッチターゲット最小44px 等のレスポンシブ・アクセシビリティ要件もここに**。 |
+
+> 本文の見出しは canonical 名（上記）を推奨。プロダクト固有の追加セクション（`## Motion` 等）は順序の最後に置けば保持される。
 
 ## 動作モード
 
-DESIGN.md の有無で動作が分岐する:
+DESIGN.md の有無で分岐する:
 
-### A. 新規作成モード（DESIGN.md が存在しない）
-
-1. **入力の収集**
-2. **既存コードの分析**
-3. **DESIGN.md の生成**（9セクション構成）
-4. **assets/ ディレクトリの整備**（必要に応じて）
-
-### B. 更新モード（DESIGN.md が既に存在する）
-
-1. **既存 DESIGN.md の読み込み**
-2. **変更要求の把握**
-3. **差分更新**（既存セクションの値更新、新セクション追加等）
-4. **整合性の検証**
-
-### C. 抽出モード（既存プロジェクトからリバース生成）
-
-1. **既存 CSS / トークン / コンポーネントの分析**
-2. **デザイン値の抽出**（色、フォント、余白、シャドウ等）
-3. **DESIGN.md の生成**（抽出値をベースに）
+- **A. 新規作成** — DESIGN.md が存在しない。入力収集 → 既存コード分析 → 生成。
+- **B. 更新** — 既存 DESIGN.md を読み込み、差分更新。front matter のトークンと本文の整合を保つ。
+- **C. 抽出（リバース生成）** — 既存 CSS / トークン / コンポーネントを分析し、値を front matter に、根拠を本文に起こす。
 
 ## 手順（新規作成）
 
 ### Step 1: 入力の収集
 
-以下を確認する（不明な場合は仮置き + 明示）:
-
-- プロダクトの性質（toB / toC / 社内ツール）
-- ブランドの視覚的基調（モダン、クリーン、遊び心等）
-- 主な利用者の特性
-- 既存のデザイン資産（Figma、CSS、コンポーネントライブラリ等）
-- 制約（技術スタック、既存UIとの整合性等）
+不明な点は仮置き + 明示。
+- プロダクトの性質（toB / toC / 社内）・ターゲット・喚起したい感情
+- ブランドの視覚的基調 — **具体的な参照**を引き出す（「何に似ているか」を1つ）
+- 既存デザイン資産（Figma、CSS、コンポーネントライブラリ）・技術制約
 
 ### Step 2: 既存コードの分析
 
-プロジェクト内の以下を走査する:
+- CSS / SCSS / Tailwind 設定 — 色、フォント、余白、シャドウ、角丸
+- デザイントークンファイル・テーマ定義
+- コンポーネント実装 — ボタン、カード、入力等のスタイルパターン
+- package.json — フォント依存、UI フレームワーク
 
-- CSS / SCSS / Tailwind 設定 — 色定義、フォント、余白、シャドウ
-- デザイントークンファイル — 変数定義、テーマ設定
-- コンポーネント実装 — ボタン、カード、フォーム等のスタイルパターン
-- package.json — フォント依存、UIフレームワーク
+### Step 3: front matter（トークン）の構築
 
-### Step 3: DESIGN.md の生成
+抽出・決定した値を `colors` / `typography` / `rounded` / `spacing` / `components` に落とす。
+- `colors`: **primitive → semantic の2層**で構成する。primitive（`blue-400` 等のパレット）を literal で定義し、semantic（`primary` `on-primary` `surface` `on-surface` …）は `{colors.blue-400}` のように **primitive を `{}` 参照**する（値の重複なし＝単一情報源）。参照先は leaf の primitive とし `colors` グループ自体は指さない。primary は最低限必須、Material 3 系命名で on-color ペアを揃える
+- `typography`: 9〜15 レベル
+- `components`: 値は `{参照}` で semantic（必要なら primitive）トークンを指す
 
-以下の **9セクション構成** で生成する。各セクションには **記述フォーマット指示** と **出力例** を示す。生成時はこのフォーマットに従うこと。
+### Step 4: 本文8セクションの記述
 
-> **重要**: DESIGN.md は AI エージェントが**直接参照して実装に使える**レベルの具体性を持つ必要がある。「色を統一する」のような抽象記述ではなく、「`#c96442` をプライマリCTAに使用する」のように**常に具体値をインラインで記載**すること。
+哲学に従い**散文中心**で記述する。汎用形容詞を避け、具体的な参照・質感・比喩を込める。レスポンシブ観点は Layout / Do's and Don'ts に統合する。
 
-```markdown
-# DESIGN.md
-
-## 1. Visual Theme & Atmosphere（視覚テーマと雰囲気）
-
-<!-- 記述フォーマット:
-  - 2〜3段落の**叙述的な散文**でデザインの人格・世界観を描写する
-  - 段落内にインラインで具体値（hex等）を `backtick` で埋め込む
-  - 末尾に **Key Characteristics:** として箇条書きサマリーを付ける
-  - 設計判断の優先順位・トレードオフの考え方もここに含める
--->
-
-[プロダクト名]のインターフェースは……（散文形式で、ムード・密度・設計哲学を描写する。
-具体的な色値 `#hex` やフォント名、余白の感覚をインラインで織り込む。
-「どんな空間にいるか」を読み手にイメージさせる書き方をする。）
-
-（第2段落で、他との差別化ポイント、特徴的な設計判断を記述する。
-設計判断の優先順位やトレードオフの考え方もここで触れる。）
-
-**Key Characteristics:**
-- 特徴1 — 具体値をインラインで含める（例: 暖色系キャンバス `#f5f4ed`）
-- 特徴2 — フォント・タイポグラフィの方針（例: カスタムセリフ weight 500）
-- 特徴3 — ブランドアクセント色の位置づけ（例: テラコッタ `#c96442` — CTA限定）
-- 特徴4 — ニュートラル色の方針（例: 全グレーに黄褐色のアンダートーン）
-- 特徴5 — シャドウ・深度の方針（例: ring-based shadow `0px 0px 0px 1px`）
-- 特徴6 — 全体的な角丸・密度の方針
-
-## 2. Color Palette & Roles（カラーパレットと役割）
-
-<!-- 記述フォーマット:
-  - カテゴリ別にサブ見出し（### Primary、### Surface & Background 等）で分割
-  - 各色は以下の形式で記述:
-    **セマンティック名** (`#hex`): 用途・役割の説明文。CSS変数名がある場合は併記。
-  - カテゴリ: Primary / Secondary & Accent / Surface & Background / Neutrals & Text / Semantic / Borders / Gradient System
-  - 60-30-10 の配色比率に言及する
-  - ダークモード対応がある場合はライト/ダーク両方の値を記載
--->
-
-### Primary
-- **[ブランド名]** (`#hex`): 主要ブランドカラー。CTAボタン、ブランドアクセントに使用。
-- **[Near Black]** (`#hex`): プライマリテキスト色。純粋な黒ではなく……
-
-### Secondary & Accent
-- **[色名]** (`#hex`): 用途の説明。
-
-### Surface & Background
-- **[Canvas]** (`#hex`): ページ背景。……の印象を与える。
-- **[Card Surface]** (`#hex`): カード・コンテナの背景。
-- **[Dark Surface]** (`#hex`): ダークテーマ時のコンテナ背景。
-
-### Neutrals & Text
-- **[色名]** (`#hex`): プライマリテキスト。
-- **[色名]** (`#hex`): セカンダリテキスト。
-- **[色名]** (`#hex`): ターシャリテキスト、メタデータ。
-
-### Semantic
-- **Success** (`#hex`): 成功状態。
-- **Warning** (`#hex`): 警告状態。
-- **Error** (`#hex`): エラー状態。
-- **Info** (`#hex`): 情報提示。
-
-### Borders
-- **[Border Light]** (`#hex`): ライトテーマ標準ボーダー。
-- **[Border Dark]** (`#hex`): ダークテーマ標準ボーダー。
-
-### Gradient System
-グラデーションの方針（使わない場合は「グラデーション不使用」と明記）。
-
-## 3. Typography Rules（タイポグラフィ規則）
-
-<!-- 記述フォーマット:
-  - ### Font Family でフォールバック付きで定義
-  - ### Hierarchy で Markdown テーブルを使用（下記カラム）
-  - ### Principles で設計意図を叙述的に説明
--->
-
-### Font Family
-- **Headline**: `[フォント名]`, fallback: `[フォールバック]`
-- **Body / UI**: `[フォント名]`, fallback: `[フォールバック]`
-- **Code**: `[フォント名]`, fallback: `[フォールバック]`
-- **日本語**: `[フォント名]`, fallback: `[フォールバック]`（該当する場合）
-
-### Hierarchy
-
-| Role | Font | Size | Weight | Line Height | Letter Spacing | Notes |
-|------|------|------|--------|-------------|----------------|-------|
-| Display / Hero | [フォント] | ??px (??rem) | ?? | 1.10 | normal | 最大インパクト |
-| H1 | [フォント] | ??px (??rem) | ?? | 1.20 | normal | セクション見出し |
-| H2 | [フォント] | ??px (??rem) | ?? | 1.25 | normal | サブセクション |
-| H3 | [フォント] | ??px (??rem) | ?? | 1.30 | normal | カードタイトル等 |
-| Body Large | [フォント] | ??px (??rem) | ?? | 1.60 | normal | リード文 |
-| Body | [フォント] | ??px (??rem) | ?? | 1.60 | normal | 本文標準 |
-| Body Small | [フォント] | ??px (??rem) | ?? | 1.50 | normal | コンパクト本文 |
-| Caption | [フォント] | ??px (??rem) | ?? | 1.40 | normal | メタデータ |
-| Label | [フォント] | ??px (??rem) | ?? | 1.25 | ?.?px | バッジ、小ラベル |
-| Code | [フォント] | ??px (??rem) | ?? | 1.60 | normal | コードブロック |
-
-### Principles
-- **[原則1]**: 設計意図の説明（例: 「セリフは権威、サンセリフは実用」）
-- **[原則2]**: 設計意図の説明（例: 「本文 line-height 1.60 で書籍に近い読書体験」）
-- **[原則3]**: ウェイト使い分けの方針
-
-## 4. Component Stylings（コンポーネントスタイル）
-
-<!-- 記述フォーマット:
-  - ### カテゴリ見出し（Buttons, Cards, Inputs, Navigation 等）
-  - 各バリアントは **太字名** で小見出しにし、CSS値をリストで列挙:
-    Background / Text / Padding / Radius / Shadow / Border / Font / Hover / Use
-  - 状態（hover, focus, active, disabled）を含める
-  - プロダクト固有の特徴的コンポーネントは ### Distinctive Components で記述
--->
-
-### Buttons
-
-**Primary**
-- Background: `#hex`
-- Text: `#hex`
-- Padding: ??px ??px
-- Radius: ??px
-- Shadow: `[CSS shadow値]`
-- Hover: `#hex` background
-- Use: プライマリCTA
-
-**Secondary**
-- Background: `#hex`
-- Text: `#hex`
-- Padding: ??px ??px
-- Radius: ??px
-- Border: `1px solid #hex`
-- Hover: background shifts to `rgba(...)`
-- Use: セカンダリアクション
-
-**Ghost**
-- Background: transparent
-- Text: `#hex`
-- Padding: ??px ??px
-- Radius: ??px
-- Hover: `rgba(...)` background
-- Use: ターシャリアクション
-
-**Destructive**
-- Background: `#hex`
-- Text: `#hex`
-- Use: 削除・破壊的操作
-
-### Cards & Containers
-- Background: `#hex`（ライト）/ `#hex`（ダーク）
-- Border: `1px solid #hex`
-- Radius: ??px（標準）/ ??px（フィーチャー）
-- Shadow: `[CSS shadow値]`
-- Padding: ??px
-
-### Inputs & Forms
-- Border: `1px solid #hex`
-- Focus: `[フォーカスリング/ボーダーの値]`
-- Error: `[エラー時のボーダー/色]`
-- Radius: ??px
-- Padding: ??px ??px
-- Label: `#hex`, ??px [フォント]
-
-### Navigation
-- 構造: [sticky top / sidebar / etc.]
-- Background: `#hex`
-- Links: `#hex`（default）→ `#hex`（hover）
-- CTA: [ボタンスタイル名] を配置
-- Border: `[ボーダー値]`
-- Mobile: [ハンバーガー / タブバー / etc.]
-
-### Distinctive Components
-（プロダクト固有の特徴的コンポーネントがあれば記述）
-
-## 5. Layout Principles（レイアウト原則）
-
-<!-- 記述フォーマット:
-  - ### Spacing System: ベースユニットとスケール値のリスト
-  - ### Grid & Container: コンテナ幅、カラム数、ガター
-  - ### Whitespace Philosophy: 余白に対する設計思想を叙述で記述
-  - ### Border Radius Scale: 名前付きスケール（名前 (値): 用途）
--->
-
-### Spacing System
-- Base unit: ??px
-- Scale: ??px, ??px, ??px, ??px, ??px, ??px, ??px, ??px
-- Button padding: ??px ??px
-- Card internal padding: ??px
-- Section vertical spacing: ??px〜??px
-- Small control min padding: ??px ??px（タグ・バッジ等の小コントロール最小値）
-- Control group min gap: ??px（隣接コントロール間の最小間隔）
-
-### Grid & Container
-- Max container width: ??px
-- Grid columns: ??
-- Gutter: ??px
-- レイアウトパターン: [センタード / サイドバー+メイン / etc.]
-
-### Whitespace Philosophy
-[余白に対する設計思想を叙述で記述する。例: 「エディトリアルなペーシング — 各セクションが雑誌の見開きのように呼吸する」]
-
-### Border Radius Scale
-- Sharp (??px): [用途]
-- Subtle (??px): [用途]
-- Comfortable (??px): [用途 — 標準ボタン、カード]
-- Generous (??px): [用途 — プライマリボタン、入力欄]
-- Large (??px): [用途 — フィーチャーコンテナ]
-- Full (9999px): [用途 — ピル型バッジ等]
-
-## 6. Depth & Elevation（深度と段階）
-
-<!-- 記述フォーマット:
-  - Markdown テーブル（Level / Treatment / Use）で定義
-  - **Shadow Philosophy** サブセクションで設計意図を叙述
-  - z-index 階層も含める
--->
-
-| Level | Treatment | Use |
-|-------|-----------|-----|
-| Flat (Level 0) | shadow なし | ページ背景、インラインテキスト |
-| Subtle (Level 1) | `[CSS shadow値]` | 標準カード、セクション |
-| Elevated (Level 2) | `[CSS shadow値]` | ドロップダウン、ポップオーバー |
-| Prominent (Level 3) | `[CSS shadow値]` | モーダル、フローティングパネル |
-| Focus Ring | `[CSS outline/ring値]` | キーボードフォーカス |
-
-### Shadow Philosophy
-[シャドウに対する設計思想を叙述で記述する。色調、ブラー、スプレッドの方針。]
-
-### z-index Scale
-- Base (0): 通常コンテンツ
-- Dropdown (100): ドロップダウンメニュー
-- Sticky (200): スティッキーヘッダー
-- Modal (300): モーダルダイアログ
-- Toast (400): トースト通知
-- Tooltip (500): ツールチップ
-
-## 7. Do's and Don'ts（推奨と禁止）
-
-<!-- 記述フォーマット:
-  - ### Do / ### Don't で分割
-  - 各項目にインライン値と理由を含める
-  - 「なぜそうするのか」が分かる記述にする
--->
-
-### Do
-- [具体的なルール] — [理由]（例: 「`#f5f4ed` をページ背景に使う — 暖色キャンバスがブランドの人格そのもの」）
-- [具体的なルール] — [理由]
-- …
-
-### Don't
-- [禁止事項と具体値] — [理由]（例: 「純粋な黒 `#000000` をテキストに使わない — ブランドは暖色系ニュートラルのみ」）
-- [禁止事項と具体値] — [理由]
-- …
-
-## 8. Responsive Behavior（レスポンシブ動作）
-
-<!-- 記述フォーマット:
-  - ### Breakpoints: Markdown テーブル（Name / Width / Key Changes）
-  - ### Touch Targets: タッチ操作に関するルール
-  - ### Collapsing Strategy: 画面縮小時の変形パターン
-  - ### Image Behavior: 画像・メディアの応答方針
--->
-
-### Breakpoints
-
-| Name | Width | Key Changes |
-|------|-------|-------------|
-| Mobile | <??px | 単一カラム、ハンバーガーナビ、縮小タイポグラフィ |
-| Tablet | ??–??px | 2カラムグリッド開始、ナビ凝縮 |
-| Desktop | ??px+ | フルマルチカラム、展開ナビ、最大タイポグラフィ |
-
-### Touch Targets
-- 最小タッチターゲット: 44×44px
-- ボタン padding: ??px 以上
-- リンク間隔: 十分なスペーシング
-
-### Collapsing Strategy
-- **Navigation**: [フル水平ナビ → ハンバーガー / タブバー]
-- **Grid**: [マルチカラム → スタック単一カラム]
-- **Typography**: [??px → ??px のプログレッシブスケーリング]
-- **Cards**: [横並び → 縦スタック]
-
-### Image Behavior
-- [レスポンシブ画像の方針: アスペクト比維持、srcset、art direction 等]
-
-## 9. Agent Prompt Guide（エージェント向けガイド）
-
-<!-- 記述フォーマット:
-  - ### Quick Color Reference: キー:値形式のコピペ用リスト
-  - ### Example Component Prompts: そのまま使えるプロンプト例（3〜5件）
-  - ### Iteration Guide: エージェントへの指示ルール（番号付きリスト）
-  - 冒頭に「このファイルの値のみ使用すること」を明記
--->
-
-> **このファイルに定義された値のみを使用すること。** 独自の色・フォント・余白を発明しないこと。
-
-### Quick Color Reference
-- Brand CTA: "[名前] (#hex)"
-- Page Background: "[名前] (#hex)"
-- Card Surface: "[名前] (#hex)"
-- Primary Text: "[名前] (#hex)"
-- Secondary Text: "[名前] (#hex)"
-- Border: "[名前] (#hex)"
-- Dark Surface: "[名前] (#hex)"
-
-### Example Component Prompts
-- "[ページ背景] `#hex` にヒーローセクションを作成。見出しは ??px [フォント] weight ??、line-height ??。テキスト色 `#hex`。サブタイトルは `#hex` で ??px [フォント]。CTAボタンは `#hex` 背景、`#hex` テキスト、??px radius。"
-- "[カード背景] `#hex` にフィーチャーカードを作成。ボーダー `1px solid #hex`、radius ??px。タイトルは [フォント] ??px weight ??。説明文は `#hex` で ??px。シャドウ `[CSS値]`。"
-- （プロダクト固有の典型的なUI構築プロンプトを3〜5件記載する）
-
-### Iteration Guide
-1. 一度に**1つのコンポーネント**に集中する
-2. 色は必ずセマンティック名と hex を併記する — 「グレーにして」ではなく「Olive Gray (`#5e5d59`) を使って」
-3. フォントの用途を明示する — 「見出しは [Serif]、ラベルは [Sans]」
-4. シャドウはレベル名で指示する — 「Elevated シャドウを適用」
-5. 背景を明示する — 「[Canvas名] (`#hex`) の上に配置」
-6. レスポンシブ時の変形を指定する — 「モバイルではスタック、デスクトップでは3カラム」
-```
-
-### Step 4: ファイル配置
+### Step 5: ファイル配置
 
 ```
 project-root/
 ├── DESIGN.md          ← 生成したファイル
-├── CLAUDE.md          ← 既存の場合、DESIGN.md参照の一文を追加
+├── CLAUDE.md          ← 既存の場合、DESIGN.md 参照の一文を追記（要ユーザー確認）
 └── assets/            ← ロゴ等のバイナリ（必要に応じて）
-    └── README.md      ← アセット配置ガイド
 ```
 
-CLAUDE.md が存在する場合、以下を追記する:
+CLAUDE.md が存在する場合、追記前にユーザーへ確認した上で以下を加える:
 
 ```markdown
-UI生成・修正時は DESIGN.md の値のみを使用すること。
+UI生成・修正時は DESIGN.md の値（front matter のトークンと本文の指針）のみを使用すること。
+```
+
+## 出力例（抜粋）
+
+```markdown
+---
+version: alpha
+name: Aurora Notes Design System
+description: 夜の書斎のような、静かで集中できるノートアプリ
+colors:
+  # Tier 1: primitive（原色パレット）— literal
+  blue-300: "#9bb4ff"
+  blue-400: "#7c9eff"
+  ink-900: "#0a0e1a"
+  neutral-0: "#0e1018"
+  neutral-50: "#171a24"
+  neutral-300: "#3a3f52"
+  neutral-500: "#a3a7b8"
+  neutral-900: "#e6e8f0"
+  red-300: "#ff8a8a"
+  red-950: "#1a0606"
+  # Tier 2: semantic（役割）— primitive を {} で参照（単一情報源）
+  primary: "{colors.blue-400}"
+  on-primary: "{colors.ink-900}"
+  surface: "{colors.neutral-0}"
+  surface-container: "{colors.neutral-50}"
+  on-surface: "{colors.neutral-900}"
+  on-surface-variant: "{colors.neutral-500}"
+  outline: "{colors.neutral-300}"
+  error: "{colors.red-300}"
+  on-error: "{colors.red-950}"
+typography:
+  headline-lg:
+    fontFamily: Newsreader
+    fontSize: 40px
+    fontWeight: "600"
+    lineHeight: 48px
+    letterSpacing: -0.02em
+  body-md:
+    fontFamily: Inter
+    fontSize: 16px
+    fontWeight: "400"
+    lineHeight: 26px
+    letterSpacing: 0em
+  label-sm:
+    fontFamily: Inter
+    fontSize: 13px
+    fontWeight: "500"
+    lineHeight: 18px
+    letterSpacing: 0.04em
+rounded:
+  md: 0.5rem
+  lg: 0.75rem
+  full: 9999px
+spacing:
+  unit: 8px
+  container-max: 760px
+  gutter: 24px
+components:
+  button-primary:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.label-sm}"
+    rounded: "{rounded.lg}"
+    padding: 10px
+    height: 44px
+  button-primary-hover:
+    backgroundColor: "{colors.blue-300}"   # hover の明色は primitive を直接参照してもよい
+  input-field:
+    backgroundColor: "{colors.surface-container}"
+    textColor: "{colors.on-surface}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.md}"
+    padding: 12px
+---
+
+## Overview
+
+Aurora Notes は深夜の書斎の机上を思わせる。明かりを落とした部屋で1冊のノートだけが
+照らされているような、静かで集中を妨げないインターフェースを目指す。装飾は最小限で、
+読み書きそのものが主役になる。toC の個人向けツールで、ターゲットは長文を書く人。
+
+## Colors
+
+パレットは藍と淡青、オフホワイトの3系統（primitive）を、役割（semantic）に割り当てて構成する。
+藍色に沈んだ背景 `surface`（源色 `neutral-0`）を基調に、文字 `on-surface`（`neutral-900`）は純白を避けた
+わずかに青みのあるオフホワイト。アクセントの `primary`（`blue-400`）はオーロラの淡い青で、保存やリンクなど
+能動的な操作にだけ使う。最も明るい青 `blue-300` は hover の浮き上がりにのみ充てる。彩度の高い色は画面に1点まで。
+
+## Typography
+
+見出しはセリフの Newsreader で「本」の質感を、本文は Inter で可読性を担保する二書体構成。
+本文 body-md は line-height 26px と広めにとり、長文でも目が疲れない読書リズムをつくる。
+
+## Layout
+
+760px の単一カラムを中央に置く。8px ベースの余白スケールで、段落間は gutter (24px) を基準に
+呼吸をもたせる。768px 未満ではコンテナ左右マージンを 16px に詰め、ナビは下部固定タブへ。
+
+## Elevation & Depth
+
+影は使わない。深度はすべて背景色の段差（surface → surface-container）で表現する。
+フォーカス時のみ primary の 1px ボーダーで浮き上がりを示す。
+
+## Shapes
+
+角は控えめ。入力欄は rounded-md (8px)、ボタンは rounded-lg (12px)。バッジのみ full。
+鋭すぎず丸すぎない、ノートの罫線のような落ち着いた形。
+
+## Components
+
+button-primary は primary 背景に on-primary の文字、hover でわずかに明るい青へ。
+input-field は surface-container に沈め、入力中の文字が背景から自然に浮くコントラストを保つ。
+
+## Do's and Don'ts
+
+- **Do**: アクセントの青は1画面1箇所に絞る — 静けさがブランドの核
+- **Do**: タッチターゲットは最小 44×44px を確保する
+- **Don't**: 純黒 `#000000` を背景に使わない — 藍を含んだ `#0e1018` が世界観
+- **Don't**: ドロップシャドウで階層を作らない — 深度は背景の段差で表現する
 ```
 
 ## 出力品質チェックリスト
 
-生成した DESIGN.md が以下を満たしているか確認する:
-
-- [ ] **Section 1** が散文形式（2段落以上）で、インライン hex 値を含み、Key Characteristics 箇条書きで締めている
-- [ ] **Section 2** の各色が `**セマンティック名** (\`#hex\`): 説明` 形式で記述されている
-- [ ] **Section 3** に Markdown テーブル（Hierarchy）と Principles サブセクションがある
-- [ ] **Section 4** の各コンポーネントバリアントが CSS 値リスト（Background / Text / Padding / Radius 等）を持つ
-- [ ] **Section 5** に Small control min padding と Control group min gap が含まれている
-- [ ] **Section 5** に Border Radius Scale と Whitespace Philosophy がある
-- [ ] **Section 6** が Markdown テーブルで、Shadow Philosophy の叙述がある
-- [ ] **Section 7** の各 Do/Don't にインライン値と理由がある
-- [ ] **Section 8** に Breakpoints テーブルと Collapsing Strategy がある
-- [ ] **Section 9** に Quick Color Reference、Example Component Prompts（3件以上）、Iteration Guide がある
-- [ ] 全セクション通じて `??` や `[プレースホルダー]` が残っていない（不明値は `/* TODO: 確定待ち */` で明示）
-- [ ] 10分以内に全体を読める分量に収まっている
+- [ ] **front matter** が有効な YAML で、`name` を持ち `colors.primary` が定義されている
+- [ ] `colors` が **primitive（literal パレット）→ semantic（`{}` で primitive を参照）の2層**で、semantic は Material 3 系命名・on-color ペアが揃い、参照先が leaf の primitive になっている
+- [ ] `typography` が 9〜15 レベル（小規模なら最低限でも可、その旨を明示）
+- [ ] `components` の値が可能な範囲で `{参照}` を使い、値の重複がない
+- [ ] 本文が **8セクションを順序通り**に持つ（Overview → … → Do's and Don'ts）
+- [ ] **見出しの重複がない**（重複は CLI でエラー）
+- [ ] Overview に**具体的な参照**があり、汎用形容詞の羅列になっていない
+- [ ] レスポンシブ観点が Layout / Do's and Don'ts に織り込まれている
+- [ ] front matter のトークンと本文の記述に矛盾がない
+- [ ] `??` や `[プレースホルダー]` が残っていない（不明値は `/* TODO: 確定待ち */` で明示）
+- [ ] 10分以内に全体を読める分量
 
 ## 出力フォーマット
 
 ### 新規作成時
 
-1. `DESIGN.md` ファイルをプロジェクトルートに作成
-2. CLAUDE.md への参照追記（存在する場合）
+1. `DESIGN.md` をプロジェクトルートに作成
+2. CLAUDE.md への参照追記（存在する場合・要確認）
 3. 生成サマリーを提示:
 
 ```markdown
 ## DESIGN.md 生成結果
 
-- セクション数: 9/9
-- 色定義: N色（Primary N / Neutral N / Semantic N）
-- フォント: [ファミリー名]（fallback: [フォールバック]）
-- タイポグラフィ階層: N段階
-- スペーシング: [ベースユニット]px ベース、N段階
-- コンポーネント: N種 × N バリアント定義
-- Border Radius: N段階スケール
-- Elevation: N段階
-- ダークモード: 対応/未対応
+- 準拠: design.md (version alpha)
+- 色トークン: primitive N色 / semantic N色（2層）
+- タイポグラフィ: N レベル（フォント: [ファミリー名]）
+- spacing: ベース [unit]px / container-max [幅]px
+- rounded: N スケール
+- components: N 定義（うち hover 等の状態 N）
+- 本文: 8/8 セクション
 - 抽出元: [CSS / トークンファイル / Figma / 手動入力]
 
 ### 要確認事項
 - [人間の判断が必要な項目]
 
 ### 推奨される次のステップ
-- `/extract-ui`（既存UIからコンポーネント・トークンを抽出し、DESIGN.md の定義と整合させる）
-- `/audit-ui`（既存コードのデザイントークン準拠率を監査する）
+- `/extract-ui`（既存UIからコンポーネント・トークンを抽出し、front matter と整合させる）
+- `/audit-ui`（既存コードのトークン準拠率を監査する）
 ```
 
 ### 更新時
@@ -473,10 +354,10 @@ UI生成・修正時は DESIGN.md の値のみを使用すること。
 ## DESIGN.md 更新結果
 
 ### 変更箇所
-- [セクション]: [変更内容]
+- [front matter トークン / セクション]: [変更内容]
 
 ### 追加箇所
-- [セクション]: [追加内容]
+- [トークン / セクション]: [追加内容]
 
 ### 要確認事項
 - [人間の判断が必要な項目]
@@ -484,12 +365,11 @@ UI生成・修正時は DESIGN.md の値のみを使用すること。
 
 ## 注意
 
-- **CLAUDE.md への副作用**: CLAUDE.md が存在する場合、「UI生成・修正時は DESIGN.md の値のみを使用すること。」の一文を追記する。これはユーザーのプロジェクトの CLAUDE.md を変更する操作であるため、追記前にユーザーに確認すること
+- **CLAUDE.md への副作用**: CLAUDE.md が存在する場合、「UI生成・修正時は DESIGN.md の値のみを使用すること。」の追記はユーザーのプロジェクトファイルを変更する操作。追記前にユーザーに確認すること
 - DESIGN.md は**たたき台**として生成する。最終判断は人間に委ねる
-- DESIGN.md は「完成させるもの」ではなく、**使われながら育つもの**
-- 既存のデザイン資産がある場合は、**既存値を尊重**し勝手に変更しない
-- ブランドガイドラインが別途存在する場合は、それを正として DESIGN.md に反映する
+- DESIGN.md は「完成させるもの」ではなく、**使われながら育つもの**（仕様自体が `alpha`）
+- 既存のデザイン資産がある場合は**既存値を尊重**し勝手に変更しない。ブランドガイドラインがあればそれを正とする
 - テキスト中心設計: DESIGN.md は Markdown のみ。ロゴ等バイナリは `assets/` に分離
-- 具体的な色値やフォント名が不明な場合は、仮置き値を `/* TODO: 確定待ち */` で明示する
-- DESIGN.md の更新は Git で履歴管理し、変更理由をコミットメッセージに残すことを推奨する
-- **HTMLコメント（`<!-- -->`）はテンプレート内の生成指示であり、最終出力には含めない**
+- 不明な値は仮置きし `/* TODO: 確定待ち */` で明示する
+- 更新は Git で履歴管理し、変更理由をコミットメッセージに残すことを推奨する
+- **YAMLコメント（`#`）やテンプレート内の説明書きは、最終出力に不要なものは含めない**
