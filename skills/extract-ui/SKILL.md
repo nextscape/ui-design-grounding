@@ -16,6 +16,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/implementation.md`
 - `ui-design-grounding/reference/color-system.md`
 - `ui-design-grounding/reference/spatial-layout.md`
+- `ui-design-grounding/reference/design-md-spec.md` — 抽出結果を DESIGN.md に反映する場合の front matter 書式
 
 ## 手順
 
@@ -41,16 +42,16 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - **Semantic トークン**: 意味（`--color-primary: var(--blue-500)`）
 - **Component トークン**: 用途特化（`--button-bg: var(--color-primary)`）
 
-**抽出対象**:
-- 色: text, surface, border, action, state（success/warning/error/info）, focus
-- 余白: 4ptグリッドに基づくスケール
-- 角丸: radius.sm, radius.md, radius.lg
-- タイポグラフィ: font-size, font-weight, line-height, font-family
+**抽出対象**（役割語彙は Material 3 系 = `design-tokens.md` 所有）:
+- 色: primary / on-primary, surface / surface-container, on-surface / on-surface-variant, outline, error / on-error（success/warning/info/focus は最小拡張）
+- 余白: 4ptグリッドに基づく `spacing.*` スケール
+- 角丸: rounded.sm, rounded.md, rounded.lg
+- タイポグラフィ: typography レベル（fontFamily, fontSize, fontWeight, lineHeight）
 - シャドウ: shadow.sm, shadow.md, shadow.lg
 
 ### 4. 命名規則の統一
 
-- `color.*`, `space.*`, `radius.*`, `font.*`, `shadow.*` の構造
+- `colors.*`(M3役割), `spacing.*`, `rounded.*`, `typography.*` の構造（DESIGN.md / `design-tokens.md` に準拠）
 - セマンティックトークンを優先使用
 - 直接値（#xxx、16px等）の使用を例外に限定
 
@@ -74,7 +75,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 | カテゴリ | トークン名 | 現在の値 | 使用箇所数 |
 |---------|----------|---------|-----------|
 | color | --color-primary | #xxx | N箇所 |
-| space | --space-md | 16px | N箇所 |
+| spacing | --spacing-md | 16px | N箇所 |
 
 ### 移行計画
 1. [Phase 1]: ...
@@ -84,5 +85,5 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 ## 推奨される次のステップ
 
 トークン・コンポーネント抽出後、以下のコマンドスキルの実行を検討する:
-- `/init-design` — 抽出結果を DESIGN.md に反映
+- `/init-design` — 抽出結果を DESIGN.md に反映（書式は `design-md-spec.md` に準拠）
 - `/audit-ui` — 抽出後の技術品質（トークン使用率等）を監査
