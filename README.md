@@ -37,15 +37,15 @@ claude install-plugin nextscape/ui-design-grounding
 skills/
   ui-design-grounding/         ← ナレッジベース（コマンドスキルが参照）
     SKILL.md                   ← スタンス・出力ポリシー・参照ナビゲーション
-    reference/                 ← 15件のUI/UX原則リファレンス
-  <command-skill>/             ← 18件のコマンドスキル（スラッシュコマンド）
+    reference/                 ← 16件のUI/UX原則リファレンス
+  <command-skill>/             ← 20件のコマンドスキル（スラッシュコマンド）
     SKILL.md                   ← ワークフロー定義
 ```
 
 ### 二層構造
 
-1. **ナレッジベース** (`skills/ui-design-grounding/`) - 15 件のリファレンス文書に UI/UX 設計の判断基準・原則・パターンを集約
-2. **コマンドスキル** (`skills/<name>/`) - 18 件のスラッシュコマンドが構造化されたワークフローを提供し、ナレッジベースを参照
+1. **ナレッジベース** (`skills/ui-design-grounding/`) - 16 件のリファレンス文書に UI/UX 設計の判断基準・原則・パターンを集約
+2. **コマンドスキル** (`skills/<name>/`) - 20 件のスラッシュコマンドが構造化されたワークフローを提供し、ナレッジベースを参照
 
 ## コマンドスキル一覧
 
@@ -57,7 +57,7 @@ skills/
 |---------|-----------|---------------|
 | `/design-ui` | 要件からUI構造・画面設計を整理 | UX目的の明文化、画面遷移フロー設計、UI状態マトリックス（初期/ローディング/成功/エラー/空）、情報階層とナビゲーション設計。見た目ではなく「構造と考え方」に専念 |
 | `/implement-ui` | デザインを実装構造に翻訳 | Atomic Design（Atoms→Molecules→Organisms）でコンポーネント分解、責務整理（表示/ロジック/データ）、5状態マトリックス、既存資産の再利用判定 |
-| `/init-design` | DESIGN.md を生成・更新 | google-labs-code/design.md 仕様（alpha）準拠。YAML front matter の機械可読トークン（colors/typography/rounded/spacing/components）+ 8セクションの散文。`{colors.primary}` 参照構文・既存CSS/トークンからの自動抽出に対応 |
+| `/init-design` | DESIGN.md を生成・更新 | google-labs-code/design.md 仕様（alpha）準拠。YAML front matter の機械可読トークン（colors/typography/rounded/spacing/components）+ 8セクションの散文。既存CSS/トークンからの自動抽出に対応 |
 
 ### 評価
 
@@ -75,6 +75,7 @@ skills/
 | `/arrange-ui` | レイアウト・余白・視覚階層を修正 | 4ptベースグリッド、スペーシングリズム（関連密集 vs グループ間開放）、スクイントテスト、光学的調整。カード過剰使用チェック |
 | `/typeset-ui` | タイポグラフィを改善 | 5段階モジュラースケール（比率1.25/1.333/1.5）、Fluid Type（`clamp()`）、垂直リズム統一、`max-width: 65ch` 可読性ガイド、OpenType機能活用、FOUT対策（`size-adjust`） |
 | `/animate-ui` | モーション・アニメーションを追加 | レイヤードアプローチ（Hero→Feedback→Transition→Delight）、イージングカーブ体系、スタガリングパターン、`prefers-reduced-motion` 必須対応 |
+| `/recolor-ui` | 既存 DESIGN.md のパレットを新 primary 中心に OKLCH で再配色 | タイポ・余白・モーションは保持し、セマンティックトークン再割当てとコントラスト再検証を行う |
 
 ### コンテンツ
 
@@ -96,6 +97,7 @@ skills/
 |---------|-----------|---------------|
 | `/slim-ui` | UIを本質へ削ぎ落とす | 要素の棚卸しと削減判断基準の明確化。Cowanの限界（同時4項目）、ナビ5つ以下、フォーム4フィールド/グループ。段階的開示（`<details>`等）への変換。認知負荷Before/After比較 |
 | `/extract-ui` | コンポーネント・トークンを抽出 | 3回以上出現パターンを抽出基準。Atomic Design粒度判定。Primitive→Semantic→Componentの3階層トークン設計。影響度順（spacing→border→background→text→state）の段階的移行計画 |
+| `/scan-ui` | 外部サイト(URL)を Playwright で分析し DESIGN.md を出力 | 単一ページ／サイト全体の2モード。デザインシステムを逆算して DESIGN.md を生成。他サイトのデザイン取り込みに対応 |
 
 ### 仕上げ
 
@@ -126,6 +128,7 @@ skills/
 | `responsive-design.md` | モバイルファースト、ブレイクポイント、入力方式検出 |
 | `design-system.md` | コンポーネント設計、Atomic Design、バリアント |
 | `design-tokens.md` | Primitive/Semantic/Component トークン、命名 |
+| `design-md-spec.md` | DESIGN.md フォーマット仕様・設計思想（front matter／本文8セクション） |
 | `implementation.md` | コンポーネント粒度、責務分離、UI状態管理 |
 | `anti-patterns.md` | 横断的アンチパターン、AI生成UI品質ゲート |
 

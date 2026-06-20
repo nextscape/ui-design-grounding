@@ -27,7 +27,7 @@ description: UI・UX・画面・ユーザーインターフェース・フロン
 本スキルは **ナレッジベース** である。
 
 - 16個のリファレンス（`reference/`）にUI/UX設計の判断基準・原則・パターンを集約
-- 17個の独立コマンドスキルが MANDATORY PREPARATION として本スキルのリファレンスを参照する
+- 19個の独立コマンドスキル（`ui-help` を除く）が MANDATORY PREPARATION として本スキルのリファレンスを参照する
 - 本スキル自体はユーザーが直接呼び出すのではなく、コマンドスキル経由で利用される
 
 ---
@@ -53,6 +53,8 @@ description: UI・UX・画面・ユーザーインターフェース・フロン
 | マルチデバイス適応 | `/adapt-ui` |
 | テキスト・コピー改善 | `/clarify-ui` |
 | UIの簡素化 | `/slim-ui` |
+| 外部サイト(URL)を分析しDESIGN.md化 | `/scan-ui` |
+| パレットをOKLCHで再配色 | `/recolor-ui` |
 
 ---
 
@@ -123,7 +125,7 @@ UI設計・実装の判断は、明示／暗黙いずれかのルールや前提
 
 - `design-system.md` — コンポーネント設計、Atomic Design、バリアント
 - `design-tokens.md` — Primitive/Semantic/Component トークン、命名、段階的導入
-- `design-md-spec.md` — DESIGN.md のフォーマット仕様・設計思想（front matter／本文8セクション／`{}` 参照構文）
+- `design-md-spec.md` — DESIGN.md のフォーマット仕様・設計思想（front matter／本文8セクション）
 - `implementation.md` — コンポーネント粒度、責務分離、UI状態管理
 
 ### 品質
