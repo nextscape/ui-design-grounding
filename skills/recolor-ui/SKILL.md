@@ -37,12 +37,16 @@ DESIGN.md の front matter `colors`（または CSS のカラートークン）�
 - ニュートラル系は「色相を僅かに primary 側へ寄せる（ティンテッドニュートラル）」か「中立を保つ」かを**選択肢として提示**する。
 - secondary / tertiary がある場合は primary との色相差（補色・類似等）の関係を維持する。
 
-### 4. コントラスト再検証
+### 4. グラデーション再配色（あれば）
+
+DESIGN.md にグラデーション（`linear/radial-gradient`、`scan-ui` 由来など）が含まれる場合、各 stop を OKLCH へ変換し、ランプと同じ色相回転・L/C 関係保持で stops を再計算する。角度・位置・stop 比率は保持し、色だけ差し替える。
+
+### 5. コントラスト再検証
 
 - `on-primary` / `on-surface` 等の on-color ペアを WCAG 基準（本文 4.5:1、大文字 3:1）で再検証し、満たさなければ L を調整して再計算する。
 - semantic の `{}` 参照構造は壊さない（参照先 primitive の値だけ変える）。
 
-### 5. 反映
+### 6. 反映
 
 front matter `colors` を更新し、必要なら本文 `## Colors` の散文も新パレットに合わせて更新する。
 
