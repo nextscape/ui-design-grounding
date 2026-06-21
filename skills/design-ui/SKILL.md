@@ -20,6 +20,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/typography.md`
 - `ui-design-grounding/reference/spatial-layout.md`
 - `ui-design-grounding/reference/responsive-design.md`
+- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段）の手順
 
 ## 入力
 
@@ -29,6 +30,10 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - 制約条件
 
 ## 手順
+
+### 0. 基準の確認（DESIGN.md 前段ゲート）
+
+`design-md-gate.md` の **前段ゲート** を実施する。DESIGN.md があれば front matter のトークンと本文の指針を**制約として読み込み**（リファレンスより優先）、構造設計はその視覚基準の中で行う。無ければ未整備として扱い `/init-design`（外部 URL からは `/scan-ui`）を提案する。**本スキルは構造（画面・遷移・情報設計）を設計するもので、DESIGN.md（視覚的憲法）は書き換えない。**
 
 1. **UX目的の言語化**: この UI が達成すべきユーザー体験を明文化する
 2. **画面・状態の整理**: 必要な画面と各画面の状態（初期/ローディング/成功/エラー/空）を洗い出す
@@ -69,3 +74,4 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - 見た目の細部を断定しない（色、フォント等の具体値は参考程度）
 - 実装可能性を無視しない
 - 画面デザインの完成ではなく、「考え方」と「構造」を明確にすることが目的
+- DESIGN.md は制約として読むが、本スキルは DESIGN.md を書き換えない（視覚的憲法の定義・更新は `/init-design`）

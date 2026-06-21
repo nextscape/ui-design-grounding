@@ -17,8 +17,13 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/color-system.md`
 - `ui-design-grounding/reference/design-tokens.md`
 - `ui-design-grounding/reference/anti-patterns.md`
+- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段）の手順
 
 ## 手順
+
+### 0. 基準の確認（DESIGN.md 前段ゲート）
+
+`design-md-gate.md` の **前段ゲート** を実施する。DESIGN.md があれば front matter のトークンと本文の指針を**基準（source of truth）として読み込み**（リファレンスより優先）、以降の監査（特にテーミング次元の準拠度）はこの基準に照らして測る。無ければ未整備として扱い `/init-design`（外部 URL からは `/scan-ui`）を提案し、「基準が未整備」と明示する（基準なしに準拠度を断定しない）。評価専用のため後段ゲートは不要。
 
 1. **対象の確認**: 監査対象のUI・技術スタック・制約を把握する
 2. **5次元スコアリング**（各0-4点、合計/20点）:

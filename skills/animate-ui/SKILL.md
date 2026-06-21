@@ -14,8 +14,13 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/motion-design.md`
 - `ui-design-grounding/reference/interaction.md`
 - `ui-design-grounding/reference/accessibility.md`
+- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段・後段）の手順
 
 ## 手順
+
+### 0. 基準の確認（DESIGN.md 前段ゲート）
+
+`design-md-gate.md` の **前段ゲート** を実施する。DESIGN.md があれば `motion`（デュレーション・イージング等）の規約を基準として読み込み（リファレンスより優先）、なければ未整備として扱い `/init-design` を提案する。基準なしに「問題なし」と判断しない。
 
 ### 1. アニメーション機会の特定
 
@@ -73,6 +78,10 @@ motion-design.md の体系に従う:
 - [ ] 60fps 性能: `transform` と `opacity` のみアニメーション
 - [ ] 各アニメーションに明確な目的があるか
 - [ ] 過剰になっていないか（全てが動いていないか）
+
+## DESIGN.md 後段ゲート
+
+`design-md-gate.md` の **後段ゲート** を実施する。今回の追加が DESIGN.md の `motion`（デュレーション・イージング体系等）を変えた・新設した場合は乖離を明示し、`/init-design` へ誘導する（DESIGN.md は自動では書き換えない）。
 
 ## 推奨される次のステップ
 

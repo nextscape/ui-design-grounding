@@ -21,6 +21,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/wording.md`
 - `ui-design-grounding/reference/design-tokens.md`
 - `ui-design-grounding/reference/motion-design.md`
+- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段・後段）の手順
 
 ## 注意
 
@@ -30,6 +31,10 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 ## 手順
 
 以下のチェックリストを順に確認し、問題があれば即座に修正する。
+
+### 0. 基準の確認（DESIGN.md 前段ゲート）
+
+`design-md-gate.md` の **前段ゲート** を実施する。DESIGN.md があればそのトークン・規約を基準として読み込み（リファレンスより優先）、以降のチェックはこの基準に照らして行う。なければ未整備として扱い `/init-design` を提案する。
 
 ### 1. 視覚的アラインメント
 - [ ] 要素の揃いが正確か（グリッド準拠）
@@ -89,6 +94,10 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - [ ] アニメーションが transform/opacity のみか
 - [ ] 画像の最適化（lazy loading、適切フォーマット）
 - [ ] 不要なスタイル・コードの除去
+
+## DESIGN.md 後段ゲート
+
+`design-md-gate.md` の **後段ゲート** を実施する。仕上げの過程で DESIGN.md のトークン水準・規約を変えた場合は乖離を明示し、**色は `/recolor-ui`、その他は `/init-design`** へ誘導する（DESIGN.md は自動では書き換えない）。
 
 ## 出力フォーマット
 

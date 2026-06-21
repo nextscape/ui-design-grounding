@@ -15,14 +15,13 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/typography.md`
 - `ui-design-grounding/reference/responsive-design.md`
 - `ui-design-grounding/reference/anti-patterns.md`
+- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段・後段）の手順
 
 ## 手順
 
-### 0. 基準の確認（DESIGN.md の検証）
+### 0. 基準の確認（DESIGN.md 前段ゲート）
 
-DESIGN.md のスペーシングスケール・コントロール最小サイズ・コンテナ幅ルールが**具体値で定義されているか**を確認する。
-
-未定義の項目がある場合は、改善の前に基準の定義を提案する。基準なしで「問題なし」と判断してはならない。
+`design-md-gate.md` の **前段ゲート** を実施する。DESIGN.md があれば、特にスペーシングスケール・コントロール最小サイズ・コンテナ幅ルールが**具体値で定義されているか**を確認し、基準として読み込む（リファレンスより優先）。未定義の項目があれば、改善の前に基準の定義（`/init-design`）を提案する。基準なしに「問題なし」と判断しない。
 
 ### 1. 現在のレイアウトを診断
 
@@ -81,6 +80,10 @@ DESIGN.md のスペーシングスケール・コントロール最小サイズ�
 - 主要ブレイクポイントでレイアウトが適切に変化するか
 - オーバーフローが発生していないか
 - 横スクロールが不要か
+
+## DESIGN.md 後段ゲート
+
+`design-md-gate.md` の **後段ゲート** を実施する。今回の修正が DESIGN.md のトークン水準・規約（スペーシング・コンテナ幅・グリッド等）を変えた場合は乖離を明示し、`/init-design` へ誘導する（DESIGN.md は自動では書き換えない）。
 
 ## 推奨される次のステップ
 

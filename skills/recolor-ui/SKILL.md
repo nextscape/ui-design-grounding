@@ -20,6 +20,9 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/color-system.md` — OKLCH、コントラスト、ダークモード
 - `ui-design-grounding/reference/design-tokens.md` — 2層トークン構造・役割語彙
 - `ui-design-grounding/reference/design-md-spec.md` — `colors` の書式・`{}` 参照構文
+- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段・後段）の位置づけ
+
+> 本スキルは色について DESIGN.md ゲートの前段（手順1の読み込み）・後段（手順6の反映）を **自スキル内で完結** させる。色以外のトークン（タイポ・余白・角丸・モーション）は保持するため変更しない。
 
 ## 手順
 
