@@ -111,6 +111,7 @@ flowchart LR
 
 - **作る**: `init-design`（既存コード・要件から生成）/ `scan-ui`（外部 URL から逆算）/ `extract-ui`（コードからトークン抽出）。
 - **更新する**: 修正系スキルは値の乖離を検出したら誘導するだけ（色 → `recolor-ui` / その他 → `init-design`）。**DESIGN.md を自動では書き換えない** — 憲法の更新は人間の承認のもとで行う。
+- **見る**: `preview-ui`（DESIGN.md をほぼ機械的に `preview.html` へ反映してブラウザで視覚確認）。`scan-ui` / `init-design` / `recolor-ui` の提案・更新を、トークンの羅列ではなく実際の見た目で把握できる。
 
 ## 構成
 
@@ -120,7 +121,7 @@ skills/
   ui-design-grounding/         ← ナレッジベース（コマンドスキルが参照）
     SKILL.md                   ← スタンス・出力ポリシー・参照ナビゲーション
     reference/                 ← 17件のUI/UX原則・仕様リファレンス
-  <command-skill>/             ← 21件のコマンドスキル（スラッシュコマンド）
+  <command-skill>/             ← 22件のコマンドスキル（スラッシュコマンド）
     SKILL.md                   ← ワークフロー定義
 ```
 
@@ -129,7 +130,7 @@ skills/
 > ※ これはファイルの構成軸。前述の「第1層 / 第2層（動詞 / 観点）」はコマンドスキル内部の役割軸で、別物。
 
 1. **ナレッジベース** (`skills/ui-design-grounding/`) — 17 件のリファレンス文書に UI/UX 設計の判断基準・原則・パターンを集約
-2. **コマンドスキル** (`skills/<name>/`) — 21 件のスラッシュコマンドが構造化されたワークフローを提供し、ナレッジベースを参照
+2. **コマンドスキル** (`skills/<name>/`) — 22 件のスラッシュコマンドが構造化されたワークフローを提供し、ナレッジベースを参照
 
 ## コマンドスキル一覧
 
@@ -146,6 +147,7 @@ skills/
 | `/score-ui` | **評価（UX）**：ヒューリスティクス評価 | ニールセン10原則で各0-4点（合計/40点）。5種ペルソナ（初回/熟練/a11y/モバイル/ストレス）のレッドフラグテスト。認知負荷アセスメント。検出課題を対応スキルへ自動マッピング |
 | `/init-design` | **基準化**：DESIGN.md を生成・更新 | google-labs-code/design.md 仕様（alpha）準拠。YAML front matter（colors/typography/rounded/spacing/components）+ Summary + 8セクション散文。既存CSS/トークンからの自動抽出・スリム化に対応 |
 | `/scan-ui` | **基準化（URL）**：外部サイトを分析し DESIGN.md 化 | Playwright で単一ページ／サイト全体の2モード分析。デザインシステムを逆算して DESIGN.md を生成 |
+| `/preview-ui` | **見る**：DESIGN.md を preview.html に機械的反映 | front matter トークン＋本文を固定テンプレへ転記。色（primitive ランプ→semantic、on-color コントラスト合否バッジ）・タイポ・余白・角丸・深度・コンポーネント atom の見本帳＋既存トークンだけで組んだ例画面を生成。scan/init/recolor の結果をブラウザで視覚確認 |
 
 ### 第2層 — 観点（実働ユニット）
 
