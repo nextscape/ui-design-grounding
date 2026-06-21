@@ -4,18 +4,7 @@
 
 ## [1.2.1] - 2026-06-21
 
-- `preview-ui` をレビュー反映で改善:
-  - コントラストバッジを「達成した最上位レベル1つ」（AAA / AA / AA Large / Fail）へ。AA・AAA の二重表示をやめ意味を明確化
-  - primitive ランプを色相（blue / ink / neutral …）ごとに改行して可読性を向上
-  - DESIGN.md 本文の文言（Summary・各セクション散文・Do's and Don'ts）を該当節へ verbatim 転記（契約4を追加）
-  - タイポグラフィのサンプル文を自然な見本へ変更（「永字八法」を廃止）
-  - 独立ファイルで開く前提に合わせ `<!doctype html>` を明示
-
-## [1.2.0] - 2026-06-21
-
 - `preview-ui` を追加（DESIGN.md をほぼ機械的に preview.html へ反映し、ブラウザで視覚確認）
-  - 色（primitive ランプ→semantic ロール、on-color のコントラスト合否バッジ付き）・タイポ・余白・角丸・深度・コンポーネント atom の見本帳＋既存トークンだけで組んだ例画面を生成
-  - 固定 HTML テンプレで決定論を担保し、トークンの取りこぼし・新値の発明を契約として禁止
 - `scan-ui` / `init-design` / `recolor-ui` の「推奨される次のステップ」に `/preview-ui` を追加
 - コマンドスキルを 22 件へ拡充
 

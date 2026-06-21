@@ -195,11 +195,10 @@ on-color ペア（`on-primary`×`primary`、`on-surface`×`surface`、`on-error`
   <!-- 2. Typography -->
   <section class="pv-block">
     <h2>Typography</h2>
-    <!-- FILL: typography レベルごとに 1 つ。実サイズでサンプル表示。
-         サンプル文は仮名・漢字・英字・数字を含む自然な見本にする（マニアックな例字は避ける） -->
+    <!-- FILL: typography レベルごとに 1 つ。実サイズでサンプル表示。サンプル文は固定文言を使う -->
     <div class="pv-type">
       <div class="spec">{{token}} · {{family}} {{size}}/{{line}} w{{weight}} tracking {{tracking}}</div>
-      <div style="font-family: var(--type-{{token}}-family); font-size: var(--type-{{token}}-size); font-weight: var(--type-{{token}}-weight); line-height: var(--type-{{token}}-line); letter-spacing: var(--type-{{token}}-tracking);">あひるの空を見上げて Design Sample 0123</div>
+      <div style="font-family: var(--type-{{token}}-family); font-size: var(--type-{{token}}-size); font-weight: var(--type-{{token}}-weight); line-height: var(--type-{{token}}-line); letter-spacing: var(--type-{{token}}-tracking);">これはサンプルテキストです Design System 0123</div>
     </div>
     <div class="pv-prose" style="margin-top:8px"><!-- FILL: 本文 ## Typography の散文を verbatim（無ければ削除） --></div>
   </section>
