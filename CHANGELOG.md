@@ -2,6 +2,15 @@
 
 本プロジェクトの主な変更点を記録する。バージョンは [プラグインマニフェスト](.claude-plugin/plugin.json) に準拠する。
 
+## [1.2.1] - 2026-06-21
+
+- `preview-ui` をレビュー反映で改善:
+  - コントラストバッジを「達成した最上位レベル1つ」（AAA / AA / AA Large / Fail）へ。AA・AAA の二重表示をやめ意味を明確化
+  - primitive ランプを色相（blue / ink / neutral …）ごとに改行して可読性を向上
+  - DESIGN.md 本文の文言（Summary・各セクション散文・Do's and Don'ts）を該当節へ verbatim 転記（契約4を追加）
+  - タイポグラフィのサンプル文を自然な見本へ変更（「永字八法」を廃止）
+  - 独立ファイルで開く前提に合わせ `<!doctype html>` を明示
+
 ## [1.2.0] - 2026-06-21
 
 - `preview-ui` を追加（DESIGN.md をほぼ機械的に preview.html へ反映し、ブラウザで視覚確認）

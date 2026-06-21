@@ -27,13 +27,14 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 1. **全トークン露出** — front matter の全トークン（`colors` / `typography` / `rounded` / `spacing` / `components`）は specimen のどこかに必ず現れる。取りこぼさない。
 2. **既存トークンのみで例画面を組む** — 末尾の例画面は CSS カスタムプロパティ（`var(--…)`）経由で既存トークンだけを参照する。新しい色・サイズ・角丸・字間などの値を一切発明しない。
 3. **欠落は省略（捏造しない）** — DESIGN.md に無いトークン群の節は出力から省く。デフォルト値で埋めない。
-4. **決定論** — 同じ DESIGN.md からはほぼ同一の HTML が出る。下の固定テンプレを骨格として使い、値の差し込みだけを行う。
+4. **本文の散文も転記** — front matter だけでなく **DESIGN.md 本文の文言**（`## Summary`・各セクションの散文・`## Do's and Don'ts`）も、該当する specimen 節へ **verbatim（要約・改変せず）** に載せる。トークンと散文を併置することで「値＋意図」を同時に把握できる。本文に無い文言は足さない。
+5. **決定論** — 同じ DESIGN.md からはほぼ同一の HTML が出る。下の固定テンプレを骨格として使い、値の差し込みだけを行う。
 
 ## 手順
 
 ### 1. DESIGN.md の読込・パース
 
-対象 DESIGN.md（引数指定がなければプロジェクトルートの `DESIGN.md`）を読み、front matter を YAML としてパースする。本文の `## Overview` 冒頭1〜2文はヘッダの説明に流用してよい（任意）。
+対象 DESIGN.md（引数指定がなければプロジェクトルートの `DESIGN.md`）を読み、front matter を YAML としてパースする。あわせて**本文の各セクション散文**（Summary・Overview・Colors・Typography・Layout・Elevation・Shapes・Components・Do's and Don'ts）も抽出する（契約4で該当節へ転記する）。本文の `## Overview` はヘッダ説明にも流用してよい。
 
 ### 2. `{}` 参照の解決
 
@@ -46,8 +47,14 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 
 on-color ペア（`on-primary`×`primary`、`on-surface`×`surface`、`on-error`×`error`、その他 `on-*` と対応するベース）について、色を sRGB 相対輝度へ変換しコントラスト比を計算する。
 
-- 判定: 本文 **AA = 4.5:1** / **AAA = 7:1**、大文字相当 **3:1**。
-- 各ペアに「比率＋AA/AAA バッジ（pass/fail）」を添える。
+- 各ペアには「比率＋**達成した最上位レベルを1つだけ**示すバッジ」を添える（AA/AAA を両方並べない — 冗長で意味が伝わりにくい）。判定は下表のとおり:
+
+  | コントラスト比 | バッジ | CSS クラス | 意味 |
+  |---|---|---|---|
+  | ≥ 7:1 | `AAA` | `pass` | 強化基準クリア（最良） |
+  | 4.5–7:1 | `AA` | `pass` | 通常テキストの最低基準クリア |
+  | 3–4.5:1 | `AA Large` | `warn` | 大文字（18px+/14px+bold）のみ可。本文は不足 |
+  | < 3:1 | `Fail` | `fail` | 不足 |
 
 ### 4. テンプレへ転記
 
@@ -68,14 +75,16 @@ on-color ペア（`on-primary`×`primary`、`on-surface`×`surface`、`on-error`
 - [ ] front matter の全トークンが specimen に現れているか（契約1）
 - [ ] 例画面に DESIGN.md に無い色・サイズ・角丸が現れていないか（契約2）
 - [ ] 存在しないトークン群の節を捏造していないか（契約3）
+- [ ] 本文の散文（Summary・各節・Do's and Don'ts）を該当節へ転記したか（契約4）
 - [ ] 未解決 `{}` 参照を警告チップとして可視化したか
-- [ ] on-color ペアにコントラストバッジが付いているか
+- [ ] on-color ペアに**1つだけ**の達成レベルバッジが付いているか
 
 ## 固定 HTML テンプレ（決定論の源）
 
 このスケルトンを骨格として使う。`<!-- FILL: … -->` の箇所だけを DESIGN.md の値で差し込み、構造・クラス名・CSS の骨組みは変えない。トークンが無い節は丸ごと削除する（契約3）。`{{name}}` 等の二重波括弧はプレースホルダで、実値へ置換する。
 
 ```html
+<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{name}} — preview</title>
@@ -109,8 +118,14 @@ on-color ペア（`on-primary`×`primary`、`on-surface`×`surface`、`on-error`
     font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
     opacity: .55; border-bottom: 1px solid currentColor; padding-bottom: 6px; margin: 0 0 20px;
   }
+  /* 本文の散文（DESIGN.md 文言の verbatim 転記） */
+  .pv-prose { max-width: 760px; opacity: .85; font-size: 14px; line-height: 1.75; margin: 0 0 24px; white-space: pre-wrap; }
+  .pv-prose.summary { padding: 16px 18px; border: 1px solid rgba(128,128,128,.2); border-radius: 10px; }
+  .pv-prose ul { margin: 0; padding-left: 1.2em; }
   /* Colors */
-  .pv-ramp { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .pv-hue { margin-bottom: 12px; }
+  .pv-hue .hue-label { font-size: 11px; opacity: .5; font-family: ui-monospace, monospace; margin-bottom: 4px; }
+  .pv-ramp { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
   .pv-swatch { width: 96px; }
   .pv-swatch .chip { height: 56px; border-radius: 8px; border: 1px solid rgba(128,128,128,.25); }
   .pv-swatch .name { font-size: 11px; font-family: ui-monospace, monospace; margin-top: 4px; }
@@ -143,31 +158,50 @@ on-color ペア（`on-primary`×`primary`、`on-surface`×`surface`、`on-error`
     <p class="pv-meta">version: {{version}} · source: {{DESIGN.md のパス}}</p>
   </header>
 
+  <!-- 0. Summary（本文 ## Summary があれば verbatim。無ければこの section を削除） -->
+  <section class="pv-block">
+    <h2>Summary</h2>
+    <div class="pv-prose summary"><!-- FILL: ## Summary の本文を verbatim（箇条書きは <ul><li> で） --></div>
+  </section>
+
+  <!-- Overview（本文 ## Overview があれば verbatim。無ければ削除） -->
+  <section class="pv-block">
+    <h2>Overview</h2>
+    <div class="pv-prose"><!-- FILL: ## Overview の散文を verbatim --></div>
+  </section>
+
   <!-- 1. Colors -->
   <section class="pv-block">
     <h2>Colors</h2>
-    <div class="pv-ramp">
-      <!-- FILL: primitive ごとに 1 つ。ヒュー×階調で整列 -->
-      <div class="pv-swatch"><div class="chip" style="background: var(--color-{{primitive}})"></div><div class="name">{{primitive}}</div><div class="val">{{literal}}</div></div>
+    <!-- FILL: primitive を色相プレフィックス（blue / ink / neutral / red …）ごとに .pv-hue で改行。
+         各 .pv-hue 内は同一色相を階調順（明→暗）に並べる -->
+    <div class="pv-hue">
+      <div class="hue-label">{{hue}}</div>
+      <div class="pv-ramp">
+        <div class="pv-swatch"><div class="chip" style="background: var(--color-{{primitive}})"></div><div class="name">{{primitive}}</div><div class="val">{{literal}}</div></div>
+      </div>
     </div>
-    <div class="pv-roles">
-      <!-- FILL: semantic ロールごとに 1 つ。on-color ペアは pair の背景/文字で対比し、コントラスト比とバッジを添える -->
+    <div class="pv-roles" style="margin-top:20px">
+      <!-- FILL: semantic ロールごとに 1 つ。on-color ペアは pair の背景/文字で対比し、比率＋達成レベルバッジを1つ添える -->
       <div class="pv-role">
         <div class="pair" style="background: var(--color-{{base}}); color: var(--color-{{on-base}})">{{base}} / {{on-base}}</div>
-        <div class="meta"><span>{{ratio}}:1</span><span><span class="badge {{pass|fail}}">AA</span> <span class="badge {{pass|fail}}">AAA</span></span></div>
+        <div class="meta"><span>{{ratio}}:1</span><span class="badge {{pass|warn|fail}}">{{AAA|AA|AA Large|Fail}}</span></div>
       </div>
       <!-- 未解決参照は: <span class="badge warn">未解決 {colors.xxx}</span> -->
     </div>
+    <div class="pv-prose" style="margin-top:24px"><!-- FILL: 本文 ## Colors の散文を verbatim（無ければ削除） --></div>
   </section>
 
   <!-- 2. Typography -->
   <section class="pv-block">
     <h2>Typography</h2>
-    <!-- FILL: typography レベルごとに 1 つ。実サイズでサンプル表示 -->
+    <!-- FILL: typography レベルごとに 1 つ。実サイズでサンプル表示。
+         サンプル文は仮名・漢字・英字・数字を含む自然な見本にする（マニアックな例字は避ける） -->
     <div class="pv-type">
       <div class="spec">{{token}} · {{family}} {{size}}/{{line}} w{{weight}} tracking {{tracking}}</div>
-      <div style="font-family: var(--type-{{token}}-family); font-size: var(--type-{{token}}-size); font-weight: var(--type-{{token}}-weight); line-height: var(--type-{{token}}-line); letter-spacing: var(--type-{{token}}-tracking);">永字八法 The quick brown fox 0123</div>
+      <div style="font-family: var(--type-{{token}}-family); font-size: var(--type-{{token}}-size); font-weight: var(--type-{{token}}-weight); line-height: var(--type-{{token}}-line); letter-spacing: var(--type-{{token}}-tracking);">あひるの空を見上げて Design Sample 0123</div>
     </div>
+    <div class="pv-prose" style="margin-top:8px"><!-- FILL: 本文 ## Typography の散文を verbatim（無ければ削除） --></div>
   </section>
 
   <!-- 3. Spacing / Rounded（どちらか欠けたら該当ブロックを削除） -->
@@ -181,12 +215,14 @@ on-color ペア（`on-primary`×`primary`、`on-surface`×`surface`、`on-error`
       <!-- FILL: rounded の各レベルを角丸矩形で -->
       <div><div class="pv-radius" style="border-radius: var(--rounded-{{level}})"></div><div class="label">{{level}} {{value}}</div></div>
     </div>
+    <div class="pv-prose" style="margin-top:24px"><!-- FILL: 本文 ## Layout / ## Shapes の散文を verbatim（無ければ削除） --></div>
   </section>
 
   <!-- 4. Elevation & Depth（本文 §5 に深度の手段がある場合のみ。影/ボーダー/背景段差を見本化） -->
   <section class="pv-block">
     <h2>Elevation &amp; Depth</h2>
     <!-- FILL: DESIGN.md が採る深度手段（shadow / border / surface 段差 等）の見本を数点 -->
+    <div class="pv-prose" style="margin-top:16px"><!-- FILL: 本文 ## Elevation & Depth の散文を verbatim（無ければ削除） --></div>
   </section>
 
   <!-- 5. Components -->
@@ -195,6 +231,7 @@ on-color ペア（`on-primary`×`primary`、`on-surface`×`surface`、`on-error`
     <div class="pv-components">
       <!-- FILL: components の atom を実レンダー。状態違い（-hover 等）も並置。スタイルは var(--…) 参照のみ -->
     </div>
+    <div class="pv-prose" style="margin-top:16px"><!-- FILL: 本文 ## Components の散文を verbatim（無ければ削除） --></div>
   </section>
 
   <!-- 6. 例画面（既存トークンだけで組む。新値禁止＝契約2） -->
@@ -203,6 +240,12 @@ on-color ペア（`on-primary`×`primary`、`on-surface`×`surface`、`on-error`
     <div class="pv-example">
       <!-- FILL: カード＋フォーム＋ナビ程度の小さな代表 UI。色・サイズ・角丸・タイポはすべて var(--…) を参照 -->
     </div>
+  </section>
+
+  <!-- 7. Do's and Don'ts（本文にあれば verbatim。無ければ削除） -->
+  <section class="pv-block">
+    <h2>Do's and Don'ts</h2>
+    <div class="pv-prose"><!-- FILL: 本文 ## Do's and Don'ts を verbatim（箇条書きは <ul><li>） --></div>
   </section>
 
 </div>
@@ -215,7 +258,7 @@ on-color ペア（`on-primary`×`primary`、`on-surface`×`surface`、`on-error`
 
 - 生成先: preview.html（DESIGN.md の隣）
 - 反映トークン: 色 primitive N / semantic N、タイポ N レベル、rounded N、spacing N、components N
-- コントラスト: on-color ペア N 組を検証（AA pass N / fail N）
+- コントラスト: on-color ペア N 組を検証（AAA N / AA N / AA Large N / Fail N）
 - 未解決 `{}` 参照: N 件（あれば一覧）
 - 省略した節: [トークン不在で省いたセクション]
 
