@@ -14,8 +14,13 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/typography.md`
 - `ui-design-grounding/reference/accessibility.md`
 - `ui-design-grounding/reference/spatial-layout.md`
+- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段・後段）の手順
 
 ## 手順
+
+### 0. 基準の確認（DESIGN.md 前段ゲート）
+
+`design-md-gate.md` の **前段ゲート** を実施する。DESIGN.md があれば `typography` トークン・規約を基準として読み込み（リファレンスより優先）、なければ未整備として扱い `/init-design` を提案する。基準なしに「問題なし」と判断しない。
 
 ### 1. 現在のタイポグラフィを診断
 
@@ -73,6 +78,10 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - [ ] 本文が最小 16px 以上か
 - [ ] `user-scalable=no` を使っていないか
 - [ ] タップターゲットが 44px 以上か
+
+## DESIGN.md 後段ゲート
+
+`design-md-gate.md` の **後段ゲート** を実施する。今回の修正が DESIGN.md の `typography`（フォント・スケール・行間・ウェイト等）を変えた場合は乖離を明示し、`/init-design` へ誘導する（DESIGN.md は自動では書き換えない）。
 
 ## 推奨される次のステップ
 
