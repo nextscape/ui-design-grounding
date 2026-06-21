@@ -49,53 +49,33 @@ claude install-plugin nextscape/ui-design-grounding
 コマンドスキルは「**第1層＝動詞（何をするか）**」と「**第2層＝観点（どの軸を実際に直すか）**」の2層で構成されます（※後述「構成」の "ナレッジ / コマンド" の二層とは別の軸）。
 
 - **第1層（入口・少数の動詞）**: 考える `design-ui` / 作る `implement-ui` / 直す `refine-ui` / 評価する `audit-ui`・`score-ui` / 基準化する `init-design`・`scan-ui`。まずこの動詞だけ覚えれば十分。
-- **第2層（観点・実働ユニット）**: 色・タイポ・レイアウト・モーション・文言・堅牢性・性能などを実際に直すスキル。第1層（`implement` / `refine`）から委譲され、軸が明確なら直接も呼べる。
+- **第2層（観点・実働ユニット）**: 色・タイポ・レイアウト・モーション・文言・堅牢性・性能などを実際に直すスキル。第1層（`implement` / `refine`）から**深掘り時に委譲され**、軸が明確なら直接も呼べる。
 
 ```mermaid
 flowchart TB
   subgraph L1["第1層 — 動詞（入口）"]
-    direction LR
-    design["design-ui<br/>考える"]
-    implement["implement-ui<br/>作る"]
-    refine["refine-ui<br/>直す"]
-    eval["audit-ui<br/>score-ui<br/>評価"]
-    init["init-design<br/>scan-ui<br/>extract-ui<br/>基準化"]
-  end
-
-  DESIGN[("DESIGN.md<br/>視覚的憲法<br/>（重力の中心）")]
-
-  subgraph L2["第2層 — 観点（実働ユニット・第1層から委譲）"]
     direction TB
-    subgraph R1["見た目・配色・配置・動き"]
-      direction LR
-      typeset["typeset-ui"]
-      recolor["recolor-ui"]
-      arrange["arrange-ui"]
-      animate["animate-ui"]
-    end
-    subgraph R2["文言・堅牢・適応・性能"]
-      direction LR
-      clarify["clarify-ui"]
-      guard["guard-ui"]
-      adapt["adapt-ui"]
-      optimize["optimize-ui"]
-    end
-    subgraph R3["整理・印象・仕上げ"]
-      direction LR
-      slim["slim-ui"]
-      calm["calm-ui"]
-      boost["boost-ui"]
-      polish["polish-ui"]
-    end
+    design["design-ui（考える）"]
+    implement["implement-ui（作る）"]
+    refine["refine-ui（直す）"]
+    eval["audit-ui / score-ui（評価）"]
+    init["init-design / scan-ui（基準化）"]
   end
+
+  DESIGN[("DESIGN.md<br/>視覚的憲法")]
+  L2["第2層<br/>観点スキル群（実働）"]
+  recolor["recolor-ui<br/>（色の実働）"]
 
   init ==>|生成・更新| DESIGN
+  recolor ==>|色を直接更新| DESIGN
   DESIGN -.->|前段ゲートで読む| L1
-  implement ==>|委譲| L2
-  refine ==>|委譲| L2
-  recolor ==>|色は自身で更新| DESIGN
-  L2 -.->|乖離は誘導| init
+  DESIGN -.->|前段ゲートで読む| L2
+  implement -.->|深掘り時のみ委譲| L2
+  refine -.->|深掘り時のみ委譲| L2
+  L2 -.->|色以外のトークン変更は誘導| init
 ```
+
+> **配線の読み方**: DESIGN.md が中心。第1層・第2層とも作業前に DESIGN.md を読む（前段ゲート）。`implement`／`refine` は**軽微なら自前で直し、深掘りが要る観点だけ**第2層へ委譲する。DESIGN.md を更新できるのは2系統 — **`init-design`／`scan-ui`（全トークン・人間承認）**と **`recolor-ui`（色・専用）**。第2層が色以外のトークン水準を変えたら `init-design` へ誘導して反映する（自動では書き換えない）。
 
 ライフサイクルで見ると、DESIGN.md を基盤に「基準化 → 考える → 作る → 評価 → 直す → 仕上げ」と巡ります:
 
