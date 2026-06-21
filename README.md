@@ -58,34 +58,43 @@ flowchart TB
     design["design-ui<br/>考える"]
     implement["implement-ui<br/>作る"]
     refine["refine-ui<br/>直す"]
-    eval["audit-ui / score-ui<br/>評価する"]
-    init["init-design / scan-ui / extract-ui<br/>基準化する"]
+    eval["audit-ui<br/>score-ui<br/>評価"]
+    init["init-design<br/>scan-ui<br/>extract-ui<br/>基準化"]
   end
 
-  DESIGN[("DESIGN.md<br/>視覚的憲法（重力の中心）")]
+  DESIGN[("DESIGN.md<br/>視覚的憲法<br/>（重力の中心）")]
 
-  subgraph L2["第2層 — 観点（実働ユニット）"]
-    direction LR
-    typeset["typeset-ui"]
-    recolor["recolor-ui"]
-    arrange["arrange-ui"]
-    animate["animate-ui"]
-    clarify["clarify-ui"]
-    guard["guard-ui"]
-    adapt["adapt-ui"]
-    optimize["optimize-ui"]
-    slim["slim-ui"]
-    calm["calm-ui"]
-    boost["boost-ui"]
-    polish["polish-ui"]
+  subgraph L2["第2層 — 観点（実働ユニット・第1層から委譲）"]
+    direction TB
+    subgraph R1["見た目・配色・配置・動き"]
+      direction LR
+      typeset["typeset-ui"]
+      recolor["recolor-ui"]
+      arrange["arrange-ui"]
+      animate["animate-ui"]
+    end
+    subgraph R2["文言・堅牢・適応・性能"]
+      direction LR
+      clarify["clarify-ui"]
+      guard["guard-ui"]
+      adapt["adapt-ui"]
+      optimize["optimize-ui"]
+    end
+    subgraph R3["整理・印象・仕上げ"]
+      direction LR
+      slim["slim-ui"]
+      calm["calm-ui"]
+      boost["boost-ui"]
+      polish["polish-ui"]
+    end
   end
 
   init ==>|生成・更新| DESIGN
   DESIGN -.->|前段ゲートで読む| L1
-  implement ==>|深掘りを委譲| L2
-  refine ==>|診断して委譲| L2
-  L2 -.->|乖離は誘導| init
+  implement ==>|委譲| L2
+  refine ==>|委譲| L2
   recolor ==>|色は自身で更新| DESIGN
+  L2 -.->|乖離は誘導| init
 ```
 
 ライフサイクルで見ると、DESIGN.md を基盤に「基準化 → 考える → 作る → 評価 → 直す → 仕上げ」と巡ります:
