@@ -19,8 +19,13 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/typography.md`
 - `ui-design-grounding/reference/color-system.md`
 - `ui-design-grounding/reference/anti-patterns.md`
+- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段）の手順
 
 ## 手順
+
+### 0. 基準の確認（DESIGN.md 前段ゲート）
+
+`design-md-gate.md` の **前段ゲート** を実施する。DESIGN.md があれば front matter のトークンと本文の指針・用語規約を**基準として読み込み**（リファレンスより優先）、以降のヒューリスティクス評価（特に H4 一貫性・用語の整合）はこの基準に照らして行う。無ければ未整備として扱い `/init-design`（外部 URL からは `/scan-ui`）を提案する。評価専用のため後段ゲートは不要。
 
 1. **コンテキスト確認**: 対象UIの目的・想定ユーザー・利用状況を確認する
 2. **ニールセン10ヒューリスティクス採点**（各0-4点、合計/40点）:
