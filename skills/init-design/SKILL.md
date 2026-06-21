@@ -133,6 +133,7 @@ UI生成・修正時は DESIGN.md の値（front matter のトークンと本文
 - [人間の判断が必要な項目]
 
 ### 推奨される次のステップ
+- `/preview-ui`（生成・更新した DESIGN.md を preview.html に起こしてブラウザで視覚確認）
 - `/extract-ui`（既存UIからコンポーネント・トークンを抽出し、front matter と整合させる）
 - `/audit-ui`（既存コードのトークン準拠率を監査する）
 ```

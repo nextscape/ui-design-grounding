@@ -77,5 +77,6 @@ front matter `colors` を更新し、必要なら本文 `## Colors` の散文も
 
 ## 推奨される次のステップ
 
+- `/preview-ui` — 再配色後の DESIGN.md を preview.html に起こし、新パレットの見た目とコントラストを視覚確認
 - `/audit-ui` — 再配色後のコントラスト・トークン準拠を監査
 - `/polish-ui` — 最終仕上げ

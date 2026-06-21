@@ -319,6 +319,7 @@ DESIGN.md 本体は `reference/design-md-spec.md` のフォーマットに従っ
 
 ## 推奨される次のステップ
 
+- `/preview-ui` — 生成された DESIGN.md を preview.html に起こしてブラウザで視覚確認
 - `/audit-ui` — 取り込んだ DESIGN.md に対する技術品質監査（A–F 的なスコアリングはこちらが担当）
 - `/recolor-ui` — 取り込んだパレットを自社ブランド primary に置き換え
 - `/init-design` — 生成された DESIGN.md の差分更新・調整
