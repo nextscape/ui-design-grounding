@@ -27,7 +27,7 @@ description: UI・UX・画面・ユーザーインターフェース・フロン
 本スキルは **ナレッジベース** である。
 
 - 16個のリファレンス（`reference/`）にUI/UX設計の判断基準・原則・パターンを集約
-- 20個の独立コマンドスキル（`ui-help` を除く）が MANDATORY PREPARATION として本スキルのリファレンスを参照する
+- 21個の独立コマンドスキル（`ui-help` を除く）が MANDATORY PREPARATION として本スキルのリファレンスを参照する
 - 入口は2層: **第1層（動詞）** = 考える `design-ui` / 作る `implement-ui` / 直す `refine-ui` / 評価 `audit-ui`・`score-ui` / 基準化 `init-design`。**第2層（観点・実働ユニット）** = 色・タイポ・レイアウト等を実際に直すスキル。第1層から委譲され、軸が明確なら直接も呼べる
 - 本スキル自体はユーザーが直接呼び出すのではなく、コマンドスキル経由で利用される
 
@@ -43,6 +43,7 @@ description: UI・UX・画面・ユーザーインターフェース・フロン
 | DESIGN.md の作成・更新 | `/init-design` |
 | 技術品質の監査 | `/audit-ui` |
 | UXヒューリスティクス採点 | `/score-ui` |
+| 初見の分かりやすさ監査 | `/legibility-ui` |
 | リリース前の最終仕上げ | `/polish-ui` |
 | エッジケースの堅牢化 | `/guard-ui` |
 | パフォーマンス最適化 | `/optimize-ui` |
