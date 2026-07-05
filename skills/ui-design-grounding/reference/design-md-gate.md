@@ -54,7 +54,7 @@
 | 第1層・考える | `design-ui` | ✓ | —（構造設計。DESIGN.md を制約として読むが書かない） |
 | 第1層・作る | `implement-ui` | ✓ | —（観点横断で第2層へ委譲。値の最終確定・乖離検出は委譲先が担う） |
 | 第1層・直す | `refine-ui` | ✓ | —（観点ベースで診断し第2層へ委譲。後段は委譲先が担う） |
-| 第1層・評価 | `audit-ui` `score-ui` | ✓ | —（実装を変更しない） |
+| 第1層・評価 | `audit-ui` `score-ui` `legibility-ui` | ✓ | —（実装を変更しない） |
 | 第1層・基準化 | `init-design` `scan-ui` | — | —（DESIGN.md そのものを生成・更新する側） |
 | 第2層・実働 | `boost-ui` `calm-ui` `typeset-ui` `animate-ui` `arrange-ui` `slim-ui` `clarify-ui` `guard-ui` `adapt-ui` `optimize-ui` | ✓ | ✓ |
 | 配色（実働） | `recolor-ui` | ✓ | ✓（色は本スキル自身で DESIGN.md を更新） |
