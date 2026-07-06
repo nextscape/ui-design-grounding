@@ -1,0 +1,20 @@
+{
+  "name": "nextscape",
+  "interface": {
+    "displayName": "Nextscape"
+  },
+  "plugins": [
+    {
+      "name": "ui-design-grounding",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

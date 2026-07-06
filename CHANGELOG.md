@@ -2,6 +2,17 @@
 
 本プロジェクトの主な変更点を記録する。バージョンは [プラグインマニフェスト](.claude-plugin/plugin.json) に準拠する。
 
+## [1.3.0] - 2026-07-07
+
+- `legibility-ui` を追加（実装を読む前に画面だけを見て、初見の分かりやすさを6レンズで監査）
+- `legibility.md` を追加し、見た目と機能の一致・現在地・目的・スコープ・重複・画面間一貫性の判断基準を整理
+- `playwright.md` を追加し、評価系・修正系スキル共通の実地観察手順と一括監査スイープを定義
+- `ui-report.md` を追加し、評価系スキルの Markdown レポート保存先・共通メタ情報・スクリーンショットリンクを統一
+- 評価レポートを対象プロジェクトの `ui-reports/YYYY-MM-DD/` に保存する運用を追加
+- README に Claude Code 以外の主要エージェント向け導入方法を追加
+- Codex プラグイン用の `.codex-plugin/plugin.json` と repo marketplace を追加
+- Cursor Rules 用の `.cursor/rules/ui-design-grounding.mdc` を追加し、Gemini CLI の Agent Skills 導入手順を README に反映
+
 ## [1.2.1] - 2026-06-21
 
 - `preview-ui` を追加（DESIGN.md をほぼ機械的に preview.html へ反映し、ブラウザで視覚確認）

@@ -1,0 +1,38 @@
+{
+  "name": "ui-design-grounding",
+  "version": "1.3.0",
+  "description": "UI/UXの設計・実装・レビューにおける判断軸と知識ベースを提供するCodexプラグイン。",
+  "author": {
+    "name": "Nextscape Inc.",
+    "url": "https://github.com/nextscape"
+  },
+  "homepage": "https://github.com/nextscape/ui-design-grounding",
+  "repository": "https://github.com/nextscape/ui-design-grounding",
+  "license": "MIT",
+  "keywords": [
+    "ui",
+    "ux",
+    "design",
+    "accessibility",
+    "frontend"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "UI Design Grounding",
+    "shortDescription": "UI/UX設計・実装・レビューの判断軸をCodexに追加します。",
+    "longDescription": "DESIGN.md、アクセシビリティ、レスポンシブ、情報設計、タイポグラフィ、色、モーション、初見理解などの観点から、UIの設計・実装・監査を支援するスキル集です。",
+    "developerName": "Nextscape Inc.",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/nextscape/ui-design-grounding",
+    "defaultPrompt": [
+      "Use ui-design-grounding to audit this UI.",
+      "Use ui-design-grounding to design this screen.",
+      "Use ui-design-grounding to improve this frontend."
+    ],
+    "brandColor": "#2563EB"
+  }
+}

@@ -1,0 +1,16 @@
+---
+description: UI/UX設計・実装・レビューでui-design-groundingのスキルとリファレンスを参照する
+alwaysApply: false
+---
+
+UI の設計・実装・レビューでは、`ui-design-grounding` の `skills/` を参照する。
+
+参照元リポジトリ: https://github.com/nextscape/ui-design-grounding
+
+Cursor の Remote Rule はこの `.mdc` だけを同期する。詳細な `SKILL.md` と `reference/` を読むには、参照元リポジトリを clone したローカルパス、または明示的に添付されたファイルを使う。
+
+- 迷ったら `skills/ui-help/SKILL.md` を入口にする。
+- 共通ナレッジは `skills/ui-design-grounding/SKILL.md` と `skills/ui-design-grounding/reference/` にある。
+- UI 実装では `skills/implement-ui/SKILL.md`、技術監査では `skills/audit-ui/SKILL.md`、UX 採点では `skills/score-ui/SKILL.md` を優先する。
+- 対象プロジェクトに DESIGN.md がある場合は作業前に読む。ない場合は `skills/init-design/SKILL.md` の手順で作成を検討する。
+- 各 `SKILL.md` の MANDATORY PREPARATION に列挙された参照ファイルを、作業前に読む。
