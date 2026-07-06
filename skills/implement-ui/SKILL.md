@@ -13,7 +13,7 @@ argument-hint: "[デザイン、要件、画面仕様...]"
 
 ui-design-grounding スキルを呼び出し、以下のリファレンスを読み込む:
 
-- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段）の手順
+- `ui-design-grounding/reference/design-md-gate.md`
 - `ui-design-grounding/reference/design-system.md`
 - `ui-design-grounding/reference/design-tokens.md`
 - `ui-design-grounding/reference/implementation.md`

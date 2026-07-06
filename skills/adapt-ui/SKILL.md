@@ -15,13 +15,18 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/spatial-layout.md`
 - `ui-design-grounding/reference/accessibility.md`
 - `ui-design-grounding/reference/interaction.md`
-- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段・後段）の手順
+- `ui-design-grounding/reference/playwright.md`
+- `ui-design-grounding/reference/design-md-gate.md`
 
 ## 手順
 
 ### 0. 基準の確認（DESIGN.md 前段ゲート）
 
 `design-md-gate.md` の **前段ゲート** を実施する。DESIGN.md があれば `breakpoints`・スペーシング等のトークン・規約を基準として読み込み（リファレンスより優先）、なければ未整備として扱い `/init-design` を提案する。基準なしに「問題なし」と判断しない。
+
+### 0.5 実地観察の方針
+
+`playwright.md` の準備を実施する。レスポンシブは**幅を実際に変えて初めて崩れが見える**ため、`playwright.md`「修正系」の型と**ビューポート/メディア変種**に従い、`browser_resize` で 320/768/1024/1280px を巡回し、各幅で**一括監査スイープを流す（安い）→ `clippedX`/`overflowX`/`smallTargets` が出た幅だけ `browser_take_screenshot` で崩れを確認する**（**検出 → 修正 → 各幅で再観察**）。入力方式（`pointer`/`hover`）・セーフエリアの再現も同節に従う。MCP が使えなければその旨を明示する。
 
 ### 1. 現状分析
 
@@ -82,12 +87,14 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 
 ### 6. 検証
 
-- [ ] 主要ブレイクポイントでの動作確認
+`playwright.md` の**ビューポート/メディア変種**に従い、`browser_resize` で各ブレイクポイントを巡回して以下を確認する（修正後は各幅で再観察）。
+
+- [ ] 主要ブレイクポイント（320/768/1024/1280px）での動作確認
 - [ ] 横向き/縦向き両方の確認
-- [ ] タッチターゲット 44px の確認
+- [ ] タッチターゲット 44px の確認（スイープの `smallTargets` で検出）
 - [ ] hover に依存した機能がないか
 - [ ] オーバーフロー（横スクロール）がないか
-- [ ] 実機テスト推奨（DevTools だけでは不十分）
+- [ ] 最終確認は可能なら実機で（エミュレートで取り切れないセーフエリア・実機固有挙動がある）
 
 ## DESIGN.md 後段ゲート
 

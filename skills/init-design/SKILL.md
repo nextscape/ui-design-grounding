@@ -27,8 +27,8 @@ DESIGN.md は「リポジトリの視覚的アイデンティティの憲法」�
 
 ui-design-grounding スキルを呼び出し、以下のリファレンスを読み込む:
 
-- `ui-design-grounding/reference/design-md-spec.md` — **DESIGN.md のフォーマット仕様・設計思想（必読）**
-- `ui-design-grounding/reference/design-system.md` — デザインシステムの構成・コンポーネント設計の判断軸
+- `ui-design-grounding/reference/design-md-spec.md`
+- `ui-design-grounding/reference/design-system.md`
 - `ui-design-grounding/reference/design-tokens.md`
 - `ui-design-grounding/reference/color-system.md`
 - `ui-design-grounding/reference/typography.md`

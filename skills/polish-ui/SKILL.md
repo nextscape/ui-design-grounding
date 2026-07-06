@@ -11,22 +11,24 @@ argument-hint: "[対象 (画面、コンポーネント、機能...)]"
 
 ui-design-grounding スキルを呼び出し、以下のリファレンスを読み込む:
 
-- `ui-design-grounding/reference/interaction.md`
+- `ui-design-grounding/reference/spatial-layout.md`
 - `ui-design-grounding/reference/typography.md`
 - `ui-design-grounding/reference/color-system.md`
-- `ui-design-grounding/reference/spatial-layout.md`
-- `ui-design-grounding/reference/anti-patterns.md`
-- `ui-design-grounding/reference/accessibility.md`
-- `ui-design-grounding/reference/responsive-design.md`
-- `ui-design-grounding/reference/wording.md`
 - `ui-design-grounding/reference/design-tokens.md`
+- `ui-design-grounding/reference/interaction.md`
+- `ui-design-grounding/reference/accessibility.md`
 - `ui-design-grounding/reference/motion-design.md`
-- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段・後段）の手順
+- `ui-design-grounding/reference/wording.md`
+- `ui-design-grounding/reference/responsive-design.md`
+- `ui-design-grounding/reference/anti-patterns.md`
+- `ui-design-grounding/reference/playwright.md`
+- `ui-design-grounding/reference/design-md-gate.md`
 
 ## 注意
 
 - **polish は最終ステップ**。機能が完成していない場合は先に完成させる
 - review-ui（評価のみ）との違い: **polish-ui は問題を発見次第、実際に修正する**
+- **実地観察で進める**: `playwright.md` の準備を実施し、各チェック項目は「そのはず」で判定せず Playwright MCP で**検出 → 修正 → 再観察で反映を確認**する（`playwright.md`「修正系」の型）。特にインタラクション状態・レスポンシブ・マイクロインタラクションは実際に発火/リサイズして確認する。MCP が使えなければその旨を明示する。
 
 ## 手順
 
@@ -54,6 +56,9 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - [ ] 色背景にグレーテキストを使っていないか
 
 ### 4. インタラクション状態（8状態すべて）
+
+`playwright.md` の**状態のトリガと観察**に従い、各状態を実際に発火させて screenshot / snapshot で確認する（:hover は `browser_hover`、focus は `browser_press_key` Tab、error/loading は実際に発火）。
+
 - [ ] Default: 基本状態が明確
 - [ ] Hover: カーソルホバー時の変化
 - [ ] Focus: `:focus-visible` スタイル（2-3px、3:1コントラスト）

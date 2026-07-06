@@ -16,7 +16,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/implementation.md`
 - `ui-design-grounding/reference/color-system.md`
 - `ui-design-grounding/reference/spatial-layout.md`
-- `ui-design-grounding/reference/design-md-spec.md` — 抽出結果を DESIGN.md に反映する場合の front matter 書式
+- `ui-design-grounding/reference/design-md-spec.md`
 
 ## 手順
 

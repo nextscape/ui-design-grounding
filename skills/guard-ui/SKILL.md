@@ -16,13 +16,18 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/wording.md`
 - `ui-design-grounding/reference/responsive-design.md`
 - `ui-design-grounding/reference/implementation.md`
-- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段・後段）の手順
+- `ui-design-grounding/reference/playwright.md`
+- `ui-design-grounding/reference/design-md-gate.md`
 
 ## 手順
 
 ### 0. 基準の確認（DESIGN.md 前段ゲート）
 
 `design-md-gate.md` の **前段ゲート** を実施する。DESIGN.md があればそのトークン・規約を基準として読み込み（リファレンスより優先）、なければ未整備として扱い `/init-design` を提案する。基準なしに「問題なし」と判断しない。
+
+### 0.5 実地観察の方針
+
+`playwright.md` の準備を実施する。堅牢性は**再現して初めて分かる**ため、コード上の存在確認だけで判定しない。`playwright.md`「修正系」の型に従い、**崩れを再現して検出 → 修正 → 再観察で確認**する。具体的には、長文・多言語テキストを実際に注入する、`browser_resize` でビューポートを縮める、エラー/オフライン/空データを実際に発生させて `browser_take_screenshot` で崩れを見る。MCP が使えなければその旨を明示する。
 
 ### 1. テキストオーバーフロー処理
 

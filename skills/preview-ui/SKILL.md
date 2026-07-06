@@ -17,8 +17,8 @@ argument-hint: "[対象 DESIGN.md（省略時はプロジェクトルート）]"
 
 ui-design-grounding スキルを呼び出し、以下のリファレンスを読み込む:
 
-- `ui-design-grounding/reference/design-md-spec.md` — **front matter 書式・`{}` 参照の解決規則・本文8セクション（必読）**
-- `ui-design-grounding/reference/color-system.md` — sRGB 変換・WCAG コントラスト計算
+- `ui-design-grounding/reference/design-md-spec.md`
+- `ui-design-grounding/reference/color-system.md`
 
 ## 機械的転記契約（不変条件）
 

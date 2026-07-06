@@ -11,12 +11,12 @@ argument-hint: "[対象 (画面、コンポーネント、機能...)]"
 
 ui-design-grounding スキルを呼び出し、以下のリファレンスを読み込む:
 
-- `ui-design-grounding/reference/typography.md`
 - `ui-design-grounding/reference/color-system.md`
-- `ui-design-grounding/reference/spatial-layout.md`
+- `ui-design-grounding/reference/typography.md`
 - `ui-design-grounding/reference/motion-design.md`
+- `ui-design-grounding/reference/spatial-layout.md`
 - `ui-design-grounding/reference/anti-patterns.md`
-- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段・後段）の手順
+- `ui-design-grounding/reference/design-md-gate.md`
 
 ## 手順
 

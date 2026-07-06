@@ -15,7 +15,7 @@ argument-hint: "[対象と気になる点 (画面、違和感...)]"
 
 ui-design-grounding スキルを呼び出し、以下のリファレンスを読み込む:
 
-- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段）の手順
+- `ui-design-grounding/reference/design-md-gate.md`
 - `ui-design-grounding/reference/anti-patterns.md`
 - `ui-design-grounding/reference/usability.md`
 

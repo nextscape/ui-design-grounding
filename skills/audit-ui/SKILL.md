@@ -13,11 +13,12 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 
 - `ui-design-grounding/reference/accessibility.md`
 - `ui-design-grounding/reference/implementation.md`
-- `ui-design-grounding/reference/responsive-design.md`
 - `ui-design-grounding/reference/color-system.md`
 - `ui-design-grounding/reference/design-tokens.md`
+- `ui-design-grounding/reference/responsive-design.md`
 - `ui-design-grounding/reference/anti-patterns.md`
-- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段）の手順
+- `ui-design-grounding/reference/playwright.md`
+- `ui-design-grounding/reference/design-md-gate.md`
 
 ## 手順
 
@@ -25,12 +26,12 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 
 `design-md-gate.md` の **前段ゲート** を実施する。DESIGN.md があれば front matter のトークンと本文の指針を**基準（source of truth）として読み込み**（リファレンスより優先）、以降の監査（特にテーミング次元の準拠度）はこの基準に照らして測る。無ければ未整備として扱い `/init-design`（外部 URL からは `/scan-ui`）を提案し、「基準が未整備」と明示する（基準なしに準拠度を断定しない）。評価専用のため後段ゲートは不要。
 
-1. **対象の確認**: 監査対象のUI・技術スタック・制約を把握する
-2. **5次元スコアリング**（各0-4点、合計/20点）:
-   - **アクセシビリティ**: コントラスト比、ARIA属性、キーボード操作、セマンティックHTML、フォーカス管理、`prefers-reduced-motion`対応
-   - **パフォーマンス**: アニメーション対象プロパティ（transform/opacityのみか）、遅延読み込み、不要な再レンダリング、Core Web Vitals
-   - **テーミング**: デザイントークン使用率、ハードコード値の有無、ダークモード対応、セマンティックトークンの適切さ
-   - **レスポンシブ**: 固定幅の有無、タッチターゲットサイズ（44px最小）、オーバーフロー、入力方式対応（pointer/hover）
+1. **対象の確認と実地観察**: 監査対象のUI・技術スタック・制約を把握する。`playwright.md` の**準備（共通）**を実施し、対象画面を Playwright MCP で開く。**まず `playwright.md` の一括監査スイープを1回流して機械的な指摘候補（コントラスト・タッチターゲット・オーバーフロー・未ラベル・レイアウトアニメ）を回収し、screenshot は要確認箇所だけに絞る**（→ 効率化のトリアージ）。スコアリングは観察・実測を根拠にし、ソース読解のみで断定しない。MCP が使えなければその旨を明示し、実測を要する項目は「未検証」として扱う。
+2. **5次元スコアリング**（各0-4点、合計/20点）: スイープの候補を各次元へ振り分け、足りない分だけ追加観察する。
+   - **アクセシビリティ**: コントラスト比・タッチターゲット・未ラベルは**一括監査スイープ**の結果を使う。フォーカス可視性は `browser_press_key`（Tab）で当ててから確認、キーボード操作も同様に実際に辿り、`prefers-reduced-motion` はエミュレートして確認。ARIA属性・セマンティックHTMLは `browser_snapshot` で確認
+   - **パフォーマンス**: アニメーション対象プロパティ（transform/opacityのみか）はスイープの `layoutAnim` で検出、遅延読み込み・不要な再レンダリング・Core Web Vitals
+   - **テーミング**: デザイントークン使用率、ハードコード値の有無、ダークモード対応（`prefers-color-scheme` エミュレートで確認）、セマンティックトークンの適切さ
+   - **レスポンシブ**: `browser_resize` で 320/768/1024/1280px を巡回し、固定幅・オーバーフロー・タッチターゲット（44px最小）・入力方式対応（pointer/hover）を各幅で確認
    - **アンチパターン**: AI slop指標の該当数、横断的アンチパターンの該当数
 3. **問題の分類**: 各問題をP0-P3の重篤度で分類する
    - P0（Blocking）: タスク完了不能、重大なアクセシビリティ違反

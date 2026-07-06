@@ -14,7 +14,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/wording.md`
 - `ui-design-grounding/reference/cognitive.md`
 - `ui-design-grounding/reference/accessibility.md`
-- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段・後段）の手順
+- `ui-design-grounding/reference/design-md-gate.md`
 
 ## 手順
 

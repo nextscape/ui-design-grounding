@@ -13,8 +13,9 @@ score-ui が「実装を読んでからニールセンの10ヒューリスティ
 
 ui-design-grounding スキルを呼び出し、以下のリファレンスを読み込む:
 
-- `ui-design-grounding/reference/legibility.md` — 6レンズの判断基準・重篤度・出力フォーマット
-- `ui-design-grounding/reference/design-md-gate.md` — DESIGN.md ゲート（前段）の手順
+- `ui-design-grounding/reference/legibility.md`
+- `ui-design-grounding/reference/playwright.md`
+- `ui-design-grounding/reference/design-md-gate.md`
 
 ## Phase 0 — 対象確定・基準確認・準備
 
@@ -33,18 +34,16 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 
 ### 準備
 
-1. Playwright（`mcp__plugin_playwright_playwright__*`）が使えることを確認する。使えない場合はその旨を出力して終了する（代替手段は判定精度を大きく損なうため用意しない）。
-2. アプリが起動していなければ、プロジェクトにアプリ起動用のスキルがあればそれを使う。なければユーザーに起動方法を確認する。
-3. **この時点でも対象コンポーネントのソースは読まない。**
-4. スクリーンショットは、プロジェクトの一時ファイル置き場の慣例（`.gitignore` が定める一時ディレクトリ等）に保存する。無ければ妥当な一時ディレクトリを使う。ファイル名だけの指定は避け、明示的なパスを指定する。
+1. `playwright.md` の**準備（共通）**を実施する（MCP 利用可否の確認 → アプリ起動 → スクリーンショット保存先の確定）。MCP が使えなければその旨を出力して終了する。
+2. **この時点でも対象コンポーネントのソースは読まない。**（本スキル固有の規律。`playwright.md` の「評価系＝観察先行」を最も厳格に適用する。）
 
 ## Phase 1 — 素朴初見監査（画面ごと・コードを読まずに実施）
 
 対象画面ごとに以下を行う。**この Phase の間はコンポーネントのソースを一切開かない。**
 
-Playwright 操作は判定の性質で使い分ける:
-- **視覚判定**（レンズ①②⑤ — 見た目の重み・現在地手がかりの有無・重複表示）→ `browser_take_screenshot` を使う。レンダリング結果そのものが必要なため。
-- **機能判定**（レンズ③④ — 目的理解・スコープ確認）→ `browser_snapshot`（アクセシビリティツリーのテキスト表現）で要素の存在・状態遷移を確認すれば足りる。画像取得は不要。
+Playwright 操作は `playwright.md` の**ツール選択マトリクス**に従い、判定の性質で使い分ける。本スキルでのレンズ別の当てはめ:
+- **視覚判定**（レンズ①②⑤ — 見た目の重み・現在地手がかりの有無・重複表示）→ `browser_take_screenshot`。
+- **機能判定**（レンズ③④ — 目的理解・スコープ確認）→ `browser_snapshot`（アクセシビリティツリー）で要素の存在・状態遷移を確認すれば足りる。
 
 1. Playwright で画面を開く。視覚判定が必要なら `browser_take_screenshot`、機能判定のみなら `browser_snapshot` を取得する。
 2. 画面内の主要な操作可能要素（ボタン・リンク・フィルタ・入力欄・見出し・バッジ等）を一つずつ挙げ、**先に**「初見でこれは何をするものだと思うか」を言語化する。`reference/legibility.md` のレンズ①③の問いを当てる。
