@@ -18,6 +18,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/responsive-design.md`
 - `ui-design-grounding/reference/anti-patterns.md`
 - `ui-design-grounding/reference/playwright.md`
+- `ui-design-grounding/reference/ui-report.md`
 - `ui-design-grounding/reference/design-md-gate.md`
 
 ## 手順
@@ -41,11 +42,40 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 4. **システム的問題の特定**: 複数箇所に共通する根本原因を洗い出す
 5. **ポジティブな発見**: 良い実装・パターンも記録する
 6. **推奨アクション**: 検出した問題を解決できるコマンドスキルを、優先度順に紐付けて提示する。各項目に対象スキル名・対応する問題件数・代表的な問題を含める
+7. **レポート保存**: `ui-report.md` に従い、評価対象プロジェクトの `ui-reports/YYYY-MM-DD/HHmmss-audit-ui.md` に詳細レポートを保存する。スクリーンショットを取得した場合は `ui-reports/YYYY-MM-DD/screenshots/` に保存し、レポート本文から相対リンクする。会話内の最終応答では、要約・最優先アクション・保存先を短く示す
 
 ## 出力フォーマット
 
 ```markdown
-## 監査結果サマリー
+# audit-ui レポート: <対象>
+
+| 項目 | 内容 |
+|---|---|
+| スキル | `audit-ui` |
+| 対象 | <画面・コンポーネント・機能> |
+| 実施日時 | <ISO 8601形式のローカル日時> |
+| DESIGN.md | あり / なし / 未確認 |
+| 観察方法 | Playwright MCP / 未実施（理由） |
+| レポート保存先 | `ui-reports/YYYY-MM-DD/HHmmss-audit-ui.md` |
+
+## スクリーンショット
+
+| # | 内容 | パス |
+|---|---|---|
+| 1 | <画面・状態・幅など> | [screenshots/HHmmss-audit-ui-01.png](screenshots/HHmmss-audit-ui-01.png) |
+
+<!-- 取得していない場合は「なし」と書く。 -->
+
+## 監査サマリー
+
+| 項目 | 内容 |
+|---|---|
+| 総合判定 | Critical / Needs Improvement / Acceptable / Good |
+| 合計スコア | X/20 |
+| P0/P1件数 | P0: X件 / P1: X件 |
+| 次にやること | <最優先で実行すべき対応を1文で書く> |
+
+## 5次元スコア
 
 | 次元 | スコア(/4) | 主要な問題 |
 |------|-----------|-----------|
@@ -56,19 +86,35 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 | アンチパターン | X | ... |
 | **合計** | **X/20** | |
 
-## 問題一覧（重篤度順）
+## 問題一覧
 
 ### P0（Blocking）
-- ...
+- **<問題名>**
+  - 根拠: <観察・実測・スクリーンショット・コード位置など>
+  - 影響: <ユーザーまたは品質への影響>
+  - 推奨対応: <対応方針>
+  - 関連スクリーンショット: [screenshots/HHmmss-audit-ui-01.png](screenshots/HHmmss-audit-ui-01.png) / なし
 
 ### P1（Major）
-- ...
+- **<問題名>**
+  - 根拠: ...
+  - 影響: ...
+  - 推奨対応: ...
+  - 関連スクリーンショット: ...
 
 ### P2（Minor）
-- ...
+- **<問題名>**
+  - 根拠: ...
+  - 影響: ...
+  - 推奨対応: ...
+  - 関連スクリーンショット: ...
 
 ### P3（Polish）
-- ...
+- **<問題名>**
+  - 根拠: ...
+  - 影響: ...
+  - 推奨対応: ...
+  - 関連スクリーンショット: ...
 
 ## システム的な問題
 - ...
@@ -95,4 +141,8 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 3. ...
 
 > 上から順に実行することを推奨。「N番やって」で該当スキルを実行できます。
+
+## 未検証・制約
+
+- <未検証項目または制約。なければ「なし」>
 ```

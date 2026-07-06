@@ -20,6 +20,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/color-system.md`
 - `ui-design-grounding/reference/anti-patterns.md`
 - `ui-design-grounding/reference/playwright.md`
+- `ui-design-grounding/reference/ui-report.md`
 - `ui-design-grounding/reference/design-md-gate.md`
 
 ## 手順
@@ -55,10 +56,40 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 5. **認知負荷アセスメント**: cognitive.md の違反パターン（選択肢の壁、メモリブリッジ等）を検出
 6. **課題の分類**: P0-P3の重篤度で整理
 7. **推奨アクション**: 検出した課題を解決できるコマンドスキルを、優先度順に紐付けて提示する。各項目に対象スキル名・対応する課題件数・代表的な課題を含める
+8. **レポート保存**: `ui-report.md` に従い、評価対象プロジェクトの `ui-reports/YYYY-MM-DD/HHmmss-score-ui.md` に詳細レポートを保存する。スクリーンショットを取得した場合は `ui-reports/YYYY-MM-DD/screenshots/` に保存し、レポート本文から相対リンクする。会話内の最終応答では、要約・最優先アクション・保存先を短く示す
 
 ## 出力フォーマット
 
 ```markdown
+# score-ui レポート: <対象>
+
+| 項目 | 内容 |
+|---|---|
+| スキル | `score-ui` |
+| 対象 | <画面・コンポーネント・機能> |
+| 実施日時 | <ISO 8601形式のローカル日時> |
+| DESIGN.md | あり / なし / 未確認 |
+| 観察方法 | Playwright MCP / 未実施（理由） |
+| レポート保存先 | `ui-reports/YYYY-MM-DD/HHmmss-score-ui.md` |
+
+## スクリーンショット
+
+| # | 内容 | パス |
+|---|---|---|
+| 1 | <画面・状態・幅など> | [screenshots/HHmmss-score-ui-01.png](screenshots/HHmmss-score-ui-01.png) |
+
+<!-- 取得していない場合は「なし」と書く。 -->
+
+## UX評価サマリー
+
+| 項目 | 内容 |
+|---|---|
+| 評価帯 | Excellent / Good / Acceptable / Needs Improvement / Critical |
+| 合計スコア | X/40 |
+| 主要UXリスク | <最も影響が大きいUXリスクを1文で書く> |
+| P0/P1件数 | P0: X件 / P1: X件 |
+| 次にやること | <最優先で実行すべき対応を1文で書く> |
+
 ## ヒューリスティクス評価
 
 | # | ヒューリスティクス | スコア(/4) | 所見 |
@@ -71,14 +102,47 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 ## ペルソナテスト結果
 
 ### [ペルソナ名]
+- 観察した導線: ...
 - レッドフラグ: ...
+- 影響: ...
 - 推奨改善: ...
+- 関連スクリーンショット: [screenshots/HHmmss-score-ui-01.png](screenshots/HHmmss-score-ui-01.png) / なし
 
 ## 認知負荷の問題
-- ...
+- **<問題名>**
+  - 根拠: ...
+  - 影響: ...
+  - 推奨対応: ...
 
-## 課題一覧（P0-P3）
-- ...
+## 課題一覧
+
+### P0（Blocking）
+- **<課題名>**
+  - 根拠: <観察・操作結果・スクリーンショット・コード位置など>
+  - 影響: <ユーザーまたはUXへの影響>
+  - 推奨対応: <対応方針>
+  - 関連スクリーンショット: [screenshots/HHmmss-score-ui-01.png](screenshots/HHmmss-score-ui-01.png) / なし
+
+### P1（Major）
+- **<課題名>**
+  - 根拠: ...
+  - 影響: ...
+  - 推奨対応: ...
+  - 関連スクリーンショット: ...
+
+### P2（Minor）
+- **<課題名>**
+  - 根拠: ...
+  - 影響: ...
+  - 推奨対応: ...
+  - 関連スクリーンショット: ...
+
+### P3（Polish）
+- **<課題名>**
+  - 根拠: ...
+  - 影響: ...
+  - 推奨対応: ...
+  - 関連スクリーンショット: ...
 
 ## 推奨アクション（優先度順）
 
@@ -103,4 +167,8 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 3. ...
 
 > 上から順に実行することを推奨。「N番やって」で該当スキルを実行できます。
+
+## 未検証・制約
+
+- <未検証項目または制約。なければ「なし」>
 ```
