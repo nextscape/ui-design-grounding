@@ -10,7 +10,7 @@
 Nextscape Inc. が公開し、`.claude-plugin/plugin.json` でプラグインとして登録されています。
 
 - プラグイン名: `ui-design-grounding`
-- 現行バージョン: `1.3.0`
+- 現行バージョン: `1.4.0`
 - 構成: ナレッジベース 1 件 + コマンドスキル 23 件
 - ライセンス: MIT
 
@@ -23,7 +23,7 @@ Nextscape Inc. が公開し、`.claude-plugin/plugin.json` でプラグインと
 skills/
   ui-design-grounding/         コアナレッジベース（ユーザー直接呼び出し不可）
     SKILL.md                   ルートスキル: スタンス・出力ポリシー・参照ナビ
-    reference/                 20件のリファレンス（UI/UX原則＋共通手順）
+    reference/                 22件のリファレンス（UI/UX原則＋共通手順）
 
   <command-skill>/             23件のコマンドスキル（ユーザー向けスラッシュコマンド）
     SKILL.md                   ナレッジベースを参照するワークフロー定義
@@ -37,8 +37,8 @@ docs/
 ### ファイル構成の二層
 
 1. **ナレッジベース**（`skills/ui-design-grounding/`）
-   - `SKILL.md` と `reference/` 配下の 20 件のリファレンス文書で構成します。
-   - ユーザビリティ、認知科学、情報設計、色彩、タイポグラフィ、空間レイアウト、インタラクション状態、モーション、アクセシビリティ、レスポンシブ、ワーディング、デザインシステム、デザイントークン、初見の分かりやすさ、DESIGN.md 仕様、DESIGN.md ゲート、実装パターン、アンチパターン、Playwright MCP 観察手順、評価レポート出力ルールを扱います。
+   - `SKILL.md` と `reference/` 配下の 22 件のリファレンス文書で構成します。
+   - ユーザビリティ、認知科学、情報設計、色彩、タイポグラフィ、空間レイアウト、インタラクション状態、モーション、アクセシビリティ、レスポンシブ、ワーディング、デザインシステム、デザイントークン、初見の分かりやすさ、DESIGN.md 仕様、DESIGN.md ゲート、インタビュー手法、機能設計規約、実装パターン、アンチパターン、Playwright MCP 観察手順、評価レポート出力ルールを扱います。
 
 2. **コマンドスキル**（`skills/<name>/`）
    - 23 件のユーザー呼び出し可能なスラッシュコマンドです。
@@ -65,6 +65,8 @@ README で説明している「第1層 / 第2層」は、ファイル構成で�
 - `preview-ui` は `DESIGN.md` を `preview.html` に機械的に反映し、視覚確認できる形にします。
 - 修正系スキルは、値の乖離を検出して誘導します。色は `recolor-ui`、その他のトークン更新は原則 `init-design` へ誘導します。
 - `DESIGN.md` を自動で大きく書き換える場合は、人間の承認が前提です。
+- `design-ui` は要件をインタビューで明確化し、機能単位の判断を `.design/<feature-slug>/FEATURE_DESIGN.md` に残します。`implement-ui` は機能設計があれば読み込みます。
+- `design-ui` / `implement-ui` は DESIGN.md 不在時に `/init-design` へ委譲して基準を先に作ります（評価系は提案止まり）。
 
 ## コマンドスキル早見表
 
@@ -98,14 +100,14 @@ README で説明している「第1層 / 第2層」は、ファイル構成で�
 
 ## 代表的なワークフロー
 
-- **新規 UI**: `/init-design` → `/design-ui` → `/implement-ui` → `/audit-ui`
+- **新規 UI**: `/design-ui`（DESIGN.md が無ければ `/init-design` へ委譲 → 要件インタビュー → 機能設計の生成）→ `/implement-ui` → `/audit-ui`
 - **既存 UI 改善（問題が曖昧）**: `/refine-ui` → `/audit-ui` または `/score-ui`
 - **既存 UI 改善（観点が明確）**: `/typeset-ui` など第2層スキルを直接実行
 - **初見の分かりやすさ確認**: `/legibility-ui`
 - **リリース前**: `/polish-ui` → `/score-ui`
 
 評価系スキル（`audit-ui` / `score-ui` / `legibility-ui`）は、検出した問題を対応スキルへ自動マッピングします。
-詳細な評価結果は、対象プロジェクトの `ui-reports/YYYY-MM-DD/` に Markdown レポートとして保存されます。
+詳細な評価結果は、対象プロジェクトの `.design/reports/YYYY-MM-DD/` に Markdown レポートとして保存されます。
 
 ## リファレンス一覧
 
@@ -127,18 +129,20 @@ README で説明している「第1層 / 第2層」は、ファイル構成で�
 | `legibility.md` | 初見の分かりやすさを評価する 6 レンズ |
 | `design-md-spec.md` | DESIGN.md フォーマット仕様・設計思想 |
 | `design-md-gate.md` | DESIGN.md ゲート（前段 / 後段）の共通プロトコル |
+| `interview.md` | インタビュー5原則、発動判定、質問の帰属 |
+| `feature-design.md` | FEATURE_DESIGN.md（機能設計）テンプレート、`.design/` 構造、昇格導線 |
 | `implementation.md` | コンポーネント粒度、責務分離、UI 状態管理 |
 | `anti-patterns.md` | 横断的アンチパターン、AI 生成 UI 品質ゲート |
 | `playwright.md` | Playwright MCP による実地観察、状態トリガ、一括監査スイープ |
-| `ui-report.md` | 評価レポート保存先、共通メタ情報、スクリーンショットリンク |
+| `ui-report.md` | 評価レポート保存先（`.design/reports/`）、共通メタ情報、スクリーンショットリンク |
 
-## 1.3.0 で追加された最新運用
+## 1.4.0 で追加された最新運用
 
-- `legibility-ui` を追加しました。実装を読む前に画面だけを見て、初見の分かりやすさを 6 レンズで監査します。
-- `legibility.md` を追加しました。見た目と機能の一致、現在地、目的、スコープ、重複、画面間一貫性を判断基準として扱います。
-- `playwright.md` を追加しました。評価系・修正系スキル共通の実地観察手順と一括監査スイープを定義します。
-- `ui-report.md` を追加しました。評価系スキルの Markdown レポート保存先、共通メタ情報、スクリーンショットリンクを統一します。
-- 評価レポートは対象プロジェクトの `ui-reports/YYYY-MM-DD/` に保存します。
+- `interview.md` を追加しました。`init-design` / `design-ui` 共通のインタビュープロトコル（5原則・発動判定・質問の帰属）を定義します。
+- `feature-design.md` を追加しました。機能単位の設計判断を `.design/<feature-slug>/FEATURE_DESIGN.md` として残します。
+- `design-ui` は要件の明確化状況を判定してインタビューし、設計結果を機能設計として保存します。`implement-ui` は機能設計を読み込んで実装します。
+- `init-design` は抽出確度を判定し、コードから読めない意図をヒアリングしてから DESIGN.md を生成します（無断の仮置きを廃止）。
+- UI 作業の生成物の出力先を `.design/` に統合しました（評価レポート = `.design/reports/`、`preview.html` = `.design/preview.html`。DESIGN.md はルート常駐のまま）。
 
 ## 編集時の注意事項
 
@@ -152,6 +156,7 @@ README で説明している「第1層 / 第2層」は、ファイル構成で�
 - **参照順**: 重要度順に並べます。主目的に近いドメイン ref、横断 ref（`anti-patterns.md`）、手順 ref（`playwright.md` → `design-md-gate.md`）の順を基本にします。
 - **DESIGN.md 基準のスキル**: `implement-ui` や `refine-ui` など DESIGN.md を作業土台にするスキルでは、`design-md-gate.md` を先頭に置きます。
 - **評価レポート**: 評価系スキルを編集するときは、`ui-report.md` の保存先・メタ情報・スクリーンショットリンク規約と整合させます。
+- **インタビュー・機能設計**: インタビューを行うスキル（`init-design` / `design-ui`）は `interview.md` の5原則・発動判定と、機能設計を扱うスキル（`design-ui` / `implement-ui`）は `feature-design.md` の保存先・テンプレート規約と整合させます。
 - **実地観察**: Playwright を使う評価・修正系スキルは、`playwright.md` の観察手順と一括監査スイープを参照します。
 
 ## 設計方針

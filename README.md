@@ -86,7 +86,7 @@ clone したリポジトリの `skills/` をリンクして使えます。
 
 | スキル | 役割 |
 |---|---|
-| `/design-ui` | UI 構造、画面遷移、状態設計を考える |
+| `/design-ui` | UI 構造、画面遷移、状態設計を考え、機能設計として残す |
 | `/implement-ui` | DESIGN.md と既存実装に沿って UI を実装する |
 | `/refine-ui` | 「読みにくい」「うるさい」など曖昧な問題を診断して直す |
 | `/audit-ui` | 技術品質を5軸で監査する |
@@ -166,23 +166,27 @@ DESIGN.md は、対象プロジェクトの UI 方針を残すファイルです
 
 DESIGN.md がない場合は、まず `/init-design` を使うのがおすすめです。
 
-## 評価レポート
+## UI 作業の出力先（.design/）
 
-評価系スキルは、結果を Markdown レポートとして保存します。
-
-対象プロジェクトに次のようなディレクトリが作られます。
+このプラグインのスキルが生成するファイルは、DESIGN.md（プロジェクトルート常駐）を除き、対象プロジェクトの `.design/` に集約されます。
 
 ```text
-ui-reports/
-  YYYY-MM-DD/
-    HHmmss-audit-ui.md
-    HHmmss-score-ui.md
-    HHmmss-legibility-ui.md
-    screenshots/
-      HHmmss-audit-ui-01.png
+.design/
+  <feature-slug>/
+    FEATURE_DESIGN.md        ← /design-ui が保存する機能単位の設計判断
+  reports/
+    YYYY-MM-DD/
+      HHmmss-audit-ui.md
+      HHmmss-score-ui.md
+      HHmmss-legibility-ui.md
+      screenshots/
+        HHmmss-audit-ui-01.png
+  preview.html               ← /preview-ui が生成する DESIGN.md の見本帳
 ```
 
-スクリーンショットを取得した場合は、レポート内から相対リンクされます。レビュー後に、何を見て、何を根拠に判断したかを追いやすくするためです。
+FEATURE_DESIGN.md は `/implement-ui` が読み込む受け渡しファイルのため、コミットしておくのがおすすめです。
+
+評価系スキルのスクリーンショットは、レポート内から相対リンクされます。レビュー後に、何を見て、何を根拠に判断したかを追いやすくするためです。
 
 ### レポートのイメージ
 
@@ -323,6 +327,8 @@ docs/
 | `design-md-gate.md` | DESIGN.md を作業前後でどう扱うか |
 | `playwright.md` | Playwright MCP による実地観察 |
 | `ui-report.md` | 評価レポートの保存先、メタ情報、スクリーンショットリンク |
+| `interview.md` | インタビュー5原則、発動判定、質問の帰属 |
+| `feature-design.md` | 機能設計（FEATURE_DESIGN.md）のテンプレートと `.design/` 構造 |
 
 ## どのスキルを選べばよいか
 

@@ -26,7 +26,7 @@ description: UI・UX・画面・ユーザーインターフェース・フロン
 
 本スキルは **ナレッジベース** である。
 
-- 20個のリファレンス（`reference/`）にUI/UX設計の判断基準・原則・パターン・観察手順を集約
+- 22個のリファレンス（`reference/`）にUI/UX設計の判断基準・原則・パターン・観察手順を集約
 - 21個の独立コマンドスキル（`ui-help` を除く）が MANDATORY PREPARATION として本スキルのリファレンスを参照する
 - 入口は2層: **第1層（動詞）** = 考える `design-ui` / 作る `implement-ui` / 直す `refine-ui` / 評価 `audit-ui`・`score-ui` / 基準化 `init-design`。**第2層（観点・実働ユニット）** = 色・タイポ・レイアウト等を実際に直すスキル。第1層から委譲され、軸が明確なら直接も呼べる
 - 本スキル自体はユーザーが直接呼び出すのではなく、コマンドスキル経由で利用される
@@ -37,7 +37,7 @@ description: UI・UX・画面・ユーザーインターフェース・フロン
 
 | やりたいこと | コマンドスキル |
 |-------------|--------------|
-| 要件からUI構造を設計 | `/design-ui` |
+| 要件からUI構造を設計し機能設計として残す | `/design-ui` |
 | デザイン・要件から実装（第1層・作る） | `/implement-ui` |
 | 既存UIを観点ベースで診断し直す（第1層・直す） | `/refine-ui` |
 | DESIGN.md の作成・更新 | `/init-design` |
@@ -131,6 +131,8 @@ UI設計・実装の判断は、明示／暗黙いずれかのルールや前提
 - `design-tokens.md` — Primitive/Semantic/Component トークン、命名、段階的導入
 - `design-md-spec.md` — DESIGN.md のフォーマット仕様・設計思想（front matter／本文8セクション）
 - `design-md-gate.md` — DESIGN.md ゲート（前段=基準読込／後段=乖離時の誘導）の手順
+- `interview.md` — インタビュー5原則（決定木を1問ずつ・調べれば分かることは聞かない・推奨回答つき）、発動判定、質問の帰属（`init-design` / `design-ui` 共通）
+- `feature-design.md` — FEATURE_DESIGN.md（機能設計）のテンプレート・保存先（`.design/<feature-slug>/`）・DESIGN.md との関係・昇格導線・`.design/` 全体構造
 - `implementation.md` — コンポーネント粒度、責務分離、UI状態管理
 
 ### 品質
@@ -140,7 +142,7 @@ UI設計・実装の判断は、明示／暗黙いずれかのルールや前提
 ### 観察・検証（実地）
 
 - `playwright.md` — Playwright MCP による実地観察（ツール選択・状態トリガ・一括監査スイープ・効率化トリアージ・検出→修正→再観察）。評価系・修正系スキルが共通で参照
-- `ui-report.md` — 評価系スキルの Markdown レポート保存先、共通メタ情報、スクリーンショットリンク、未検証・制約の共通ルール
+- `ui-report.md` — 評価系スキルの Markdown レポート保存先（`.design/reports/`）、共通メタ情報、スクリーンショットリンク、未検証・制約の共通ルール
 
 ---
 

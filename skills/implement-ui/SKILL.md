@@ -1,6 +1,6 @@
 ---
 name: implement-ui
-description: 新規UIを実装する第1層オーケストレーター。要件・デザインを受け、DESIGN.md を基準に観点（色・タイポ・レイアウト・モーション・文言・堅牢性・性能）を横断的に通しながら、必要に応じて第2層スキルへ委譲して実装まで担う。デザインからの実装・新規画面実装・コンポーネント実装を依頼されたときに使用する。
+description: 新規UIを実装する第1層オーケストレーター。要件・デザイン・機能設計（.design/<feature-slug>/FEATURE_DESIGN.md、あれば）を受け、DESIGN.md を基準に観点（色・タイポ・レイアウト・モーション・文言・堅牢性・性能）を横断的に通しながら、必要に応じて第2層スキルへ委譲して実装まで担う。デザインからの実装・新規画面実装・コンポーネント実装を依頼されたときに使用する。
 user-invocable: true
 argument-hint: "[デザイン、要件、画面仕様...]"
 ---
@@ -14,6 +14,7 @@ argument-hint: "[デザイン、要件、画面仕様...]"
 ui-design-grounding スキルを呼び出し、以下のリファレンスを読み込む:
 
 - `ui-design-grounding/reference/design-md-gate.md`
+- `ui-design-grounding/reference/feature-design.md`
 - `ui-design-grounding/reference/design-system.md`
 - `ui-design-grounding/reference/design-tokens.md`
 - `ui-design-grounding/reference/implementation.md`
@@ -22,11 +23,14 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 
 ### 0. 基準の確認（DESIGN.md 前段ゲート）
 
-`design-md-gate.md` の **前段ゲート** を実施する。DESIGN.md があれば front matter のトークンと本文の指針を**基準（source of truth）として読み込み**（リファレンスより優先）、既存トークンで表現できるものは新しい値を持ち込まない。無ければ未整備として扱い `/init-design`（外部 URL からは `/scan-ui`）を提案する。基準なしに実装を始めない。
+`design-md-gate.md` の **前段ゲート** を実施する。DESIGN.md があれば front matter のトークンと本文の指針を**基準（source of truth）として読み込み**（リファレンスより優先）、既存トークンで表現できるものは新しい値を持ち込まない。
+
+**DESIGN.md が無い場合は提案に留めず、`/init-design` へ委譲して基準を先に作る**（「これから基準づくりの質問を数問する」と宣言。急ぎなら最小構成 DESIGN.md で切り上げ可）。DESIGN.md ができたら本スキルへ復帰する。基準なしに実装を始めない。
 
 ### 1. 実装対象と UI 状態の把握
 
 - 何を作るか（画面・コンポーネント・フロー）と入力（デザイン / 要件 / 制約）を確認する。
+- `.design/<feature-slug>/FEATURE_DESIGN.md` の有無を確認し、あれば読み込んで**機能単位の判断基準**にする（DESIGN.md = 恒久の視覚基準、機能設計 = この機能の UX 判断。矛盾する場合は DESIGN.md を優先し、乖離として報告する）。
 - 各コンポーネントの UI 状態を洗い出す: Initial / Loading / Success / Error / Empty。
 - 既存コンポーネント・CSS・トークン資産の再利用可否を確認する。
 
@@ -76,6 +80,11 @@ DESIGN.md（無ければ reference）の基準に沿って実装する。各観�
 
 ## 横断波及対応
 - [波及]: 追加で `/xxx-ui` を実施
+
+## 機能設計との対応（FEATURE_DESIGN.md がある場合）
+- 体験原則: [各原則を実装でどう反映したか]
+- コンポーネント一覧との突合: [計画どおり / 差分]
+- スコープ外の遵守: [機能設計のスコープ外に踏み込んでいないか]
 
 ## 基準との差分（あれば）
 - [新しい値]: → `/init-design` or `/recolor-ui`

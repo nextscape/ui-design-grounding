@@ -66,7 +66,7 @@ Phase 1/2 で見つかった指摘についてのみ、該当コンポーネン�
 
 以下の出力フォーマットに従い、冒頭サマリー、6レンズ一覧、レンズ別の詳細、推奨アクションをまとめる。`reference/legibility.md`「対象外（他スキルに委ねる観点）」に該当する気づき（エルゴノミクス・ピクセル整合・将来のデータ量への堅牢性等）があれば、指摘表には含めず「対象外として見送った観点」として委譲先スキルとともに一言添える。
 
-`ui-report.md` に従い、評価対象プロジェクトの `ui-reports/YYYY-MM-DD/HHmmss-legibility-ui.md` に詳細レポートを保存する。スクリーンショットを取得した場合は `ui-reports/YYYY-MM-DD/screenshots/` に保存し、レポート本文から相対リンクする。会話内の最終応答では、要約・最優先アクション・保存先を短く示す。
+`ui-report.md` に従い、評価対象プロジェクトの `.design/reports/YYYY-MM-DD/HHmmss-legibility-ui.md` に詳細レポートを保存する。スクリーンショットを取得した場合は `.design/reports/YYYY-MM-DD/screenshots/` に保存し、レポート本文から相対リンクする。会話内の最終応答では、要約・最優先アクション・保存先を短く示す。
 
 ## 出力フォーマット
 
@@ -80,7 +80,7 @@ Phase 1/2 で見つかった指摘についてのみ、該当コンポーネン�
 | 実施日時 | <ISO 8601形式のローカル日時> |
 | DESIGN.md | あり / なし / 未確認 |
 | 観察方法 | Playwright MCP / 未実施（理由） |
-| レポート保存先 | `ui-reports/YYYY-MM-DD/HHmmss-legibility-ui.md` |
+| レポート保存先 | `.design/reports/YYYY-MM-DD/HHmmss-legibility-ui.md` |
 
 ## スクリーンショット
 

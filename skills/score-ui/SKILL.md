@@ -56,7 +56,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 5. **認知負荷アセスメント**: cognitive.md の違反パターン（選択肢の壁、メモリブリッジ等）を検出
 6. **課題の分類**: P0-P3の重篤度で整理
 7. **推奨アクション**: 検出した課題を解決できるコマンドスキルを、優先度順に紐付けて提示する。各項目に対象スキル名・対応する課題件数・代表的な課題を含める
-8. **レポート保存**: `ui-report.md` に従い、評価対象プロジェクトの `ui-reports/YYYY-MM-DD/HHmmss-score-ui.md` に詳細レポートを保存する。スクリーンショットを取得した場合は `ui-reports/YYYY-MM-DD/screenshots/` に保存し、レポート本文から相対リンクする。会話内の最終応答では、要約・最優先アクション・保存先を短く示す
+8. **レポート保存**: `ui-report.md` に従い、評価対象プロジェクトの `.design/reports/YYYY-MM-DD/HHmmss-score-ui.md` に詳細レポートを保存する。スクリーンショットを取得した場合は `.design/reports/YYYY-MM-DD/screenshots/` に保存し、レポート本文から相対リンクする。会話内の最終応答では、要約・最優先アクション・保存先を短く示す
 
 ## 出力フォーマット
 
@@ -70,7 +70,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 | 実施日時 | <ISO 8601形式のローカル日時> |
 | DESIGN.md | あり / なし / 未確認 |
 | 観察方法 | Playwright MCP / 未実施（理由） |
-| レポート保存先 | `ui-reports/YYYY-MM-DD/HHmmss-score-ui.md` |
+| レポート保存先 | `.design/reports/YYYY-MM-DD/HHmmss-score-ui.md` |
 
 ## スクリーンショット
 

@@ -17,7 +17,7 @@ MCP ツールは `mcp__plugin_playwright_playwright__*`（`browser_navigate` / `
 
 1. **MCP 利用可否の確認** — Playwright MCP（`mcp__plugin_playwright_playwright__*`）が使えることを確認する。使えなければ**その旨を出力して終了**する（代替手段は判定精度を大きく損なうため用意しない）。
 2. **アプリ起動** — 対象アプリが起動していなければ、プロジェクトにアプリ起動用のスキルがあればそれを使う。なければユーザーに起動方法を確認する。
-3. **スクリーンショット保存先** — 評価系（`audit-ui` / `score-ui` / `legibility-ui`）では `ui-report.md` に従い、評価対象プロジェクト直下の `ui-reports/YYYY-MM-DD/screenshots/` に保存する。ファイル名は `HHmmss-<skill>-NN.png` とし、レポート本文から相対リンクする。修正系ではプロジェクトの一時ファイル置き場の慣例（`.gitignore` が定める一時ディレクトリ等）に保存する。いずれもファイル名だけの指定は避け、**明示的なパス**を指定する。
+3. **スクリーンショット保存先** — 評価系（`audit-ui` / `score-ui` / `legibility-ui`）では `ui-report.md` に従い、評価対象プロジェクトの `.design/reports/YYYY-MM-DD/screenshots/` に保存する。ファイル名は `HHmmss-<skill>-NN.png` とし、レポート本文から相対リンクする。修正系ではプロジェクトの一時ファイル置き場の慣例（`.gitignore` が定める一時ディレクトリ等）に保存する。いずれもファイル名だけの指定は避け、**明示的なパス**を指定する。
 
 ## ツール選択マトリクス
 

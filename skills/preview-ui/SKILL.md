@@ -66,7 +66,7 @@ on-color ペア（`on-primary`×`primary`、`on-surface`×`surface`、`on-error`
 
 ### 5. 書き出し
 
-`preview.html` をプロジェクトルート（DESIGN.md の隣）に書き出す。既存があれば上書き。
+`preview.html` を `.design/preview.html` に書き出す（`.design/` が無ければ作成する）。既存があれば上書き。
 
 ### 6. 取りこぼし自己チェック
 
@@ -255,14 +255,14 @@ on-color ペア（`on-primary`×`primary`、`on-surface`×`surface`、`on-error`
 ```markdown
 ## preview-ui 生成結果
 
-- 生成先: preview.html（DESIGN.md の隣）
+- 生成先: .design/preview.html
 - 反映トークン: 色 primitive N / semantic N、タイポ N レベル、rounded N、spacing N、components N
 - コントラスト: on-color ペア N 組を検証（AAA N / AA N / AA Large N / Fail N）
 - 未解決 `{}` 参照: N 件（あれば一覧）
 - 省略した節: [トークン不在で省いたセクション]
 
 ### 確認方法
-ブラウザで preview.html を開く（例: `start preview.html` / `open preview.html`）。
+ブラウザで .design/preview.html を開く（例: `start .design/preview.html` / `open .design/preview.html`）。
 
 ### 要確認事項
 - [コントラスト fail の箇所 / 未解決参照など、人間の判断が要る項目]

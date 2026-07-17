@@ -4,18 +4,18 @@
 
 ## 保存先
 
-評価レポートは、評価対象プロジェクトのルート直下に `ui-reports/` を作成して保存する。
+評価レポートは、評価対象プロジェクトの `.design/reports/` 配下に保存する（`.design/` は UI 作業の生成物を集約するディレクトリ。全体構造は `feature-design.md` を参照）。
 
 | 種別 | パス |
 |---|---|
-| レポート | `ui-reports/YYYY-MM-DD/HHmmss-<skill>.md` |
-| スクリーンショット | `ui-reports/YYYY-MM-DD/screenshots/HHmmss-<skill>-NN.png` |
+| レポート | `.design/reports/YYYY-MM-DD/HHmmss-<skill>.md` |
+| スクリーンショット | `.design/reports/YYYY-MM-DD/screenshots/HHmmss-<skill>-NN.png` |
 
 - `YYYY-MM-DD` と `HHmmss` は実行環境のローカル時刻を使う。
 - `<skill>` は `audit-ui` / `score-ui` / `legibility-ui` のいずれかを使う。
 - 同一秒に複数レポートを出す場合は `HHmmss-<skill>-2.md` のように連番を付けて上書きを避ける。
 - スクリーンショットの `NN` は `01` から始め、取得順に連番を付ける。
-- このプラグインリポジトリにはサンプルレポートを追加しない。`ui-reports/` は評価対象プロジェクト側の成果物である。
+- このプラグインリポジトリにはサンプルレポートを追加しない。`.design/reports/` は評価対象プロジェクト側の成果物である。
 
 ## 共通メタ情報
 
@@ -31,7 +31,7 @@
 | 実施日時 | <ISO 8601形式のローカル日時> |
 | DESIGN.md | あり / なし / 未確認 |
 | 観察方法 | Playwright MCP / 未実施（理由） |
-| レポート保存先 | `ui-reports/YYYY-MM-DD/HHmmss-<skill>.md` |
+| レポート保存先 | `.design/reports/YYYY-MM-DD/HHmmss-<skill>.md` |
 ```
 
 - DESIGN.md が無い場合は、該当スキルのルールに従って `/init-design` または `/scan-ui` を推奨する。

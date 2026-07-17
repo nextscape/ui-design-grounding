@@ -2,6 +2,16 @@
 
 本プロジェクトの主な変更点を記録する。バージョンは [プラグインマニフェスト](.claude-plugin/plugin.json) に準拠する。
 
+## [1.4.0] - 2026-07-17
+
+- `interview.md` を追加（`init-design` / `design-ui` 共通のインタビュープロトコル。決定木を1問ずつ・調べれば分かることは聞かない・推奨回答つき）
+- `feature-design.md` を追加（機能単位の設計判断を `.design/<feature-slug>/FEATURE_DESIGN.md` として保存する規約とテンプレート）
+- `design-ui` を拡張（要件の明確化状況を判定してインタビュー → 設計結果を機能設計として保存 → DESIGN.md へ昇格すべき決定の検出）
+- `init-design` を拡張（抽出確度を判定し、コードから読めない意図をヒアリング。無断の仮置きを廃止し、最小構成 DESIGN.md を定義）
+- `implement-ui` に機能設計の受け口を追加（DESIGN.md = 恒久基準、機能設計 = 機能判断として読み込み）
+- `design-ui` / `implement-ui` は DESIGN.md 不在時に `/init-design` へ委譲する運用に変更
+- UI 作業の生成物の出力先を `.design/` に統合（評価レポート = `.design/reports/`、preview.html = `.design/preview.html`。DESIGN.md はルート常駐のまま）
+
 ## [1.3.0] - 2026-07-07
 
 - `legibility-ui` を追加（実装を読む前に画面だけを見て、初見の分かりやすさを6レンズで監査）
