@@ -66,6 +66,13 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - 設計結果を `feature-design.md` のテンプレートに従い `.design/<feature-slug>/FEATURE_DESIGN.md` に保存する（`<feature-slug>` は機能・画面から導いた小文字ハイフン区切り）。
 - DESIGN.md 級の恒久的決定（トーンの明確化・新トークン候補・画面横断の新規約）が生まれていれば「DESIGN.md へ昇格すべき決定」として列挙し、`/init-design` を提案する（本スキルからは書き換えない）。
 
+### 9. 実装への受け渡し
+
+固有の実装ワークフロー（CLAUDE.md / AGENTS.md の記載・ユーザー指定・導入済みの実装プロセス系スキル。スキルは明記が無くても暗黙に期待されうる — 迷えばユーザーに確認）の有無で分岐する:
+
+- **ある / 実装が UI に閉じない** → FEATURE_DESIGN.md と DESIGN.md を設計入力として渡す。UI 実装フェーズで `/implement-ui` を部品として使える。
+- **無く、UI に閉じる** → `/implement-ui` へ。
+
 ## 出力フォーマット
 
 FEATURE_DESIGN.md（`feature-design.md` のテンプレート準拠）を保存したうえで、会話では要約を示す:
@@ -84,7 +91,7 @@ FEATURE_DESIGN.md（`feature-design.md` のテンプレート準拠）を保存�
 - [インタビューで確定しなかった判断・推奨で埋めた判断]
 
 ## 推奨される次のステップ
-- `/implement-ui`（DESIGN.md と機能設計を基準にコンポーネント分解・実装）
+- [手順9の判定結果: 固有ワークフローへの受け渡し、または `/implement-ui`]
 ```
 
 ## 注意

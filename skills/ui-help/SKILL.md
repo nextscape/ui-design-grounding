@@ -77,7 +77,8 @@ argument-hint: "[カテゴリやキーワードで絞り込み（省略可）]"
 
 ### 典型的なワークフロー
 
-**新規設計**: `/design-ui`（DESIGN.md が無ければ `/init-design` へ委譲 → 要件インタビュー → 機能設計の生成）→ `/implement-ui`（実装）→ `/audit-ui`
+**新規設計（UI に閉じる）**: `/design-ui`（DESIGN.md が無ければ `/init-design` へ委譲 → 要件インタビュー → 機能設計の生成）→ `/implement-ui`（実装）→ `/audit-ui`
+**フルスタック実装（UI に閉じない）**: `/design-ui`（機能設計の生成）→ プロジェクトの実装ワークフローへ受け渡し → UI フェーズで `/implement-ui`
 **既存UIの改善（観点が曖昧）**: `/refine-ui`（診断→委譲で修正）→ `/audit-ui` or `/score-ui`
 **既存UIの改善（観点が明確）**: 該当する第2層スキルを直接実行
 **リリース前**: `/polish-ui` → `/score-ui`

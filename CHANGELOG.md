@@ -11,6 +11,7 @@
 - `implement-ui` に機能設計の受け口を追加（DESIGN.md = 恒久基準、機能設計 = 機能判断として読み込み）
 - `design-ui` / `implement-ui` は DESIGN.md 不在時に `/init-design` へ委譲する運用に変更
 - UI 作業の生成物の出力先を `.design/` に統合（評価レポート = `.design/reports/`、preview.html = `.design/preview.html`。DESIGN.md はルート常駐のまま）
+- 実装ワークフローとの接続を定義（固有の実装ワークフローがあれば機能設計を設計入力として渡す。UI に閉じない実装では `implement-ui` は UI 部分のみを担う）
 
 ## [1.3.0] - 2026-07-07
 
