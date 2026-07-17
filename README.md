@@ -19,6 +19,8 @@ AI は UI のコードを書けますが、その UI が「なぜ使いやすい
 
 ## まず何を使えばよいか
 
+出発点は `/init-design` です。プロジェクトの視覚基準 **DESIGN.md** を作ると、以降のすべてのスキルがそれを判断基準として参照します。`/design-ui` や `/implement-ui` から始めても、DESIGN.md が無ければ `/init-design` に委譲して基準づくりから始まります。
+
 迷ったら `/ui-help` から始めます。
 
 ```text
@@ -29,13 +31,13 @@ AI は UI のコードを書けますが、その UI が「なぜ使いやすい
 
 | やりたいこと | 使うスキル |
 |---|---|
+| デザイン基準（DESIGN.md）を作りたい — 最初の一歩 | `/init-design` |
 | 新しい UI を考えたい | `/design-ui` |
 | UI を実装したい | `/implement-ui` |
 | 既存 UI をよくしたいが、何が悪いか曖昧 | `/refine-ui` |
 | 技術品質を監査したい | `/audit-ui` |
 | UX と使いやすさを採点したい | `/score-ui` |
 | 初見で分かりづらい箇所を見つけたい | `/legibility-ui` |
-| デザイン基準を作りたい | `/init-design` |
 | 外部サイトのデザインを分析したい | `/scan-ui` |
 
 ## 導入方法
@@ -86,13 +88,13 @@ clone したリポジトリの `skills/` をリンクして使えます。
 
 | スキル | 役割 |
 |---|---|
+| `/init-design` | DESIGN.md（全スキルが参照する視覚基準）を作成・更新する |
 | `/design-ui` | UI 構造、画面遷移、状態設計を考え、機能設計として残す |
 | `/implement-ui` | DESIGN.md と既存実装に沿って UI を実装する |
 | `/refine-ui` | 「読みにくい」「うるさい」など曖昧な問題を診断して直す |
 | `/audit-ui` | 技術品質を5軸で監査する |
 | `/score-ui` | UX ヒューリスティクスで採点する |
 | `/legibility-ui` | 初見で画面だけを見たときの分かりやすさを監査する |
-| `/init-design` | DESIGN.md を作成・更新する |
 | `/scan-ui` | 外部サイトからデザインシステムを逆算する |
 | `/preview-ui` | DESIGN.md を preview.html に反映して見た目を確認する |
 
@@ -107,13 +109,13 @@ clone したリポジトリの `skills/` をリンクして使えます。
 | 色 | `/recolor-ui` |
 | モーション | `/animate-ui` |
 | 文言 | `/clarify-ui` |
-| 堅牢性・エッジケース | `/guard-ui` |
 | レスポンシブ | `/adapt-ui` |
+| 堅牢性・エッジケース | `/guard-ui` |
 | パフォーマンス | `/optimize-ui` |
-| 簡素化 | `/slim-ui` |
-| コンポーネント・トークン抽出 | `/extract-ui` |
 | 印象を強める | `/boost-ui` |
 | 印象を抑える | `/calm-ui` |
+| 簡素化 | `/slim-ui` |
+| コンポーネント・トークン抽出 | `/extract-ui` |
 | リリース前仕上げ | `/polish-ui` |
 
 ## 典型的な使い方
@@ -334,12 +336,13 @@ docs/
 
 判断に迷う場合は、次の順で選ぶと扱いやすいです。
 
-1. 何を作るか考える段階なら `/design-ui`
-2. 実装したいなら `/implement-ui`
-3. 問題が曖昧なら `/refine-ui`
-4. 品質を測りたいなら `/audit-ui` または `/score-ui`
-5. 初見で分かるかを見たいなら `/legibility-ui`
-6. 直す軸が明確なら第2層スキルを直接呼ぶ
+1. DESIGN.md がまだ無いなら `/init-design`（すべてのスキルの判断基準を先に作る）
+2. 何を作るか考える段階なら `/design-ui`
+3. 実装したいなら `/implement-ui`
+4. 問題が曖昧なら `/refine-ui`
+5. 品質を測りたいなら `/audit-ui` または `/score-ui`
+6. 初見で分かるかを見たいなら `/legibility-ui`
+7. 直す軸が明確なら第2層スキルを直接呼ぶ
 
 それでも迷う場合は `/ui-help` を使ってください。
 

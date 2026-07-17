@@ -28,7 +28,7 @@ description: UI・UX・画面・ユーザーインターフェース・フロン
 
 - 22個のリファレンス（`reference/`）にUI/UX設計の判断基準・原則・パターン・観察手順を集約
 - 21個の独立コマンドスキル（`ui-help` を除く）が MANDATORY PREPARATION として本スキルのリファレンスを参照する
-- 入口は2層: **第1層（動詞）** = 考える `design-ui` / 作る `implement-ui` / 直す `refine-ui` / 評価 `audit-ui`・`score-ui` / 基準化 `init-design`。**第2層（観点・実働ユニット）** = 色・タイポ・レイアウト等を実際に直すスキル。第1層から委譲され、軸が明確なら直接も呼べる
+- 入口は2層: **第1層（動詞）** = 基準化 `init-design` / 考える `design-ui` / 作る `implement-ui` / 直す `refine-ui` / 評価 `audit-ui`・`score-ui`。**第2層（観点・実働ユニット）** = 色・タイポ・レイアウト等を実際に直すスキル。第1層から委譲され、軸が明確なら直接も呼べる
 - 本スキル自体はユーザーが直接呼び出すのではなく、コマンドスキル経由で利用される
 
 ---
@@ -37,27 +37,28 @@ description: UI・UX・画面・ユーザーインターフェース・フロン
 
 | やりたいこと | コマンドスキル |
 |-------------|--------------|
+| DESIGN.md の作成・更新 | `/init-design` |
 | 要件からUI構造を設計し機能設計として残す | `/design-ui` |
 | デザイン・要件から実装（第1層・作る） | `/implement-ui` |
 | 既存UIを観点ベースで診断し直す（第1層・直す） | `/refine-ui` |
-| DESIGN.md の作成・更新 | `/init-design` |
 | 技術品質の監査 | `/audit-ui` |
 | UXヒューリスティクス採点 | `/score-ui` |
 | 初見の分かりやすさ監査 | `/legibility-ui` |
-| リリース前の最終仕上げ | `/polish-ui` |
+| 外部サイト(URL)を分析しDESIGN.md化 | `/scan-ui` |
+| DESIGN.md を preview.html に反映して視覚確認 | `/preview-ui` |
+| レイアウト・余白修正 | `/arrange-ui` |
+| タイポグラフィ修正 | `/typeset-ui` |
+| パレットをOKLCHで再配色 | `/recolor-ui` |
+| アニメーション追加 | `/animate-ui` |
+| テキスト・コピー改善 | `/clarify-ui` |
+| マルチデバイス適応 | `/adapt-ui` |
 | エッジケースの堅牢化 | `/guard-ui` |
 | パフォーマンス最適化 | `/optimize-ui` |
 | デザインの印象を強める | `/boost-ui` |
 | デザインの印象を抑える | `/calm-ui` |
-| アニメーション追加 | `/animate-ui` |
-| タイポグラフィ修正 | `/typeset-ui` |
-| レイアウト・余白修正 | `/arrange-ui` |
-| コンポーネント・トークン抽出 | `/extract-ui` |
-| マルチデバイス適応 | `/adapt-ui` |
-| テキスト・コピー改善 | `/clarify-ui` |
 | UIの簡素化 | `/slim-ui` |
-| 外部サイト(URL)を分析しDESIGN.md化 | `/scan-ui` |
-| パレットをOKLCHで再配色 | `/recolor-ui` |
+| コンポーネント・トークン抽出 | `/extract-ui` |
+| リリース前の最終仕上げ | `/polish-ui` |
 
 ---
 

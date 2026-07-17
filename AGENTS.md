@@ -49,10 +49,10 @@ docs/
 README で説明している「第1層 / 第2層」は、ファイル構成ではなくコマンドスキルの役割軸です。
 
 - **第1層: 入口になる動詞**
-  - `design-ui` / `implement-ui` / `refine-ui` / `audit-ui` / `score-ui` / `legibility-ui` / `init-design` / `scan-ui` / `preview-ui`
-  - 要件整理、実装、評価、改善、基準化の入口です。
+  - `init-design` / `design-ui` / `implement-ui` / `refine-ui` / `audit-ui` / `score-ui` / `legibility-ui` / `scan-ui` / `preview-ui`
+  - 基準化、要件整理、実装、改善、評価の入口です。
 - **第2層: 観点ごとの実働ユニット**
-  - `arrange-ui` / `typeset-ui` / `recolor-ui` / `animate-ui` / `clarify-ui` / `guard-ui` / `adapt-ui` / `optimize-ui` / `slim-ui` / `extract-ui` / `boost-ui` / `calm-ui` / `polish-ui`
+  - `arrange-ui` / `typeset-ui` / `recolor-ui` / `animate-ui` / `clarify-ui` / `adapt-ui` / `guard-ui` / `optimize-ui` / `boost-ui` / `calm-ui` / `slim-ui` / `extract-ui` / `polish-ui`
   - 問題の軸が明確な場合に直接使えます。第1層から委譲されることもあります。
 
 ## DESIGN.md の扱い
@@ -74,23 +74,23 @@ README で説明している「第1層 / 第2層」は、ファイル構成で�
 
 | カテゴリ | コマンド | 一言 |
 |---------|---------|------|
+| 設計 | `/init-design` | DESIGN.md 生成・更新 |
 | 設計 | `/design-ui` | 要件から UI 構造・画面遷移・状態設計を整理 |
 | 設計 | `/implement-ui` | DESIGN.md と既存実装に沿って UI を実装 |
-| 設計 | `/init-design` | DESIGN.md 生成・更新 |
 | 可視化 | `/preview-ui` | DESIGN.md から preview.html を生成 |
 | 評価 | `/audit-ui` | 技術品質を5軸で監査 |
 | 評価 | `/score-ui` | UXヒューリスティクスで採点 |
 | 評価 | `/legibility-ui` | 実装を読む前に画面だけを見て、初見の分かりやすさを監査 |
 | 調整 | `/refine-ui` | 曖昧な訴えを観点ベースで診断し、必要に応じて委譲して直す |
-| 調整 | `/boost-ui` | 印象を強める（地味から大胆へ） |
-| 調整 | `/calm-ui` | 印象を抑える（派手から洗練へ） |
 | 調整 | `/arrange-ui` | レイアウト・余白・階層修正 |
 | 調整 | `/typeset-ui` | タイポグラフィ改善 |
-| 調整 | `/animate-ui` | モーション・アニメ追加 |
 | 調整 | `/recolor-ui` | パレットを OKLCH で再配色 |
+| 調整 | `/animate-ui` | モーション・アニメ追加 |
+| 調整 | `/boost-ui` | 印象を強める（地味から大胆へ） |
+| 調整 | `/calm-ui` | 印象を抑える（派手から洗練へ） |
 | 文言 | `/clarify-ui` | テキスト・ワーディング改善 |
-| 堅牢化 | `/guard-ui` | エッジケース・i18n 強化 |
 | 堅牢化 | `/adapt-ui` | レスポンシブ・マルチデバイス対応 |
+| 堅牢化 | `/guard-ui` | エッジケース・i18n 強化 |
 | 堅牢化 | `/optimize-ui` | パフォーマンス最適化 |
 | 整理 | `/slim-ui` | UI を本質へ削ぎ落とす |
 | 整理 | `/extract-ui` | コンポーネント・トークン抽出 |
@@ -158,6 +158,7 @@ README で説明している「第1層 / 第2層」は、ファイル構成で�
 - **DESIGN.md 基準のスキル**: `implement-ui` や `refine-ui` など DESIGN.md を作業土台にするスキルでは、`design-md-gate.md` を先頭に置きます。
 - **評価レポート**: 評価系スキルを編集するときは、`ui-report.md` の保存先・メタ情報・スクリーンショットリンク規約と整合させます。
 - **インタビュー・機能設計**: インタビューを行うスキル（`init-design` / `design-ui`）は `interview.md` の5原則・発動判定と、機能設計を扱うスキル（`design-ui` / `implement-ui`）は `feature-design.md` の保存先・テンプレート規約と整合させます。
+- **スキル一覧の順序**: スキル一覧（README / ui-help / AGENTS.md / ui-design-grounding の各表）は、第1層をライフサイクル順（基準化 → 考える → 作る → 直す → 評価 → 補助）、第2層を利用頻度順（視覚の基本観点 → 内容 → 適応・堅牢・性能 → 印象 → 整理 → 仕上げ）で揃えます。
 - **実地観察**: Playwright を使う評価・修正系スキルは、`playwright.md` の観察手順と一括監査スイープを参照します。
 
 ## 設計方針
