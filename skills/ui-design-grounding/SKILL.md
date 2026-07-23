@@ -132,7 +132,7 @@ UI設計・実装の判断は、明示／暗黙いずれかのルールや前提
 - `design-tokens.md` — Primitive/Semantic/Component トークン、命名、段階的導入
 - `design-md-spec.md` — DESIGN.md のフォーマット仕様・設計思想（front matter／本文8セクション）
 - `design-md-gate.md` — DESIGN.md ゲート（前段=基準読込／後段=乖離時の誘導）の手順
-- `interview.md` — インタビュー5原則（決定木を1問ずつ・調べれば分かることは聞かない・推奨回答つき）、発動判定、質問の帰属（`init-design` / `design-ui` 共通）
+- `interview.md` — インタビュー6原則（決定木を1問ずつ深掘る・調べれば分かることは聞かない・推奨回答つき・合意まで行動しない）、発動判定、質問の帰属（`init-design` / `design-ui` 共通）
 - `feature-design.md` — FEATURE_DESIGN.md（機能設計）のテンプレート・保存先（`.design/<feature-slug>/`）・DESIGN.md との関係・昇格導線・`.design/` 全体構造
 - `implementation.md` — コンポーネント粒度、責務分離、UI状態管理
 

@@ -8,7 +8,7 @@
 
 ## 1. 背景・目的
 
-コミュニティスキル **grill-me**（原案: [mattpocock/skills](https://github.com/mattpocock/skills)）と **design-brief**（[julianoczkowski/designer-skills](https://github.com/julianoczkowski/designer-skills)、Apache-2.0）の核心概念を本プラグインに統合する。両スキルの丸ごと移植ではなく、既存の2層アーキテクチャ・DESIGN.md 常駐の設計思想に合わせて日本語で再設計する。
+**design-brief**（[julianoczkowski/designer-skills](https://github.com/julianoczkowski/designer-skills)、Apache-2.0）の成果物化の考え方と、依存関係を順に解くインタビュー手法を本プラグインに統合する。外部資料の丸ごと移植ではなく、既存の2層アーキテクチャ・DESIGN.md 常駐の設計思想に合わせて日本語で再設計する。
 
 現状の課題:
 
@@ -19,7 +19,7 @@
 
 ## 2. 取り込む核心: インタビュー手法（`reference/interview.md` 新設）
 
-grill 式インタビューの5原則を新リファレンス `interview.md` に一元化し、`init-design` / `design-ui` の両方が MANDATORY PREPARATION で参照する:
+インタビューの5原則を新リファレンス `interview.md` に一元化し、`init-design` / `design-ui` の両方が MANDATORY PREPARATION で参照する:
 
 1. **決定木を枝ごとに** — 設計の決定木を枝ごとに下り、決定間の依存関係を1つずつ解決する
 2. **1問ずつ** — 質問は1つずつ提示する（複数同時に聞くと混乱させる）
@@ -47,7 +47,7 @@ grill 式インタビューの5原則を新リファレンス `interview.md` に
 | **DESIGN.md**（恒久・システム全体） | 感情トーン / 参照・アンチ参照プロダクト / ブランド制約 / 対象デバイス / アクセシビリティ基準 | `init-design` |
 | **DESIGN_BRIEF.md**(機能単位) | 主要ユーザーと JTBD / 成功の定義 / コンテンツ（実データ/プレースホルダ）/ 機能固有の制約 / スコープ外 | `design-ui` |
 
-`design-ui` のインタビューでは、**DESIGN.md が既に答えを持つ質問はスキップする**（原則3の「調べる先」に DESIGN.md 自体が含まれる）。これにより DESIGN.md 常駐の設計思想と grill の原則が接続する。
+`design-ui` のインタビューでは、**DESIGN.md が既に答えを持つ質問はスキップする**（原則3の「調べる先」に DESIGN.md 自体が含まれる）。これにより DESIGN.md 常駐の設計思想とインタビュー原則が接続する。
 
 ## 5. フロー全体像
 
@@ -135,15 +135,15 @@ project-root/
 | `skills/preview-ui/SKILL.md` | `preview.html` の書き出し先を `.design/preview.html` に変更 |
 | `skills/ui-design-grounding/SKILL.md` | 参照ナビゲーションに `interview.md`・`design-brief.md` の一行要約を追加 / リファレンス件数を更新 |
 | `AGENTS.md` | リファレンス一覧・件数 / DESIGN.md の扱い（ブリーフとの関係）/ 代表的なワークフロー / 保存先記述 / バージョン記述 / 最新運用の節 |
-| `README.md` | 出力先・design-ui の説明更新 / 着想元（grill-me / design-brief）のクレジット |
+| `README.md` | 出力先・design-ui の説明更新 / 関連文書の説明 |
 | `skills/ui-help/SKILL.md` | design-ui の一言説明が変わる場合に追随 |
-| `CHANGELOG.md` | 1.4.0 の変更記録（着想元クレジット含む） |
+| `CHANGELOG.md` | 1.4.0 の変更記録 |
 | `.claude-plugin/plugin.json` | バージョン 1.3.0 → 1.4.0 |
 
 ## 10. スコープ外（YAGNI）
 
 - designer-skills の他スキル（information-architecture / design-tokens / brief-to-tasks / design-review）は取り込まない（既存スキルが同等の役割を持つ）
-- grill 単独の入口スキル（`grill-ui` 等）は新設しない（`design-ui` / `init-design` 内の工程で足りる）
+- インタビュー単独の入口スキルは新設しない（`design-ui` / `init-design` 内の工程で足りる）
 - `refine-ui` へのブリーフ機構追加は今回見送る（既存 UI 修正は DESIGN.md が基準。必要になったら別途検討）
 - ブリーフの自動アーカイブ・ライフサイクル管理（実装完了後の移動・削除等）は定義しない
 - `ui-reports/` から `.design/reports/` への既存レポートの移行手順・後方互換は提供しない（評価対象プロジェクト側の成果物のため、新規実行分から新パスを使う）

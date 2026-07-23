@@ -38,7 +38,7 @@ Expected: `Switched to a new branch 'feat/interview-brief-integration'`
 ````markdown
 # インタビュー（要件・意図の明確化）
 
-`init-design`（システム全体）と `design-ui`（機能単位）が、ユーザーとの共通理解に達するために使う共通インタビュープロトコル。コミュニティスキル grill-me / design-brief の考え方に着想を得て、DESIGN.md 常駐の本プラグインアーキテクチャに合わせて再設計している。
+`init-design`（システム全体）と `design-ui`（機能単位）が、ユーザーとの共通理解に達するために使う共通インタビュープロトコル。DESIGN.md 常駐の本プラグインアーキテクチャに合わせて再設計している。
 
 ## 5原則
 
@@ -880,7 +880,7 @@ new_string:
 ```markdown
 ## 着想元
 
-インタビューとデザインブリーフの仕組みは、コミュニティスキル [grill-me](https://github.com/mattpocock/skills)（Matt Pocock）と [design-brief](https://github.com/julianoczkowski/designer-skills)（Julian Oczkowski, Apache-2.0）の考え方に着想を得て、本プラグインのアーキテクチャに合わせて再設計したものです。
+インタビューとデザインブリーフの仕組みは、本プラグインのアーキテクチャに合わせて再設計したものです。
 
 ## ライセンス
 
@@ -932,7 +932,7 @@ new_string: `## [1.4.0] - 2026-07-17
 - `implement-ui` にブリーフの受け口を追加（DESIGN.md = 恒久基準、ブリーフ = 機能判断として読み込み）
 - `design-ui` / `implement-ui` は DESIGN.md 不在時に `/init-design` へ委譲する運用に変更
 - UI 作業の生成物の出力先を `.design/` に統合（評価レポート = `.design/reports/`、`preview.html` = `.design/preview.html`。DESIGN.md はルート常駐のまま）
-- 着想元: grill-me（Matt Pocock）/ design-brief（Julian Oczkowski, Apache-2.0）
+- 関連: design-brief（Julian Oczkowski, Apache-2.0）
 
 ## [1.3.0] - 2026-07-07`
 
