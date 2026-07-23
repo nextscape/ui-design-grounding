@@ -130,7 +130,7 @@ README で説明している「第1層 / 第2層」は、ファイル構成で�
 | `legibility.md` | 初見の分かりやすさを評価する 6 レンズ |
 | `design-md-spec.md` | DESIGN.md フォーマット仕様・設計思想 |
 | `design-md-gate.md` | DESIGN.md ゲート（前段 / 後段）の共通プロトコル |
-| `interview.md` | インタビュー5原則、発動判定、質問の帰属 |
+| `interview.md` | インタビュー6原則、実施プロトコル、発動判定、質問の帰属 |
 | `feature-design.md` | FEATURE_DESIGN.md（機能設計）テンプレート、`.design/` 構造、昇格導線 |
 | `implementation.md` | コンポーネント粒度、責務分離、UI 状態管理 |
 | `anti-patterns.md` | 横断的アンチパターン、AI 生成 UI 品質ゲート |
@@ -139,7 +139,7 @@ README で説明している「第1層 / 第2層」は、ファイル構成で�
 
 ## 1.4.0 で追加された最新運用
 
-- `interview.md` を追加しました。`init-design` / `design-ui` 共通のインタビュープロトコル（5原則・発動判定・質問の帰属）を定義します。
+- `interview.md` を追加しました。`init-design` / `design-ui` 共通のインタビュープロトコル（6原則・実施プロトコル・発動判定・質問の帰属）を定義します。
 - `feature-design.md` を追加しました。機能単位の設計判断を `.design/<feature-slug>/FEATURE_DESIGN.md` として残します。
 - `design-ui` は要件の明確化状況を判定してインタビューし、設計結果を機能設計として保存します。`implement-ui` は機能設計を読み込んで実装します。
 - `init-design` は抽出確度を判定し、コードから読めない意図をヒアリングしてから DESIGN.md を生成します（無断の仮置きを廃止）。
@@ -157,7 +157,7 @@ README で説明している「第1層 / 第2層」は、ファイル構成で�
 - **参照順**: 重要度順に並べます。主目的に近いドメイン ref、横断 ref（`anti-patterns.md`）、手順 ref（`playwright.md` → `design-md-gate.md`）の順を基本にします。
 - **DESIGN.md 基準のスキル**: `implement-ui` や `refine-ui` など DESIGN.md を作業土台にするスキルでは、`design-md-gate.md` を先頭に置きます。
 - **評価レポート**: 評価系スキルを編集するときは、`ui-report.md` の保存先・メタ情報・スクリーンショットリンク規約と整合させます。
-- **インタビュー・機能設計**: インタビューを行うスキル（`init-design` / `design-ui`）は `interview.md` の5原則・発動判定と、機能設計を扱うスキル（`design-ui` / `implement-ui`）は `feature-design.md` の保存先・テンプレート規約と整合させます。
+- **インタビュー・機能設計**: インタビューを行うスキル（`init-design` / `design-ui`）は `interview.md` の6原則・実施プロトコル・発動判定と、機能設計を扱うスキル（`design-ui` / `implement-ui`）は `feature-design.md` の保存先・テンプレート規約と整合させます。
 - **スキル一覧の順序**: スキル一覧（README / ui-help / AGENTS.md / ui-design-grounding の各表）は、第1層をライフサイクル順（基準化 → 考える → 作る → 直す → 評価 → 補助）、第2層を利用頻度順（視覚の基本観点 → 内容 → 適応・堅牢・性能 → 印象 → 整理 → 仕上げ）で揃えます。
 - **実地観察**: Playwright を使う評価・修正系スキルは、`playwright.md` の観察手順と一括監査スイープを参照します。
 

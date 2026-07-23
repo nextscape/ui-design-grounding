@@ -329,7 +329,7 @@ docs/
 | `design-md-gate.md` | DESIGN.md を作業前後でどう扱うか |
 | `playwright.md` | Playwright MCP による実地観察 |
 | `ui-report.md` | 評価レポートの保存先、メタ情報、スクリーンショットリンク |
-| `interview.md` | インタビュー5原則、発動判定、質問の帰属 |
+| `interview.md` | インタビュー6原則、実施プロトコル、発動判定、質問の帰属 |
 | `feature-design.md` | 機能設計（FEATURE_DESIGN.md）のテンプレートと `.design/` 構造 |
 
 ## どのスキルを選べばよいか
