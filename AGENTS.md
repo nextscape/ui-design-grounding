@@ -10,7 +10,7 @@
 Nextscape Inc. が公開し、`.claude-plugin/plugin.json` でプラグインとして登録されています。
 
 - プラグイン名: `ui-design-grounding`
-- 現行バージョン: `1.4.0`
+- 現行バージョン: `1.5.0`
 - 構成: ナレッジベース 1 件 + コマンドスキル 23 件
 - ライセンス: MIT
 
@@ -127,7 +127,7 @@ README で説明している「第1層 / 第2層」は、ファイル構成で�
 | `responsive-design.md` | モバイルファースト、ブレイクポイント、入力方式検出 |
 | `design-system.md` | コンポーネント設計、Atomic Design、バリアント |
 | `design-tokens.md` | Primitive / Semantic / Component トークン、命名 |
-| `legibility.md` | 初見の分かりやすさを評価する 6 レンズ |
+| `legibility.md` | 初見の分かりやすさを評価する 7 レンズ |
 | `design-md-spec.md` | DESIGN.md フォーマット仕様・設計思想 |
 | `design-md-gate.md` | DESIGN.md ゲート（前段 / 後段）の共通プロトコル |
 | `interview.md` | インタビュー6原則、実施プロトコル、発動判定、質問の帰属 |
@@ -137,13 +137,11 @@ README で説明している「第1層 / 第2層」は、ファイル構成で�
 | `playwright.md` | Playwright MCP による実地観察、状態トリガ、一括監査スイープ |
 | `ui-report.md` | 評価レポート保存先（`.design/reports/`）、共通メタ情報、スクリーンショットリンク |
 
-## 1.4.0 で追加された最新運用
+## 1.5.0 で追加された最新運用
 
-- `interview.md` を追加しました。`init-design` / `design-ui` 共通のインタビュープロトコル（6原則・実施プロトコル・発動判定・質問の帰属）を定義します。
-- `feature-design.md` を追加しました。機能単位の設計判断を `.design/<feature-slug>/FEATURE_DESIGN.md` として残します。
-- `design-ui` は要件の明確化状況を判定してインタビューし、設計結果を機能設計として保存します。`implement-ui` は機能設計を読み込んで実装します。
-- `init-design` は抽出確度を判定し、コードから読めない意図をヒアリングしてから DESIGN.md を生成します（無断の仮置きを廃止）。
-- UI 作業の生成物の出力先を `.design/` に統合しました（評価レポート = `.design/reports/`、`preview.html` = `.design/preview.html`。DESIGN.md はルート常駐のまま）。
+- `legibility-ui` に新レンズ⑥「操作群の平坦化」を追加しました。操作群の意味構造（動詞×スコープ×手順）が等質なボタンの羅列に潰されていないかを監査します。旧⑥「画面間一貫性」は⑦へ繰り下げです。
+- レンズ⑥は2段階検出です。見出し・区切りなしに操作コントロールが4個以上並ぶ領域では、字面によらず「動詞／対象／スコープ／性質」の分解表を必ず作り、意味構造で判定します（ラベルの共通接頭辞は傍証扱い）。
+- レンズ④に「設置場所から作用対象を推測できるか」の問いを追加し、対象外（エルゴノミクス委譲）の線引きを明確化しました（配置でも「理解」に関わる問題は legibility-ui の対象）。
 
 ## 編集時の注意事項
 
