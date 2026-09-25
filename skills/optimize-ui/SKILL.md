@@ -1,6 +1,6 @@
 ---
 name: optimize-ui
-description: UIのパフォーマンスを最適化する。Core Web Vitals・レンダリング性能・アニメーション性能・バンドルサイズ・画像最適化を分析し改善する。パフォーマンス改善・速度向上・表示最適化を依頼されたときに使用する。
+description: UIのパフォーマンスを提案と承認を経て最適化する。Core Web Vitals・レンダリング性能・アニメーション性能・バンドルサイズ・画像最適化を分析し改善する。パフォーマンス改善・速度向上・表示最適化を依頼されたときに使用する。
 user-invocable: true
 argument-hint: "[対象 (画面、コンポーネント、機能...)]"
 ---
@@ -16,6 +16,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/responsive-design.md`
 - `ui-design-grounding/reference/typography.md`
 - `ui-design-grounding/reference/design-md-gate.md`
+- `ui-design-grounding/reference/change-gate.md`
 
 ## 手順
 
@@ -26,6 +27,12 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 ### 1. 現状の確認
 
 対象UIの技術スタック、既知のパフォーマンス問題、計測値（あれば）を把握する。
+
+### 1.5 変更承認ゲート
+
+`change-gate.md` に従い、手順1の現状確認から挙げた改善項目を改善提案（変更点・対象・規模判定）としてユーザーに提示し、承認を得てから次の手順に進む。規模が小なら実装計画を会話内で示して承認を得る。大なら設計（`.design/specs/`）と実装計画（`.design/plans/`）をそれぞれ保存して承認を得る。以降の手順は承認された項目だけを実施する。
+
+第1層（`refine-ui` / `implement-ui`）から承認済みの実装計画を受け取っている場合は、このゲートを省略し、計画のうち自分に割り当てられたタスクの範囲だけを実施する。範囲外の変更が必要になったら手を止め、差分を提案する。
 
 ### 2. レンダリング性能
 

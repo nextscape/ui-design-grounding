@@ -1,6 +1,6 @@
 ---
 name: typeset-ui
-description: UIのタイポグラフィを修正・改善する。フォント選定・階層設計・サイズスケール・垂直リズム・可読性を最適化する。文字が読みにくい・フォントが合わない・テキスト階層が不明確なときに使用する。
+description: UIのタイポグラフィを提案と承認を経て修正・改善する。フォント選定・階層設計・サイズスケール・垂直リズム・可読性を最適化する。文字が読みにくい・フォントが合わない・テキスト階層が不明確なときに使用する。
 user-invocable: true
 argument-hint: "[対象 (画面、コンポーネント、機能...)]"
 ---
@@ -15,6 +15,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/spatial-layout.md`
 - `ui-design-grounding/reference/accessibility.md`
 - `ui-design-grounding/reference/design-md-gate.md`
+- `ui-design-grounding/reference/change-gate.md`
 
 ## 手順
 
@@ -39,6 +40,12 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - 可読性の問題（行が長すぎる、行間が狭すぎる）
 - ウェイトの使い分けが不明確
 - モノスペースの安易な使用
+
+### 2.5 変更承認ゲート
+
+`change-gate.md` に従い、ここまでの診断を改善提案（変更点・対象・規模判定）としてユーザーに提示し、承認を得てから次の手順に進む。規模が小なら実装計画を会話内で示して承認を得る。大なら設計（`.design/specs/`）と実装計画（`.design/plans/`）をそれぞれ保存して承認を得る。以降の手順は承認された項目だけを実施する。
+
+第1層（`refine-ui` / `implement-ui`）から承認済みの実装計画を受け取っている場合は、このゲートを省略し、計画のうち自分に割り当てられたタスクの範囲だけを実施する。範囲外の変更が必要になったら手を止め、差分を提案する。
 
 ### 3. 改善の実施
 

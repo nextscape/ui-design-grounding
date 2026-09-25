@@ -1,6 +1,6 @@
 ---
 name: adapt-ui
-description: UIをマルチデバイス・レスポンシブに適応させる。ブレイクポイント設計・入力方式対応・セーフエリア・レイアウト変形を実施する。レスポンシブ対応・モバイル対応・マルチデバイス対応を依頼されたときに使用する。
+description: UIをマルチデバイス・レスポンシブに提案と承認を経て適応させる。ブレイクポイント設計・入力方式対応・セーフエリア・レイアウト変形を実施する。レスポンシブ対応・モバイル対応・マルチデバイス対応を依頼されたときに使用する。
 user-invocable: true
 argument-hint: "[対象 (画面、コンポーネント、機能...)]"
 ---
@@ -17,6 +17,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/interaction.md`
 - `ui-design-grounding/reference/playwright.md`
 - `ui-design-grounding/reference/design-md-gate.md`
+- `ui-design-grounding/reference/change-gate.md`
 
 ## 手順
 
@@ -26,7 +27,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 
 ### 0.5 実地観察の方針
 
-`playwright.md` の準備を実施する。レスポンシブは**幅を実際に変えて初めて崩れが見える**ため、`playwright.md`「修正系」の型と**ビューポート/メディア変種**に従い、`browser_resize` で 320/768/1024/1280px を巡回し、各幅で**一括監査スイープを流す（安い）→ `clippedX`/`overflowX`/`smallTargets` が出た幅だけ `browser_take_screenshot` で崩れを確認する**（**検出 → 修正 → 各幅で再観察**）。入力方式（`pointer`/`hover`）・セーフエリアの再現も同節に従う。MCP が使えなければその旨を明示する。
+`playwright.md` の準備を実施する。レスポンシブは**幅を実際に変えて初めて崩れが見える**ため、`playwright.md`「修正系」の型と**ビューポート/メディア変種**に従い、`browser_resize` で 320/768/1024/1280px を巡回し、各幅で**一括監査スイープを流す（安い）→ `clippedX`/`overflowX`/`smallTargets` が出た幅だけ `browser_take_screenshot` で崩れを確認する**（**検出 → 変更承認ゲート → 修正 → 各幅で再観察**）。入力方式（`pointer`/`hover`）・セーフエリアの再現も同節に従う。MCP が使えなければその旨を明示する。
 
 ### 1. 現状分析
 
@@ -42,6 +43,12 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - 通常3つで十分: ~640px, ~768px, ~1024px
 - `clamp()` でブレイクポイント間のフルードスケーリング
 - モバイルファースト（`min-width`）への統一
+
+### 2.5 変更承認ゲート
+
+`change-gate.md` に従い、ここまでの診断と手順2の設計を改善提案（変更点・対象・規模判定）としてユーザーに提示し、承認を得てから次の手順に進む。規模が小なら実装計画を会話内で示して承認を得る。大なら設計（`.design/specs/`）と実装計画（`.design/plans/`）をそれぞれ保存して承認を得る。以降の手順は承認された項目だけを実施する。
+
+第1層（`refine-ui` / `implement-ui`）から承認済みの実装計画を受け取っている場合は、このゲートを省略し、計画のうち自分に割り当てられたタスクの範囲だけを実施する。範囲外の変更が必要になったら手を止め、差分を提案する。
 
 ### 3. レイアウト適応
 

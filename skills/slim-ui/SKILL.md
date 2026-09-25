@@ -1,6 +1,6 @@
 ---
 name: slim-ui
-description: UIを本質へ削ぎ落とす。不要な要素・重複情報・過剰な装飾を削除し、情報を簡素化してUIをスリムにする。画面が複雑すぎる・情報が多すぎる・UIを簡素化したい・蒸留したいときに使用する。
+description: UIを本質へ提案と承認を経て削ぎ落とす。不要な要素・重複情報・過剰な装飾を削除し、情報を簡素化してUIをスリムにする。画面が複雑すぎる・情報が多すぎる・UIを簡素化したい・蒸留したいときに使用する。
 user-invocable: true
 argument-hint: "[対象 (画面、コンポーネント、機能...)]"
 ---
@@ -16,6 +16,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/usability.md`
 - `ui-design-grounding/reference/anti-patterns.md`
 - `ui-design-grounding/reference/design-md-gate.md`
+- `ui-design-grounding/reference/change-gate.md`
 
 ## 手順
 
@@ -55,6 +56,12 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - Cowanの限界（4項目）を超える同時表示
 - ナビゲーション項目が5つを超える
 - フォームフィールドが4つ/グループを超える
+
+### 2.5 変更承認ゲート
+
+`change-gate.md` に従い、ここまでの診断を改善提案（変更点・対象・規模判定）としてユーザーに提示し、承認を得てから次の手順に進む。規模が小なら実装計画を会話内で示して承認を得る。大なら設計（`.design/specs/`）と実装計画（`.design/plans/`）をそれぞれ保存して承認を得る。以降の手順は承認された項目だけを実施する。
+
+第1層（`refine-ui` / `implement-ui`）から承認済みの実装計画を受け取っている場合は、このゲートを省略し、計画のうち自分に割り当てられたタスクの範囲だけを実施する。範囲外の変更が必要になったら手を止め、差分を提案する。
 
 ### 3. 削減の実施
 
