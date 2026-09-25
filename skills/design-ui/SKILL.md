@@ -1,6 +1,6 @@
 ---
 name: design-ui
-description: 要件・仕様からUI/UXの構造と設計方針を整理し、機能単位の設計文書（.design/<feature-slug>/FEATURE_DESIGN.md）として保存する。要件が曖昧なときはインタビューで明確化してから設計する。新規UI設計・画面設計・UI構造の検討・機能設計の作成・実装前の要件整理を依頼されたときに使用する。
+description: 要件・仕様からUI/UXの構造と設計方針を整理し、機能単位の設計文書（.design/specs/yyyy-mm-dd-{name}.md）として保存し、ユーザーの承認を得る。要件が曖昧なときはインタビューで明確化してから設計する。新規UI設計・画面設計・UI構造の検討・機能設計の作成・実装前の要件整理を依頼されたときに使用する。
 user-invocable: true
 argument-hint: "[要件、課題、シナリオ...]"
 ---
@@ -12,7 +12,7 @@ argument-hint: "[要件、課題、シナリオ...]"
 ui-design-grounding スキルを呼び出し、以下のリファレンスを読み込む:
 
 - `ui-design-grounding/reference/interview.md`
-- `ui-design-grounding/reference/feature-design.md`
+- `ui-design-grounding/reference/design-artifacts.md`
 - `ui-design-grounding/reference/information-arch.md`
 - `ui-design-grounding/reference/wording.md`
 - `ui-design-grounding/reference/design-system.md`
@@ -23,6 +23,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/spatial-layout.md`
 - `ui-design-grounding/reference/responsive-design.md`
 - `ui-design-grounding/reference/design-md-gate.md`
+- `ui-design-grounding/reference/change-gate.md`
 
 ## 入力
 
@@ -50,7 +51,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 要件の明確化状況を判定する: 対象画面・主要ユーザー・成功条件が入力から特定できるか。
 
 - **特定できる** → インタビューを省略し、把握した前提を一度だけ要約して確認する。
-- **曖昧・複数解釈がある** → `interview.md` の原則と実施プロトコルでインタビューを実施する。質問は機能単位（主要ユーザーと JTBD / 成功の定義 / コンテンツ / 機能固有の制約 / スコープ外）。**DESIGN.md・コードベースが答えを持つ質問は聞かずに調べる。** 主要枝が解決したら、確定事項・推奨で埋める事項・未確定事項を要約し、ユーザーが共通理解を確認してから FEATURE_DESIGN.md の生成へ進む。
+- **曖昧・複数解釈がある** → `interview.md` の原則と実施プロトコルでインタビューを実施する。質問は機能単位（主要ユーザーと JTBD / 成功の定義 / コンテンツ / 機能固有の制約 / スコープ外）。**DESIGN.md・コードベースが答えを持つ質問は聞かずに調べる。** 主要枝が解決したら、確定事項・推奨で埋める事項・未確定事項を要約し、ユーザーが共通理解を確認してから機能設計の生成へ進む。
 
 インタビュー中に DESIGN.md 級の話題（トーン・参照・新トークン）が出たら、機能設計に記録して手順8の昇格検出に回す。
 
@@ -61,25 +62,26 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 6. **ワーディング方向性**: ラベル、メッセージ、ガイダンスの方向性を検討する
 7. **実装を見据えた構造提案**: レスポンシブ、アクセシビリティ、パフォーマンスを考慮した構造を提案する
 
-### 8. 機能設計の保存と昇格検出
+### 8. 機能設計の保存・承認と昇格検出
 
-- 設計結果を `feature-design.md` のテンプレートに従い `.design/<feature-slug>/FEATURE_DESIGN.md` に保存する（`<feature-slug>` は機能・画面から導いた小文字ハイフン区切り）。
+- 設計結果を `design-artifacts.md` の機能設計テンプレートに従い `.design/specs/yyyy-mm-dd-{name}.md` に保存する（`{name}` は機能・画面から導いた小文字ハイフン区切り）。
+- 保存した設計の要約と保存先を示し、`change-gate.md` に従って**設計の承認**を得る。修正の要望があれば設計を直して再提示する。承認されるまで手順9へ進まない。
 - DESIGN.md 級の恒久的決定（トーンの明確化・新トークン候補・画面横断の新規約）が生まれていれば「DESIGN.md へ昇格すべき決定」として列挙し、`/init-design` を提案する（本スキルからは書き換えない）。
 
 ### 9. 実装への受け渡し
 
 固有の実装ワークフロー（CLAUDE.md / AGENTS.md の記載・ユーザー指定・導入済みの実装プロセス系スキル。スキルは明記が無くても暗黙に期待されうる — 迷えばユーザーに確認）の有無で分岐する:
 
-- **ある / 実装が UI に閉じない** → FEATURE_DESIGN.md と DESIGN.md を設計入力として渡す。UI 実装フェーズで `/implement-ui` を部品として使える。
-- **無く、UI に閉じる** → `/implement-ui` へ。
+- **ある / 実装が UI に閉じない** → 承認済みの機能設計（`.design/specs/`）と DESIGN.md を設計入力として渡す。UI 実装フェーズで `/implement-ui` を部品として使える。
+- **無く、UI に閉じる** → `/implement-ui` へ（設計承認済みとして実装計画から始まる）。
 
 ## 出力フォーマット
 
-FEATURE_DESIGN.md（`feature-design.md` のテンプレート準拠）を保存したうえで、会話では要約を示す:
+機能設計（`design-artifacts.md` のテンプレート準拠）を保存したうえで、会話では要約を示す:
 
 ```markdown
 ## 設計サマリ
-- 機能設計の保存先: `.design/<feature-slug>/FEATURE_DESIGN.md`
+- 機能設計の保存先: `.design/specs/yyyy-mm-dd-{name}.md`（承認: 済 / 修正待ち）
 - UX目的: ...
 - 画面構成: [画面一覧と遷移の要点]
 - 体験原則: [最大3つ]
@@ -98,5 +100,5 @@ FEATURE_DESIGN.md（`feature-design.md` のテンプレート準拠）を保存�
 
 - 見た目の細部を断定しない（色、フォント等の具体値は参考程度。視覚基準は DESIGN.md に委ねる）
 - 実装可能性を無視しない
-- 画面デザインの完成ではなく、「考え方」と「構造」を明確にし、実装に受け渡せる形（FEATURE_DESIGN.md）で残すことが目的
+- 画面デザインの完成ではなく、「考え方」と「構造」を明確にし、実装に受け渡せる形（`.design/specs/` の機能設計）で残すことが目的
 - DESIGN.md は制約として読むが、本スキルは DESIGN.md を書き換えない（視覚的憲法の定義・更新は `/init-design`）
