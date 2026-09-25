@@ -42,7 +42,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 4. **システム的問題の特定**: 複数箇所に共通する根本原因を洗い出す
 5. **ポジティブな発見**: 良い実装・パターンも記録する
 6. **推奨アクション**: 検出した問題を解決できるコマンドスキルを、優先度順に紐付けて提示する。各項目に対象スキル名・対応する問題件数・代表的な問題を含める
-7. **レポート保存**: `ui-report.md` に従い、評価対象プロジェクトの `.design/reports/YYYY-MM-DD/HHmmss-audit-ui.md` に詳細レポートを保存する。スクリーンショットを取得した場合は `.design/reports/YYYY-MM-DD/screenshots/` に保存し、レポート本文から相対リンクする。会話内の最終応答では、要約・最優先アクション・保存先を短く示す
+7. **レポート保存**: `ui-report.md` に従い、評価対象プロジェクトの `.design/reports/yyyy-mm-dd-audit-ui-<対象>.md` に詳細レポートを保存する。スクリーンショットを取得した場合は `.design/reports/yyyy-mm-dd-audit-ui-<対象>/` に保存し、レポート本文から相対リンクする。会話内の最終応答では、要約・最優先アクション・保存先を短く示す
 8. **フォローアップ**: `ui-report.md` の「指摘のフォローアップ（タスク管理への接続）」を必ず実施する — この実行内で修正しない P0/P1 指摘は、プロジェクトのタスク管理へ登録するか、最終応答で登録を提案する
 
 ## 出力フォーマット
@@ -57,13 +57,13 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 | 実施日時 | <ISO 8601形式のローカル日時> |
 | DESIGN.md | あり / なし / 未確認 |
 | 観察方法 | Playwright MCP / 未実施（理由） |
-| レポート保存先 | `.design/reports/YYYY-MM-DD/HHmmss-audit-ui.md` |
+| レポート保存先 | `.design/reports/yyyy-mm-dd-audit-ui-<対象>.md` |
 
 ## スクリーンショット
 
 | # | 内容 | パス |
 |---|---|---|
-| 1 | <画面・状態・幅など> | [screenshots/HHmmss-audit-ui-01.png](screenshots/HHmmss-audit-ui-01.png) |
+| 1 | <画面・状態・幅など> | [yyyy-mm-dd-audit-ui-<対象>/01.png](yyyy-mm-dd-audit-ui-<対象>/01.png) |
 
 <!-- 取得していない場合は「なし」と書く。 -->
 
@@ -94,7 +94,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
   - 根拠: <観察・実測・スクリーンショット・コード位置など>
   - 影響: <ユーザーまたは品質への影響>
   - 推奨対応: <対応方針>
-  - 関連スクリーンショット: [screenshots/HHmmss-audit-ui-01.png](screenshots/HHmmss-audit-ui-01.png) / なし
+  - 関連スクリーンショット: [yyyy-mm-dd-audit-ui-<対象>/01.png](yyyy-mm-dd-audit-ui-<対象>/01.png) / なし
 
 ### P1（Major）
 - **<問題名>**

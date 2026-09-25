@@ -67,7 +67,7 @@ Phase 1/2 で見つかった指摘についてのみ、該当コンポーネン�
 
 以下の出力フォーマットに従い、冒頭サマリー、7レンズ一覧、レンズ別の詳細、推奨アクションをまとめる。`reference/legibility.md`「対象外（他スキルに委ねる観点）」に該当する気づき（エルゴノミクス・ピクセル整合・将来のデータ量への堅牢性等）があれば、指摘表には含めず「対象外として見送った観点」として委譲先スキルとともに一言添える。
 
-`ui-report.md` に従い、評価対象プロジェクトの `.design/reports/YYYY-MM-DD/HHmmss-legibility-ui.md` に詳細レポートを保存する。スクリーンショットを取得した場合は `.design/reports/YYYY-MM-DD/screenshots/` に保存し、レポート本文から相対リンクする。会話内の最終応答では、要約・最優先アクション・保存先を短く示す。
+`ui-report.md` に従い、評価対象プロジェクトの `.design/reports/yyyy-mm-dd-legibility-ui-<対象>.md` に詳細レポートを保存する。スクリーンショットを取得した場合は `.design/reports/yyyy-mm-dd-legibility-ui-<対象>/` に保存し、レポート本文から相対リンクする。会話内の最終応答では、要約・最優先アクション・保存先を短く示す。
 
 保存後、`ui-report.md` の「指摘のフォローアップ（タスク管理への接続）」を必ず実施する — この実行内で修正しない P0/P1 指摘は、プロジェクトのタスク管理へ登録するか、最終応答で登録を提案する（レポートを出して終わりにしない）。
 
@@ -83,13 +83,13 @@ Phase 1/2 で見つかった指摘についてのみ、該当コンポーネン�
 | 実施日時 | <ISO 8601形式のローカル日時> |
 | DESIGN.md | あり / なし / 未確認 |
 | 観察方法 | Playwright MCP / 未実施（理由） |
-| レポート保存先 | `.design/reports/YYYY-MM-DD/HHmmss-legibility-ui.md` |
+| レポート保存先 | `.design/reports/yyyy-mm-dd-legibility-ui-<対象>.md` |
 
 ## スクリーンショット
 
 | # | 内容 | パス |
 |---|---|---|
-| 1 | <画面・状態・幅など> | [screenshots/HHmmss-legibility-ui-01.png](screenshots/HHmmss-legibility-ui-01.png) |
+| 1 | <画面・状態・幅など> | [yyyy-mm-dd-legibility-ui-<対象>/01.png](yyyy-mm-dd-legibility-ui-<対象>/01.png) |
 
 <!-- 取得していない場合は「なし」と書く。 -->
 
@@ -120,7 +120,7 @@ Phase 1/2 で見つかった指摘についてのみ、該当コンポーネン�
 
 | 画面 | 対象 | 初見の予想 | 実際の挙動 | ギャップ | 影響 | 重篤度 | 該当コード | 関連スクリーンショット | 推奨対応 |
 |---|---|---|---|---|---|---|---|---|---|
-| ... | ... | ... | ... | ... | ... | P0-P3 | `path/to/file:line` / 未特定 | [screenshots/HHmmss-legibility-ui-01.png](screenshots/HHmmss-legibility-ui-01.png) / なし | ... |
+| ... | ... | ... | ... | ... | ... | P0-P3 | `path/to/file:line` / 未特定 | [yyyy-mm-dd-legibility-ui-<対象>/01.png](yyyy-mm-dd-legibility-ui-<対象>/01.png) / なし | ... |
 
 ### ② 現在地の不透明さ
 

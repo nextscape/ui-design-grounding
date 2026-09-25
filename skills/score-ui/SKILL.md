@@ -56,7 +56,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 5. **認知負荷アセスメント**: cognitive.md の違反パターン（選択肢の壁、メモリブリッジ等）を検出
 6. **課題の分類**: P0-P3の重篤度で整理
 7. **推奨アクション**: 検出した課題を解決できるコマンドスキルを、優先度順に紐付けて提示する。各項目に対象スキル名・対応する課題件数・代表的な課題を含める
-8. **レポート保存**: `ui-report.md` に従い、評価対象プロジェクトの `.design/reports/YYYY-MM-DD/HHmmss-score-ui.md` に詳細レポートを保存する。スクリーンショットを取得した場合は `.design/reports/YYYY-MM-DD/screenshots/` に保存し、レポート本文から相対リンクする。会話内の最終応答では、要約・最優先アクション・保存先を短く示す
+8. **レポート保存**: `ui-report.md` に従い、評価対象プロジェクトの `.design/reports/yyyy-mm-dd-score-ui-<対象>.md` に詳細レポートを保存する。スクリーンショットを取得した場合は `.design/reports/yyyy-mm-dd-score-ui-<対象>/` に保存し、レポート本文から相対リンクする。会話内の最終応答では、要約・最優先アクション・保存先を短く示す
 9. **フォローアップ**: `ui-report.md` の「指摘のフォローアップ（タスク管理への接続）」を必ず実施する — この実行内で修正しない P0/P1 指摘は、プロジェクトのタスク管理へ登録するか、最終応答で登録を提案する
 
 ## 出力フォーマット
@@ -71,13 +71,13 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 | 実施日時 | <ISO 8601形式のローカル日時> |
 | DESIGN.md | あり / なし / 未確認 |
 | 観察方法 | Playwright MCP / 未実施（理由） |
-| レポート保存先 | `.design/reports/YYYY-MM-DD/HHmmss-score-ui.md` |
+| レポート保存先 | `.design/reports/yyyy-mm-dd-score-ui-<対象>.md` |
 
 ## スクリーンショット
 
 | # | 内容 | パス |
 |---|---|---|
-| 1 | <画面・状態・幅など> | [screenshots/HHmmss-score-ui-01.png](screenshots/HHmmss-score-ui-01.png) |
+| 1 | <画面・状態・幅など> | [yyyy-mm-dd-score-ui-<対象>/01.png](yyyy-mm-dd-score-ui-<対象>/01.png) |
 
 <!-- 取得していない場合は「なし」と書く。 -->
 
@@ -107,7 +107,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - レッドフラグ: ...
 - 影響: ...
 - 推奨改善: ...
-- 関連スクリーンショット: [screenshots/HHmmss-score-ui-01.png](screenshots/HHmmss-score-ui-01.png) / なし
+- 関連スクリーンショット: [yyyy-mm-dd-score-ui-<対象>/01.png](yyyy-mm-dd-score-ui-<対象>/01.png) / なし
 
 ## 認知負荷の問題
 - **<問題名>**
@@ -122,7 +122,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
   - 根拠: <観察・操作結果・スクリーンショット・コード位置など>
   - 影響: <ユーザーまたはUXへの影響>
   - 推奨対応: <対応方針>
-  - 関連スクリーンショット: [screenshots/HHmmss-score-ui-01.png](screenshots/HHmmss-score-ui-01.png) / なし
+  - 関連スクリーンショット: [yyyy-mm-dd-score-ui-<対象>/01.png](yyyy-mm-dd-score-ui-<対象>/01.png) / なし
 
 ### P1（Major）
 - **<課題名>**
