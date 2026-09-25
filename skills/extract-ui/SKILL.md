@@ -17,6 +17,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/color-system.md`
 - `ui-design-grounding/reference/spatial-layout.md`
 - `ui-design-grounding/reference/design-md-spec.md`
+- `ui-design-grounding/reference/change-gate.md`
 
 ## 手順
 
@@ -60,6 +61,12 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - **見た目を変えない**: 抽出はリファクタリングであり、視覚的変更を伴わない
 - **影響度順**: spacing → border → background → text → state の順で移行
 - **検証**: 抽出前後で見た目が同一であることを確認
+
+### 5.5 変更承認ゲート
+
+抽出結果と移行計画は提案として提示する。コードのコンポーネント化・トークン置換・DESIGN.md への反映に着手する場合は、`change-gate.md` に従って改善提案として承認を得てから行う（トークン抽出で DESIGN.md のトークンだけを変える場合は小規模）。
+
+第1層（`refine-ui` / `implement-ui`）から承認済みの実装計画を受け取っている場合は、このゲートを省略し、計画のうち自分に割り当てられたタスクの範囲だけを実施する。
 
 ## 出力フォーマット
 

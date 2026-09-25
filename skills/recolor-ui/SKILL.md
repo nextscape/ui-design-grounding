@@ -1,6 +1,6 @@
 ---
 name: recolor-ui
-description: 既存の DESIGN.md（または CSS のカラートークン）のパレットを、新しいブランド／テーマ primary を中心に OKLCH で破綻なく再配色（リカラー）する。タイポグラフィ・余白・角丸・モーションは保持し、明度・彩度の関係と WCAG コントラスト、on-color ペアを維持・再計算する。ブランドカラーの変更、テーマカラー／アクセントカラーの切り替え、配色テーマの差し替え、別ブランド向けの色展開を依頼されたときに使用する。外部URLのパレットを取り込む場合は scan-ui で分析してから使う。
+description: 既存の DESIGN.md（または CSS のカラートークン）のパレットを、新しいブランド／テーマ primary を中心に OKLCH で破綻なく再配色（リカラー）し、変更前後を提示して承認を得てから反映する。タイポグラフィ・余白・角丸・モーションは保持し、明度・彩度の関係と WCAG コントラスト、on-color ペアを維持・再計算する。ブランドカラーの変更、テーマカラー／アクセントカラーの切り替え、配色テーマの差し替え、別ブランド向けの色展開を依頼されたときに使用する。外部URLのパレットを取り込む場合は scan-ui で分析してから使う。
 user-invocable: true
 argument-hint: "[--primary <hex/oklch>] [対象 DESIGN.md / トークン]"
 ---
@@ -21,6 +21,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/design-tokens.md`
 - `ui-design-grounding/reference/design-md-spec.md`
 - `ui-design-grounding/reference/design-md-gate.md`
+- `ui-design-grounding/reference/change-gate.md`
 
 > 本スキルは色について DESIGN.md ゲートの前段（手順1の読み込み）・後段（手順6の反映）を **自スキル内で完結** させる。色以外のトークン（タイポ・余白・角丸・モーション）は保持するため変更しない。
 
@@ -48,6 +49,12 @@ DESIGN.md にグラデーション（`linear/radial-gradient`、`scan-ui` 由来
 
 - `on-primary` / `on-surface` 等の on-color ペアを WCAG 基準（本文 4.5:1、大文字 3:1）で再検証し、満たさなければ L を調整して再計算する。
 - semantic の `{}` 参照構造は壊さない（参照先 primitive の値だけ変える）。
+
+### 5.5 変更承認ゲート
+
+`change-gate.md` に従い、手順1〜5の再配色結果（変更前後の colors とコントラスト検証）を改善提案（変更点・対象・規模判定）としてユーザーに提示し、承認を得てから次の手順に進む。規模が小なら実装計画を会話内で示して承認を得る。大なら設計（`.design/specs/`）と実装計画（`.design/plans/`）をそれぞれ保存して承認を得る。以降の手順は承認された項目だけを実施する。
+
+第1層（`refine-ui` / `implement-ui`）から承認済みの実装計画を受け取っている場合は、このゲートを省略し、計画のうち自分に割り当てられたタスクの範囲だけを実施する。範囲外の変更が必要になったら手を止め、差分を提案する。
 
 ### 6. 反映
 
