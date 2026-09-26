@@ -222,7 +222,7 @@ project-root/
   - 根拠: `browser_resize(320)` とスクリーンショットで確認
   - 影響: モバイルユーザーが指標を読み切れない
   - 推奨対応: `/adapt-ui`
-  - 関連スクリーンショット: [screenshots/103012-audit-ui-01.png](screenshots/103012-audit-ui-01.png)
+  - 関連スクリーンショット: [2026-09-26-audit-ui-dashboard/01.png](2026-09-26-audit-ui-dashboard/01.png)
 ```
 
 #### UXヒューリスティクス評価: `/score-ui`
