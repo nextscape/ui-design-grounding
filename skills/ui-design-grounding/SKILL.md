@@ -91,6 +91,7 @@ UI設計・実装の判断は、明示／暗黙いずれかのルールや前提
 - 不足情報がある場合は、仮定として明示したうえで判断する
 - 特別な指示がなければ、既存コンポーネント・CSS・デザイントークンの再利用を優先する
 - 判断や最終選択は、必ず人間に委ねる
+- コード・UI ファイル・DESIGN.md を変更するときは、改善提案とユーザーの承認を経てから行う（`change-gate.md`）
 
 ---
 
@@ -132,8 +133,9 @@ UI設計・実装の判断は、明示／暗黙いずれかのルールや前提
 - `design-tokens.md` — Primitive/Semantic/Component トークン、命名、段階的導入
 - `design-md-spec.md` — DESIGN.md のフォーマット仕様・設計思想（front matter／本文8セクション）
 - `design-md-gate.md` — DESIGN.md ゲート（前段=基準読込／後段=乖離時の誘導）の手順
+- `change-gate.md` — 変更承認ゲート: 改善提案 → 承認 →（大: 設計 → 承認）→ 実装計画 → 承認 → 実装、規模判定、ゲートの省略条件、第1層→第2層の受け渡し
 - `interview.md` — インタビュー6原則（決定木を1問ずつ深掘る・調べれば分かることは聞かない・推奨回答つき・合意まで行動しない）、発動判定、質問の帰属（`init-design` / `design-ui` 共通）
-- `feature-design.md` — FEATURE_DESIGN.md（機能設計）のテンプレート・保存先（`.design/<feature-slug>/`）・DESIGN.md との関係・昇格導線・`.design/` 全体構造
+- `design-artifacts.md` — `.design/` の構造（specs / plans / reports / preview.html）・命名・機能設計と改善設計と実装計画のテンプレート・旧構造との互換・DESIGN.md への昇格導線
 - `implementation.md` — コンポーネント粒度、責務分離、UI状態管理
 
 ### 品質
@@ -143,7 +145,7 @@ UI設計・実装の判断は、明示／暗黙いずれかのルールや前提
 ### 観察・検証（実地）
 
 - `playwright.md` — Playwright MCP による実地観察（ツール選択・状態トリガ・一括監査スイープ・効率化トリアージ・検出→修正→再観察）。評価系・修正系スキルが共通で参照
-- `ui-report.md` — 評価系スキルの Markdown レポート保存先（`.design/reports/`）、共通メタ情報、スクリーンショットリンク、未検証・制約の共通ルール
+- `ui-report.md` — 評価系スキルの Markdown レポート保存先（`.design/reports/yyyy-mm-dd-<skill>-<対象>.md`）、共通メタ情報、スクリーンショットリンク、未検証・制約の共通ルール
 
 ---
 
