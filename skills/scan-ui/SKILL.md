@@ -31,6 +31,7 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/motion-design.md`
 - `ui-design-grounding/reference/responsive-design.md`
 - `ui-design-grounding/reference/anti-patterns.md`
+- `ui-design-grounding/reference/change-gate.md`
 
 ## モードとキャプチャオプション
 
@@ -307,7 +308,7 @@ const VIEWPORTS = [320, 768, 1024, 1280];
 - 取り込みは参照・学習目的。商標・独自表現の流用は避ける。
 ```
 
-DESIGN.md 本体は `reference/design-md-spec.md` のフォーマットに従って別途生成し、プロジェクトルート（または指定パス）に書き出す。
+DESIGN.md 本体は `reference/design-md-spec.md` のフォーマットに従って別途生成し、プロジェクトルート（または指定パス）に書き出す。既存の DESIGN.md がある場合は上書きせず、`change-gate.md` に従って差分を示し承認を得てから書き込む（新規作成は生成結果の要約を示して承認を得る）。
 
 ## よくある落とし穴
 

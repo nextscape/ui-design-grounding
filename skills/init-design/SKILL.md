@@ -37,15 +37,16 @@ ui-design-grounding スキルを呼び出し、以下のリファレンスを読
 - `ui-design-grounding/reference/interaction.md`
 - `ui-design-grounding/reference/responsive-design.md`
 - `ui-design-grounding/reference/anti-patterns.md`
+- `ui-design-grounding/reference/change-gate.md`
 
 ## 動作モード
 
 DESIGN.md の有無で分岐する:
 
 - **A. 新規作成** — DESIGN.md が存在しない。入力収集 → 既存コード分析 → 生成。
-- **B. 更新** — 既存 DESIGN.md を読み込み、差分更新。front matter のトークンと本文の整合を保つ。
-- **C. 抽出（リバース生成）** — 既存 CSS / トークン / コンポーネントを分析し、値を front matter に、根拠を本文に起こす。
-- **D. スリム化（重複統合）** — 更新の積み重ねで重複・冗長が溜まった DESIGN.md を、既存値を統合して整理する。**情報量は減らさず冗長だけ削る**。大規模化していれば `tokens.css` / `tokens.json` への外出しを提案する。
+- **B. 更新** — 既存 DESIGN.md を読み込み、差分更新。front matter のトークンと本文の整合を保つ。書き込む前に、変更差分（どのトークン・節をどう変えるか）を提示し、`change-gate.md` に従ってユーザーの承認を得てから書き込む。
+- **C. 抽出（リバース生成）** — 既存 CSS / トークン / コンポーネントを分析し、値を front matter に、根拠を本文に起こす。書き込む前に、変更差分（どのトークン・節をどう変えるか）を提示し、`change-gate.md` に従ってユーザーの承認を得てから書き込む。
+- **D. スリム化（重複統合）** — 更新の積み重ねで重複・冗長が溜まった DESIGN.md を、既存値を統合して整理する。**情報量は減らさず冗長だけ削る**。大規模化していれば `tokens.css` / `tokens.json` への外出しを提案する。書き込む前に、変更差分（どのトークン・節をどう変えるか）を提示し、`change-gate.md` に従ってユーザーの承認を得てから書き込む。
 
 ## 手順（新規作成）
 
