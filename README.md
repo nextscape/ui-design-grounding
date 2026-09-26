@@ -173,22 +173,21 @@ DESIGN.md がない場合は、まず `/init-design` を使うのがおすすめ
 このプラグインのスキルが生成するファイルは、DESIGN.md（プロジェクトルート常駐）を除き、対象プロジェクトの `.design/` に集約されます。
 
 ```text
-.design/
-  <feature-slug>/
-    FEATURE_DESIGN.md        ← /design-ui が保存する機能単位の設計判断
-  reports/
-    YYYY-MM-DD/
-      HHmmss-audit-ui.md
-      HHmmss-score-ui.md
-      HHmmss-legibility-ui.md
-      screenshots/
-        HHmmss-audit-ui-01.png
-  preview.html               ← /preview-ui が生成する DESIGN.md の見本帳
+project-root/
+├── DESIGN.md                                ← 視覚的憲法はルート常駐（エージェントの自動参照が価値の核）
+└── .design/
+    ├── specs/yyyy-mm-dd-{name}.md           ← 設計（機能設計 / 改善設計）
+    ├── plans/yyyy-mm-dd-{name}.md           ← 大規模の実装計画
+    ├── reports/yyyy-mm-dd-{name}.md         ← 評価レポート（ui-report.md 参照）
+    ├── reports/yyyy-mm-dd-{name}/NN.png     ← そのレポートのスクリーンショット
+    └── preview.html                         ← DESIGN.md の見本帳（preview-ui が生成）
 ```
 
-FEATURE_DESIGN.md は `/implement-ui` が読み込む受け渡しファイルのため、コミットしておくのがおすすめです。
+機能設計（`specs/`）は `/implement-ui` が読み込む受け渡しファイルのため、コミットしておくのがおすすめです。
 
 評価系スキルのスクリーンショットは、レポート内から相対リンクされます。レビュー後に、何を見て、何を根拠に判断したかを追いやすくするためです。
+
+コードや UI を変更するスキルは、いきなり修正せず、まず改善提案を示して承認を得ます。規模が小さければ実装計画 → 実装、大きければ設計（`specs/`）→ 実装計画（`plans/`）→ 実装の順に、工程ごとに承認を得て進みます（`change-gate.md`）。
 
 ### レポートのイメージ
 
@@ -327,10 +326,11 @@ docs/
 | `responsive-design.md` | モバイルファースト、ブレイクポイント、入力方式 |
 | `design-md-spec.md` | DESIGN.md のフォーマット仕様 |
 | `design-md-gate.md` | DESIGN.md を作業前後でどう扱うか |
+| `change-gate.md` | 変更承認ゲート（提案 → 承認 → 設計 → 計画 → 実装）、規模判定 |
 | `playwright.md` | Playwright MCP による実地観察 |
 | `ui-report.md` | 評価レポートの保存先、メタ情報、スクリーンショットリンク |
 | `interview.md` | インタビュー6原則、実施プロトコル、発動判定、質問の帰属 |
-| `feature-design.md` | 機能設計（FEATURE_DESIGN.md）のテンプレートと `.design/` 構造 |
+| `design-artifacts.md` | `.design/` の構造・命名、設計（機能設計 / 改善設計）と実装計画のテンプレート |
 
 ## どのスキルを選べばよいか
 

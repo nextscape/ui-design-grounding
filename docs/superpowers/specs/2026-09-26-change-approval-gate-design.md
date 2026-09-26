@@ -176,7 +176,7 @@ project-root/
 - `design-md-gate.md`: フロー上の位置関係（前段ゲート → 変更承認ゲート → 実装 → 後段ゲート）を追記
 - `playwright.md`: スクリーンショットの保存先を新構造へ
 - `README.md` / `AGENTS.md` / `ui-help`: `.design/` 構造・ワークフロー・リファレンス一覧を更新
-- `.claude-plugin/plugin.json` / `CHANGELOG.md`: バージョンを 1.7.0 に上げる（出力パスが変わる破壊的な変更を含むため、CHANGELOG に移行の注意を明記）
+- `.claude-plugin/plugin.json` / `CHANGELOG.md`: バージョンを 1.6.0 に上げる（現行マニフェストは 1.5.1）（出力パスが変わる破壊的な変更を含むため、CHANGELOG に移行の注意を明記）
 
 ## 6. 検討した代替案
 

@@ -2,6 +2,13 @@
 
 本プロジェクトの主な変更点を記録する。バージョンは [プラグインマニフェスト](.claude-plugin/plugin.json) に準拠する。
 
+## [1.6.0] - 2026-09-26
+
+- 書き込みを伴う全スキルに **変更承認ゲート**（新リファレンス `change-gate.md`）を導入。いきなり修正せず、改善提案 → 承認 →（大規模: 設計 → 承認）→ 実装計画 → 承認 → 実装の順に進める。規模は「共通コンポーネント・複数画面への波及／2観点以上／構造変更」で大、DESIGN.md のトークン変更のみは小
+- 第1層（`refine-ui` / `implement-ui`）から第2層への委譲では承認済み計画を渡し、第2層はゲートを省略（二重承認の回避）。`polish-ui` の「即座に修正」、`refine-ui` / `implement-ui` の「止めず」を承認前提の文言に変更
+- **破壊的変更**: `.design/` の構造を再編。機能設計は `.design/<feature-slug>/FEATURE_DESIGN.md` → `.design/specs/yyyy-mm-dd-{name}.md`、評価レポートは `.design/reports/YYYY-MM-DD/HHmmss-<skill>.md` → `.design/reports/yyyy-mm-dd-<skill>-<対象>.md`（スクリーンショットはレポートと同名フォルダ）。大規模の実装計画は `.design/plans/` に保存。`implement-ui` は旧パスの FEATURE_DESIGN.md も読む（自動移行はしない）
+- `feature-design.md` を `design-artifacts.md` に改名し、改善設計・実装計画のテンプレートを追加
+
 ## [1.5.1] - 2026-07-24
 
 - 評価系スキル（`audit-ui` / `score-ui` / `legibility-ui`）に「指摘のフォローアップ（タスク管理への接続）」を追加（`ui-report.md`）。監査が P1 の構造問題を検出しても、修正フェーズで `/design-ui` 委譲のまま放置され後日ユーザーが同じ問題を再発見した実運用の欠陥への対応。実行内で修正しない P0/P1 指摘はプロジェクトのタスク管理へ登録（無ければ最終応答で登録を提案）し、登録先をレポートに残す
