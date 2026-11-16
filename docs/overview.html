@@ -1,0 +1,1198 @@
+<!doctype html>
+<html lang="ja" data-dd-format="onepage">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ui-design-grounding の使い方と仕組み</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=Archivo:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* === 1. 色トークン: 正本は shared/theme/tokens.css（区画の中は直さない） === */
+/* ==== dd-tokens:start ==== */
+/* 色のトークン（presentation と design-doc で同じ）。正本は plugins/ns-docs/shared/theme/tokens.css。
+   各ひな形の区画には scripts/sync-shared.js が写す。区画の中を直接直さない。
+   プリミティブ（--p-*）は意味を持たない。名前は「色の名前＋明るさの段（大きいほど暗い）」で、OKLCH の値を持つ。
+   セマンティック（それ以外）は使う場面を名前にし、var(--p-*) を参照するだけにする。
+   ブランドの色を変えるときは、プリミティブの値だけを直す */
+:root{
+  /* ===== プリミティブ ===== */
+  /* 紺 */
+  --p-navy-900: oklch(19% 0.080 260);
+  --p-navy-850: oklch(24.5% 0.108 260);
+  --p-navy-800: oklch(28% 0.136 260);
+  --p-navy-700: oklch(40.5% 0.153 260);
+  --p-navy-600: oklch(47.5% 0.168 260);
+  --p-navy-a14: oklch(19% 0.080 260 / 0.14);
+  /* シアン */
+  --p-cyan-700: oklch(50% 0.120 219);
+  --p-cyan-500: oklch(65.5% 0.120 219);
+  --p-cyan-400: oklch(71.5% 0.120 219);
+  --p-cyan-300: oklch(78% 0.111 219);
+  --p-cyan-50: oklch(96% 0.020 219);
+  /* マゼンタ */
+  --p-magenta-600: oklch(54% 0.205 3);
+  --p-magenta-500: oklch(58.5% 0.205 3);
+  --p-magenta-300: oklch(69% 0.177 3);
+  /* 灰 */
+  --p-gray-700: oklch(50.5% 0.032 258);
+  --p-gray-500: oklch(67% 0.030 258);
+  /* 青みの灰（明るい面と図の面の段） */
+  --p-slate-50: oklch(97.5% 0.006 256);
+  --p-slate-100: oklch(95.5% 0.012 254);
+  --p-slate-150: oklch(94% 0.016 254);
+  --p-slate-200: oklch(91.5% 0.020 254);
+  --p-slate-300: oklch(87% 0.028 254);
+  --p-slate-400: oklch(80% 0.040 254);
+  /* 白・黒 */
+  --p-white: oklch(100% 0 0);
+  --p-black: oklch(0% 0 0);
+
+  /* ===== セマンティック（部品と図はこの層だけを参照する） ===== */
+  /* 面 */
+  --page: var(--p-slate-50);          /* 明るい面の地（上） */
+  --page-2: var(--p-slate-150);       /* 明るい面の地（下） */
+  --surface: var(--p-white);          /* 白い面: カード・表・図の地・図の部品 */
+  --bg: var(--p-navy-900);            /* 紺の面: 表紙の塗り・帯 */
+  --surface-deep: var(--p-navy-800);  /* 濃い紺の面 */
+  /* 文字 */
+  --text: var(--p-navy-900);          /* 本文・見出し・最重要の塗り */
+  --text-muted: var(--p-gray-700);    /* 補足・通常の線 */
+  --on-dark: var(--p-white);          /* 紺の面の上の文字 */
+  --text-black: var(--p-black);       /* 編集機能の文字色「黒」 */
+  /* 線・罫 */
+  --stroke: var(--p-navy-700);        /* 写真の影の色 */
+  --rule: var(--p-navy-a14);          /* 罫線・柱の線・図の引き出し線 */
+  /* 強調（マゼンタ）: 強調の印・要対応・今日の線だけ */
+  --accent: var(--p-magenta-500);
+  --accent-on-light: var(--p-magenta-600); /* 明るい面の上で AA */
+  /* 補助（シアン）: 見出しの強調の語・非同期・進行中 */
+  --support: var(--p-cyan-500);
+  --support-2: var(--p-cyan-400);
+  --support-on-dark: var(--p-cyan-300);
+  --support-on-light: var(--p-cyan-700);   /* 明るい面の上で AA */
+  --tint: var(--p-cyan-50);           /* 表の推す列の地 */
+  /* 図の面（外側の範囲ほど淡く、内側ほど濃い） */
+  --zone-1: var(--p-slate-100);       /* 最も淡い面: 外側の範囲・グラフの描画域・レーンの地 */
+  --zone-2: var(--p-slate-200);       /* 淡い面: 中の範囲・地の上の箱・表の見出し */
+  --zone-3: var(--p-slate-300);       /* 一段濃い面: 内側の範囲・予定の工程・枝・優先の象限 */
+  --zone-4: var(--p-slate-400);       /* 濃い面: ピラミッドの 2 段目・構成比の段 */
+}
+/* ==== dd-tokens:end ==== */
+/* フォントなど色以外のトークン（ホストごと） */
+:root{
+  --jp: "Zen Kaku Gothic New", system-ui, sans-serif;
+  --en: "Archivo", var(--jp);
+  --mono: "JetBrains Mono", monospace;
+}
+/* ==== dd-theme:start ==== */
+/* 共通のテーマ（presentation と design-doc で同じ）。正本は plugins/ns-docs/shared/theme/theme.css。
+   各ひな形の区画には scripts/sync-shared.js が写す。区画の中を直接直さない。
+   ここは「形と色」だけを持つ。大きさ・位置・余白は、各ひな形の CSS（この区画の後ろ）が持つ */
+/* 図の地（白）。図の面 --zone-1 が明るい面の地に溶けないように */
+:where(figure.diagram,.fig){background:var(--surface);}
+/* 図の説明の先頭の番号（FIG. 01） */
+:where(.fig-no){display:inline-block;background:var(--text);color:var(--on-dark);font-family:var(--en);font-weight:700;letter-spacing:.14em;line-height:1;padding:.4em .7em;margin-right:.8em;font-size:.78em;vertical-align:.1em;}
+/* 紺の小さなラベル（見出しの前の印・文書の種類・目次の見出し） */
+:where(.eyebrow,.doc-sub,.doc-toc .hd,.dd-sub,.dd-agenda h2,.ttl .tag){background:var(--text);color:var(--on-dark);font-family:var(--en);font-weight:700;letter-spacing:.14em;text-transform:uppercase;}
+/* 表: 見出しの下に紺の太線、行は細い罫線。推す列は is-key */
+:where(table.cmp,.doc table,table.rc,table.opt){width:100%;border-collapse:collapse;background:var(--surface);}
+:where(table.cmp,.doc table,table.rc,table.opt) :is(th,td){border:0;border-bottom:1px solid var(--rule);text-align:left;}
+:where(table.cmp,.doc table,table.rc,table.opt) thead th{background:none;color:var(--text);border-bottom:2px solid var(--text);}
+:where(table.cmp,.doc table,table.rc,table.opt) .is-key{background:var(--tint);}
+:where(table.cmp,.doc table,table.rc,table.opt) thead .is-key{background:var(--text);color:var(--on-dark);border-bottom-color:var(--text);}
+:where(table.cmp,.doc table,table.rc,table.opt) .mk{font-family:var(--en);font-weight:900;font-size:1.2em;}
+:where(table.cmp,.doc table,table.rc,table.opt) .is-key .mk{color:var(--support-on-light);}
+/* 四角いラベル（指摘・優先度・残課題）。要対応・Must はマゼンタ、任意・Should はシアン、ほかは灰色 */
+:where(.labeled i,.pri,.notes .k,.rest .k){font-style:normal;font-weight:700;color:var(--on-dark);background:var(--text-muted);}
+:where(.labeled i.must,.pri.must){background:var(--accent-on-light);}
+:where(.labeled i.opt,.pri.should){background:var(--support-on-light);}
+:where(.notes .k,.rest .k){background:var(--text);}
+/* 箇条書き（2 段まで）。1 段目は紺の四角、2 段目はシアンの短い線 */
+:where(.bul,.doc section ul,.inner ul),:where(.bul,.doc section ul,.inner ul) ul{list-style:none;padding-left:0;}
+:where(.bul,.doc section ul,.inner ul) li{position:relative;padding-left:1.5em;}
+:where(.bul,.doc section ul,.inner ul) li::before{content:"";position:absolute;left:0;top:.55em;width:.5em;height:.5em;background:var(--text);}
+:where(.bul,.doc section ul,.inner ul) ul li{font-size:.86em;color:var(--text-muted);padding-left:1.4em;}
+:where(.bul,.doc section ul,.inner ul) ul li::before{top:.8em;width:.65em;height:2px;background:var(--support);}
+/* 柱（下端の細い線の上に、左・中央・右） */
+.foot{display:flex;justify-content:space-between;align-items:center;gap:1rem;border-top:1px solid var(--rule);
+  font-family:var(--en);font-weight:700;letter-spacing:.18em;color:var(--text-muted);}
+.foot b{color:var(--support-on-light);margin-right:.8em;}
+.foot .logo{opacity:.45;}
+/* 紺の箱（まとめの次の一歩・決定事項） */
+:where(.next,.decide){background:var(--text);color:var(--on-dark);}
+:where(.next,.decide) > b{font-family:var(--en);font-weight:700;letter-spacing:.2em;color:var(--support-on-dark);}
+/* ==== dd-theme:end ==== */
+/* === 2. 文書のレイアウト（縦に読む 1 枚形式）。色・ラベル・表・箇条書きの形は上の共通のテーマが持つ === */
+* { box-sizing: border-box; }
+body { margin: 0; background: linear-gradient(170deg, var(--page), var(--page-2)) fixed; color: var(--text);
+  font-family: var(--jp); line-height: 1.8; font-weight: 400; font-feature-settings: "palt"; }
+.doc { max-width: 960px; margin: 0 auto; padding: 40px 32px 72px; counter-reset: sec; }
+/* 文書の頭: 上端の行（左に組織、右に小さなロゴ、下に罫線）、紺のラベル（文書の種類）、主題、版・日付・作成者 */
+.doc-header { position: relative; padding: 58px 0 14px; margin-bottom: 34px; border-bottom: 1px solid var(--rule);
+  background: linear-gradient(var(--rule), var(--rule)) 0 34px / 100% 1px no-repeat; }
+.doc-header::after { content: ""; position: absolute; left: 0; bottom: -2px; width: 64px; height: 4px; background: var(--support); }
+.doc-header .doc-org { position: absolute; left: 0; top: 7px; max-width: calc(100% - 110px); margin: 0; font-size: 12px; font-weight: 700; color: var(--text-muted); letter-spacing: .04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.doc-header .dd-logo { position: absolute; right: 0; top: 6px; width: 92px; aspect-ratio: 616.33 / 80; color: var(--text); fill: currentColor; }
+.doc-header .doc-sub { display: inline-block; margin: 0 0 12px; padding: 5px 10px; font-size: 12px; line-height: 1.2; }
+.doc-header h1 { font-family: var(--jp); font-weight: 900; font-size: clamp(24px, 3.6vw, 34px); line-height: 1.3; margin: 0 0 12px; }
+.doc-meta { display: flex; flex-wrap: wrap; gap: 6px 24px; margin: 0; font-size: 12.5px; color: var(--text-muted); }
+.doc-meta b { font-family: var(--en); font-size: 10px; letter-spacing: .2em; color: var(--support-on-light); margin-right: 8px; }
+.lead { margin: 0 0 32px; font-size: 16px; line-height: 1.8; }
+/* 目次: 見出しは紺のラベル（CONTENTS。会議資料は AGENDA）。番号はシアンの大きな数字（CSS の連番） */
+.doc-toc { margin: 0 0 40px; }
+.doc-toc .hd { display: inline-block; margin: 0 0 12px; padding: 6px 10px; font-size: 11px; line-height: 1; }
+.doc-toc ol { margin: 0; padding: 0; list-style: none; counter-reset: toc; columns: 2; column-gap: 32px; border-top: 1px solid var(--rule); font-size: 14px; }
+.doc-toc li { counter-increment: toc; break-inside: avoid; border-bottom: 1px solid var(--rule); }
+.doc-toc a { display: flex; gap: 14px; align-items: baseline; padding: 7px 0; color: var(--text); text-decoration: none; }
+.doc-toc a::before { content: counter(toc, decimal-leading-zero); font-family: var(--en); font-weight: 900; font-size: 15px; color: var(--support-on-light); min-width: 24px; }
+.doc-toc a:hover { color: var(--support-on-light); }
+/* 目次をサイドバーに固定する（nav に doc-toc-side を足す）。今の章（li.cur）の番号は紺の箱。
+   狭い画面と印刷では、上の文書内の形に戻る */
+@media screen and (min-width: 1100px) {
+  .doc:has(> .doc-toc-side) { max-width: 1240px; padding-left: 300px; }
+  .doc-toc-side { position: fixed; top: 40px; bottom: 24px; left: max(32px, calc((100vw - 1240px) / 2 + 32px)); width: 236px;
+    margin: 0; padding: 0 16px 0 0; overflow-y: auto; border-right: 1px solid var(--rule); }
+  .doc-toc-side ol { columns: 1; border-top: 0; font-size: 13px; line-height: 1.5; }
+  .doc-toc-side li { border-bottom: 0; }
+  .doc-toc-side a { align-items: flex-start; gap: 8px; padding: 4px 0; color: var(--text-muted); }
+  .doc-toc-side a::before { flex: none; display: inline-flex; align-items: center; justify-content: center; min-width: 2.6em; line-height: 1; padding: calc(.3em + 2px) .45em; font-size: 11px; font-weight: 700; color: var(--text-muted); }
+  .doc-toc-side a:hover { color: var(--text); }
+  .doc-toc-side li.cur a { color: var(--text); font-weight: 700; }
+  .doc-toc-side li.cur a::before { background: var(--text); color: var(--on-dark); }
+}
+/* 章: 見出しの番号は CSS の連番で「01」と付ける（見出しの文字に番号を書かない） */
+section[data-block] { margin: 40px 0; scroll-margin-top: 16px; counter-increment: sec; }
+section[data-block] > h2 { display: flex; align-items: baseline; gap: 14px; margin: 0 0 16px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule); font-weight: 900; font-size: clamp(18px, 2.2vw, 22px); }
+section[data-block] > h2::before { content: counter(sec, decimal-leading-zero); font-family: var(--en); font-weight: 900; font-size: 30px; line-height: 1; letter-spacing: -.02em; color: var(--support-on-light); }
+section[data-block] h3 { font-size: 15px; font-weight: 700; margin: 20px 0 8px; }
+.doc table { font-size: 13.5px; }
+.doc th, .doc td { padding: 8px 11px; vertical-align: top; }
+.doc tbody th { color: var(--text-muted); font-weight: 700; }
+code, pre { font-family: var(--mono); }
+.doc section ul ul { margin: .2em 0 .3em; }
+.scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.scope-grid .out { opacity: .75; }
+/* 優先度のラベル（.pri.must・.pri.should・.pri.could）。色は共通のテーマ */
+.pri { display: inline-block; padding: 2px 8px; font-size: 11px; line-height: 1.3; }
+/* 残課題・前提: 白いカードに紺のラベル */
+.notes { margin: 16px 0 0; background: var(--surface); border: 1px solid var(--rule); }
+.notes p { display: grid; grid-template-columns: 72px 1fr; gap: 12px; align-items: baseline; margin: 0; padding: 9px 14px; border-top: 1px solid var(--rule); font-size: 13.5px; }
+.notes p:first-child { border-top: 0; }
+.notes .k { justify-self: start; font-size: 11px; line-height: 1; padding: 5px 8px; }
+/* 決定事項: 紺の箱 */
+.decide { display: flex; gap: 16px; align-items: baseline; margin: 16px 0 0; padding: 14px 18px; font-size: 14px; }
+.decide > b { font-size: 10px; }
+figure.diagram { margin: 0; padding: 20px 24px 14px; } figure.diagram svg { max-width: 100%; max-height: 460px; height: auto; }
+figure.diagram figcaption { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
+/* 柱: 左に文書の種類と主題、中央に小さく薄いロゴ、右に日付 */
+.doc-footer { margin-top: 64px; padding-top: 10px; font-size: 10.5px; }
+.doc-footer .dd-logo { width: 72px; aspect-ratio: 616.33 / 80; fill: currentColor; color: var(--text); opacity: .45; }
+@media screen and (max-width: 700px) { .scope-grid { grid-template-columns: 1fr; } .doc { padding: 24px 16px 60px; } .doc-toc ol { columns: 1; } }
+@page { size: A4; margin: 14mm 12mm 16mm; @bottom-right { content: counter(page) " / " counter(pages); font: 8pt sans-serif; color: #777; } }
+@media print { body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; } .doc { max-width: none; } th, .pri, .doc-sub, .hd, .notes .k, .decide { -webkit-print-color-adjust: exact; print-color-adjust: exact; } section[data-block] > h2 { break-after: avoid; } figure.diagram, tr { break-inside: avoid; } .doc:has(> .doc-toc-side) { max-width: none; padding-left: 32px; } .doc-toc-side { position: static; width: auto; border: 0; padding: 0; margin: 0 0 40px; } .doc { zoom: .85; } section[data-block="diagram"] { break-inside: avoid; } .doc-footer { break-before: avoid; } }
+
+/* 選択（反転）時のコントラストを固定する。文書は明るい面なので紺地に白字 */
+::selection{background:var(--text);color:var(--on-dark);-webkit-text-fill-color:var(--on-dark);}
+</style>
+</head>
+<body>
+
+<main class="doc">
+  <header class="doc-header">
+    <svg class="dd-logo" role="img" aria-label="NEXTSCAPE"><use href="#dd-logo"/></svg>
+    <p class="doc-sub">概要資料</p>
+    <h1>ui-design-grounding の使い方と仕組み</h1>
+    <p class="doc-meta"><span><b>VERSION</b>1.6.0</span><span class="doc-date"><b>DATE</b>2026-11-16</span></p>
+  </header>
+  <p class="lead">ui-design-grounding は、AI コーディングエージェントに UI/UX の判断軸を持たせるスキル集です。この資料は、初めて使う開発者に向けて、導入から日々の使い方までを先に示し、その後でスキルが基準を外さずに動く仕組みを概略で説明します。</p>
+
+  <nav class="doc-toc doc-toc-side" aria-label="目次">
+    <p class="hd">CONTENTS</p>
+    <ol>
+      <li><a href="#about">これは何か</a></li>
+      <li><a href="#install">導入</a></li>
+      <li><a href="#start">はじめの一歩</a></li>
+      <li><a href="#usage">典型的な使い方</a></li>
+      <li><a href="#arch">仕組みの全体像</a></li>
+      <li><a href="#layers">2 層のスキルと委譲</a></li>
+      <li><a href="#gates">2 つのゲート</a></li>
+      <li><a href="#outputs">成果物の置き場所</a></li>
+    </ol>
+  </nav>
+
+  <section data-block="about" id="about">
+    <h2>これは何か</h2>
+    <p>ui-design-grounding は、UI の設計・実装・レビューで使う知識ベースです。アプリケーションではなく、Markdown で書いたスキル定義（エージェントが手順として読み込む指示書）とリファレンスでできています。</p>
+    <h3>解決する課題</h3>
+    <p>AI は UI のコードを書けます。しかし、その UI がなぜ使いやすいのか、どこを直すべきかを毎回同じ水準で判断するには、拠り所になる基準が要ります。ui-design-grounding は、次の判断をエージェントに持たせます。</p>
+    <table><thead><tr><th>判断の観点</th><th>エージェントが確かめること</th></tr></thead>
+    <tbody>
+      <tr><td>初見の分かりやすさ</td><td>初めて見た人が、画面の目的を理解できるか</td></tr>
+      <tr><td>情報設計</td><td>利用者が操作に迷わない構造になっているか</td></tr>
+      <tr><td>技術品質</td><td>アクセシビリティとレスポンシブが破綻していないか</td></tr>
+      <tr><td>一貫性</td><td>色・余白・タイポグラフィ・モーションがそろっているか</td></tr>
+      <tr><td>基準への準拠</td><td>DESIGN.md に残した設計方針から外れていないか</td></tr>
+      <tr><td>追跡のしやすさ</td><td>評価の結果を Markdown のレポートとして後から追えるか</td></tr>
+    </tbody></table>
+    <h3>スキルが守る方針</h3>
+    <ul>
+      <li>主観的な良し悪しではなく、根拠と前提を示す。</li>
+      <li>人が判断できるように、選択肢とトレードオフを出す。</li>
+      <li>既存のコンポーネント・CSS・デザイントークンを尊重する。</li>
+      <li>いきなり大きく作り替えず、優先度に沿って段階的に直す。</li>
+      <li>観察が要る評価では、実際の画面と操作の結果を根拠にする。</li>
+    </ul>
+  </section>
+
+  <section data-block="install" id="install">
+    <h2>導入</h2>
+    <p>ui-design-grounding は 4 つのエージェント環境で使えます。環境ごとに、読み込まれる形が異なります。</p>
+    <table><thead><tr><th>環境</th><th>読み込まれる形</th><th>備考</th></tr></thead>
+    <tbody>
+      <tr><td>Claude Code</td><td>プラグイン</td><td>スラッシュコマンドで全スキルを呼べる</td></tr>
+      <tr><td>Codex</td><td>Codex プラグイン</td><td>CLI の <code>/plugins</code> から入れる</td></tr>
+      <tr><td>Gemini CLI</td><td>Agent Skills</td><td>clone した <code>skills/</code> をリンクする</td></tr>
+      <tr><td>Cursor</td><td>Rules（<code>.cursor/rules/ui-design-grounding.mdc</code>）</td><td>同期されるのは <code>.mdc</code> のルールだけ</td></tr>
+    </tbody></table>
+    <h3>Claude Code</h3>
+    <pre style="background:var(--zone-1);padding:12px 16px;font-size:13px;overflow-x:auto;margin:8px 0">/plugin marketplace add nextscape/ns-skills
+/plugin install ui-design-grounding@nextscape</pre>
+    <p>インストールした後、対象のプロジェクトで <code>/ui-help</code> を実行すると、スキルの一覧が出ます。</p>
+    <h3>Codex</h3>
+    <pre style="background:var(--zone-1);padding:12px 16px;font-size:13px;overflow-x:auto;margin:8px 0">codex plugin marketplace add nextscape/ui-design-grounding</pre>
+    <p>その後、Codex CLI で <code>/plugins</code> を開き、Nextscape の marketplace から ui-design-grounding を入れます。</p>
+    <h3>Gemini CLI</h3>
+    <pre style="background:var(--zone-1);padding:12px 16px;font-size:13px;overflow-x:auto;margin:8px 0">/skills link /path/to/ui-design-grounding/skills --scope user
+/skills reload</pre>
+    <h3>Cursor</h3>
+    <p>リポジトリに含まれる <code>.cursor/rules/ui-design-grounding.mdc</code> を Rules として使います。</p>
+    <div class="notes">
+      <p><span class="k">制約</span><span>Remote Rule は <code>.mdc</code> だけを同期します。詳細な <code>SKILL.md</code> と <code>reference/</code> を使うには、リポジトリを clone してローカルのパスを参照させるか、必要なファイルをコンテキストに添付します。</span></p>
+    </div>
+  </section>
+
+  <section data-block="start" id="start">
+    <h2>はじめの一歩</h2>
+    <p>最初に <code>/init-design</code> で DESIGN.md を作ります。DESIGN.md は、プロジェクトの色・タイポグラフィ・余白・コンポーネントの方針を 1 つにまとめたファイルで、以降のすべてのスキルが判断の基準として読みます。どのスキルを使うか迷ったときは、<code>/ui-help</code> で一覧を出します。</p>
+    <h3>やりたいことから選ぶ</h3>
+    <table><thead><tr><th>やりたいこと</th><th>使うスキル</th></tr></thead>
+    <tbody>
+      <tr><td>デザインの基準（DESIGN.md）を作る</td><td><code>/init-design</code></td></tr>
+      <tr><td>新しい UI を考える</td><td><code>/design-ui</code></td></tr>
+      <tr><td>UI を実装する</td><td><code>/implement-ui</code></td></tr>
+      <tr><td>既存の UI を良くしたいが、何が悪いかがはっきりしない</td><td><code>/refine-ui</code></td></tr>
+      <tr><td>技術品質を監査する</td><td><code>/audit-ui</code></td></tr>
+      <tr><td>UX と使いやすさを採点する</td><td><code>/score-ui</code></td></tr>
+      <tr><td>初見で分かりにくい箇所を見つける</td><td><code>/legibility-ui</code></td></tr>
+      <tr><td>外部サイトのデザインを分析する</td><td><code>/scan-ui</code></td></tr>
+    </tbody></table>
+    <h3>迷ったときの選び方</h3>
+    <p>上の行から順に当てはめ、最初に当てはまったスキルを使います。</p>
+    <table><thead><tr><th>#</th><th>状況</th><th>使うスキル</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>DESIGN.md がまだ無い</td><td><code>/init-design</code></td></tr>
+      <tr><td>2</td><td>何を作るかを考える段階にある</td><td><code>/design-ui</code></td></tr>
+      <tr><td>3</td><td>実装したい</td><td><code>/implement-ui</code></td></tr>
+      <tr><td>4</td><td>問題がはっきりしない</td><td><code>/refine-ui</code></td></tr>
+      <tr><td>5</td><td>品質を測りたい</td><td><code>/audit-ui</code> か <code>/score-ui</code></td></tr>
+      <tr><td>6</td><td>初見で分かるかを見たい</td><td><code>/legibility-ui</code></td></tr>
+      <tr><td>7</td><td>直す観点がはっきりしている</td><td>第 2 層のスキル（6 章）</td></tr>
+    </tbody></table>
+  </section>
+
+  <section data-block="usage" id="usage">
+    <h2>典型的な使い方</h2>
+    <p>よくある 4 つの場面では、スキルを次の順に使います。どの場面でも、コードを変えるスキルは、先に改善の提案を示して承認を得てから変更します（7 章）。</p>
+    <table><thead><tr><th>場面</th><th>使う順</th><th>ねらい</th></tr></thead>
+    <tbody>
+      <tr><td>新しい UI を作る</td><td><code>/init-design</code>、<code>/design-ui</code>、<code>/implement-ui</code>、<code>/audit-ui</code></td><td>基準と設計方針を先に文書にし、それに沿って実装し、最後に技術品質を確かめる</td></tr>
+      <tr><td>既存の UI を直す</td><td><code>/refine-ui</code>、<code>/audit-ui</code> か <code>/score-ui</code></td><td><code>/refine-ui</code> が問題の観点を診断し、<code>/arrange-ui</code> や <code>/clarify-ui</code> などへ修正を任せる</td></tr>
+      <tr><td>初見の分かりやすさを見直す</td><td><code>/legibility-ui</code></td><td>実装を読む前に画面だけを観察し、見た目から予想した意味と実際の挙動のずれを記録する</td></tr>
+      <tr><td>リリース前に確かめる</td><td><code>/polish-ui</code>、<code>/score-ui</code></td><td>空状態・エラー・hover・focus・loading などの細部を仕上げ、最後に UX を評価する</td></tr>
+    </tbody></table>
+    <div class="notes">
+      <p><span class="k">補足</span><span>UI に閉じない実装では、<code>/design-ui</code> で作った機能設計を、プロジェクトの実装ワークフローへ設計の入力として渡します。<code>/implement-ui</code> は UI の部分だけを受け持ちます。</span></p>
+    </div>
+  </section>
+
+  <section data-block="arch" id="arch">
+    <h2>仕組みの全体像</h2>
+    <p>ui-design-grounding は、ナレッジベース・コマンドスキル・DESIGN.md の 3 つが組み合わさって動きます。利用者が呼ぶのはコマンドスキルで、コマンドスキルが残りの 2 つを読んで判断し、結果を対象のプロジェクトへ書き出します。</p>
+    <table><thead><tr><th>部品</th><th>置き場所</th><th>役割</th></tr></thead>
+    <tbody>
+      <tr><td>ナレッジベース</td><td><code>skills/ui-design-grounding/</code>（<code>SKILL.md</code> と <code>reference/</code> の 23 件）</td><td>UI/UX の原則と、スキルに共通の手順を持つ。利用者は直接呼ばない</td></tr>
+      <tr><td>コマンドスキル</td><td><code>skills/&lt;スキル名&gt;/SKILL.md</code>（23 件）</td><td>利用者が呼ぶスラッシュコマンド。手順の最初に、必要なリファレンスを読み込む</td></tr>
+      <tr><td>DESIGN.md</td><td>対象プロジェクトのルート</td><td>プロジェクトに固有の視覚の基準。リファレンスより優先される</td></tr>
+      <tr><td><code>.design/</code></td><td>対象プロジェクトのルート</td><td>スキルが作る設計・実装計画・評価レポートの置き場所（8 章）</td></tr>
+    </tbody></table>
+    <figure class="diagram">
+      <svg viewBox="0 0 1120 470" role="img" aria-label="利用者がコマンドスキルを呼び、コマンドスキルがナレッジベースと DESIGN.md を読んで判断し、承認を得てから対象プロジェクトのコードを変更し、成果物を .design に保存する構成">
+        <defs>
+          <marker id="f1-am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--text-muted)"/></marker>
+          <marker id="f1-ak" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--text)"/></marker>
+        </defs>
+        <rect x="40" y="200" width="160" height="90" fill="var(--zone-2)"/>
+        <rect x="270" y="185" width="230" height="120" fill="var(--text)"/>
+        <rect x="486" y="179" width="12" height="12" fill="var(--accent-on-light)"/>
+        <rect x="640" y="30" width="440" height="84" fill="var(--zone-2)"/>
+        <rect x="640" y="140" width="440" height="84" fill="var(--zone-2)"/>
+        <rect x="640" y="250" width="440" height="84" fill="var(--zone-2)"/>
+        <rect x="640" y="360" width="440" height="84" fill="var(--zone-2)"/>
+        <path d="M200 245 H266" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f1-am)"/>
+        <path d="M500 245 H570 V72 H636" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f1-am)"/>
+        <path d="M500 245 H570 V182 H636" fill="none" stroke="var(--text)" stroke-width="3" marker-end="url(#f1-ak)"/>
+        <path d="M570 245 V292 H636" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f1-am)"/>
+        <path d="M570 292 V402 H636" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f1-am)"/>
+        <g font-family="var(--jp)" text-anchor="middle">
+          <text x="120" y="241" font-size="17" font-weight="700" fill="var(--text)">利用者</text>
+          <text x="120" y="263" font-size="12.5" fill="var(--text-muted)">/コマンドで呼ぶ</text>
+          <text x="385" y="238" font-size="17" font-weight="700" fill="var(--on-dark)">コマンドスキル</text>
+          <text x="385" y="262" font-size="12.5" fill="var(--on-dark)" opacity=".8">23 件・判断と手順</text>
+        </g>
+        <g font-family="var(--jp)" font-size="12.5" font-weight="700">
+          <text x="584" y="64" fill="var(--text-muted)">参照</text>
+          <text x="584" y="174" fill="var(--text)">基準</text>
+          <text x="584" y="284" fill="var(--text-muted)">変更</text>
+          <text x="584" y="394" fill="var(--text-muted)">保存</text>
+        </g>
+        <foreignObject x="640" y="30" width="440" height="84"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;box-sizing:border-box;padding:10px 18px;display:flex;flex-direction:column;justify-content:center;font:400 13px/1.45 var(--jp);color:var(--text-muted);overflow-wrap:anywhere;"><b style="font-weight:700;font-size:16px;color:var(--text)">ナレッジベース</b>UI/UX の原則と共通の手順（リファレンス 23 件）</div></foreignObject>
+        <foreignObject x="640" y="140" width="440" height="84"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;box-sizing:border-box;padding:10px 18px;display:flex;flex-direction:column;justify-content:center;font:400 13px/1.45 var(--jp);color:var(--text-muted);overflow-wrap:anywhere;"><b style="font-weight:700;font-size:16px;color:var(--text)">DESIGN.md</b>プロジェクトに固有の視覚の基準。リファレンスより優先</div></foreignObject>
+        <foreignObject x="640" y="250" width="440" height="84"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;box-sizing:border-box;padding:10px 18px;display:flex;flex-direction:column;justify-content:center;font:400 13px/1.45 var(--jp);color:var(--text-muted);overflow-wrap:anywhere;"><b style="font-weight:700;font-size:16px;color:var(--text)">対象プロジェクトのコード・UI</b>改善の提案を承認してから変更する</div></foreignObject>
+        <foreignObject x="640" y="360" width="440" height="84"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;box-sizing:border-box;padding:10px 18px;display:flex;flex-direction:column;justify-content:center;font:400 13px/1.45 var(--jp);color:var(--text-muted);overflow-wrap:anywhere;"><b style="font-weight:700;font-size:16px;color:var(--text)">.design/</b>設計・実装計画・評価レポートを残す</div></foreignObject>
+      </svg>
+      <figcaption><b class="fig-no">FIG. 01</b>コマンドスキルを中心にした部品の関係</figcaption>
+    </figure>
+    <h3>リファレンスの中身</h3>
+    <p>23 件のリファレンスは、次の 6 つの領域に分かれます。各リファレンスの 1 行の説明は <code>skills/ui-design-grounding/SKILL.md</code> にあります。</p>
+    <table><thead><tr><th>領域</th><th>リファレンス</th></tr></thead>
+    <tbody>
+      <tr><td>ユーザビリティと認知</td><td><code>usability.md</code>・<code>cognitive.md</code>・<code>information-arch.md</code>・<code>legibility.md</code></td></tr>
+      <tr><td>視覚</td><td><code>color-system.md</code>・<code>typography.md</code>・<code>spatial-layout.md</code>・<code>motion-design.md</code></td></tr>
+      <tr><td>操作と品質</td><td><code>interaction.md</code>・<code>accessibility.md</code>・<code>responsive-design.md</code>・<code>wording.md</code>・<code>anti-patterns.md</code></td></tr>
+      <tr><td>デザインシステム</td><td><code>design-system.md</code>・<code>design-tokens.md</code>・<code>design-md-spec.md</code></td></tr>
+      <tr><td>進め方</td><td><code>design-md-gate.md</code>・<code>change-gate.md</code>・<code>interview.md</code>・<code>design-artifacts.md</code>・<code>implementation.md</code></td></tr>
+      <tr><td>観察と出力</td><td><code>playwright.md</code>・<code>ui-report.md</code></td></tr>
+    </tbody></table>
+  </section>
+
+  <section data-block="layers" id="layers">
+    <h2>2 層のスキルと委譲</h2>
+    <p>コマンドスキルは、役割で 2 つの層に分かれます。第 1 層は作業の入口で、第 2 層は 1 つの観点だけを直す実働のスキルです。第 1 層の <code>/refine-ui</code> と <code>/implement-ui</code> は、診断した結果に応じて第 2 層へ修正を任せます。</p>
+    <h3>第 1 層：入口になるスキル</h3>
+    <table><thead><tr><th>スキル</th><th>役割</th></tr></thead>
+    <tbody>
+      <tr><td><code>/init-design</code></td><td>DESIGN.md を作り、更新する</td></tr>
+      <tr><td><code>/design-ui</code></td><td>要件をインタビューで明確にし、UI の構造・画面遷移・状態を機能設計として残す</td></tr>
+      <tr><td><code>/implement-ui</code></td><td>DESIGN.md と既存の実装に沿って UI を実装する</td></tr>
+      <tr><td><code>/refine-ui</code></td><td>「読みにくい」「うるさい」などの曖昧な訴えを観点ごとに診断して直す</td></tr>
+      <tr><td><code>/audit-ui</code></td><td>技術品質を 5 つの次元で監査する</td></tr>
+      <tr><td><code>/score-ui</code></td><td>ニールセンの 10 のヒューリスティクスで UX を採点する</td></tr>
+      <tr><td><code>/legibility-ui</code></td><td>画面だけを見て、初見の分かりやすさを 7 つのレンズで監査する</td></tr>
+      <tr><td><code>/scan-ui</code></td><td>外部サイトを分析し、デザインシステムを DESIGN.md として逆算する</td></tr>
+      <tr><td><code>/preview-ui</code></td><td>DESIGN.md を <code>preview.html</code> に変換し、ブラウザで見た目を確かめる</td></tr>
+    </tbody></table>
+    <h3>第 2 層：観点ごとに直すスキル</h3>
+    <table><thead><tr><th>観点</th><th>スキル</th><th>観点</th><th>スキル</th></tr></thead>
+    <tbody>
+      <tr><td>レイアウト・余白</td><td><code>/arrange-ui</code></td><td>パフォーマンス</td><td><code>/optimize-ui</code></td></tr>
+      <tr><td>タイポグラフィ</td><td><code>/typeset-ui</code></td><td>印象を強める</td><td><code>/boost-ui</code></td></tr>
+      <tr><td>色</td><td><code>/recolor-ui</code></td><td>印象を抑える</td><td><code>/calm-ui</code></td></tr>
+      <tr><td>モーション</td><td><code>/animate-ui</code></td><td>簡素化</td><td><code>/slim-ui</code></td></tr>
+      <tr><td>文言</td><td><code>/clarify-ui</code></td><td>コンポーネント・トークンの抽出</td><td><code>/extract-ui</code></td></tr>
+      <tr><td>レスポンシブ</td><td><code>/adapt-ui</code></td><td>リリース前の仕上げ</td><td><code>/polish-ui</code></td></tr>
+      <tr><td>堅牢性・エッジケース</td><td><code>/guard-ui</code></td><td></td><td></td></tr>
+    </tbody></table>
+    <h3>委譲の流れ</h3>
+    <figure class="diagram">
+      <svg viewBox="0 20 1120 360" role="img" aria-label="利用者が第1層のオーケストレーターか評価系スキルを呼ぶ。オーケストレーターは承認済みの計画を第2層へ渡し、評価系はレポートを保存して推奨する第2層スキルを案内する">
+        <defs>
+          <marker id="f2-am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--text-muted)"/></marker>
+          <marker id="f2-ak" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--text)"/></marker>
+        </defs>
+        <rect x="40" y="160" width="140" height="80" fill="var(--zone-2)"/>
+        <rect x="270" y="50" width="270" height="96" fill="var(--text)"/>
+        <rect x="526" y="44" width="12" height="12" fill="var(--accent-on-light)"/>
+        <rect x="270" y="254" width="270" height="96" fill="var(--zone-2)"/>
+        <rect x="740" y="50" width="340" height="96" fill="var(--zone-2)"/>
+        <rect x="740" y="254" width="340" height="96" fill="var(--zone-2)"/>
+        <path d="M180 190 H225 V98 H266" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f2-am)"/>
+        <path d="M180 210 H225 V302 H266" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f2-am)"/>
+        <path d="M540 98 H736" fill="none" stroke="var(--text)" stroke-width="3" marker-end="url(#f2-ak)"/>
+        <path d="M540 302 H736" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f2-am)"/>
+        <path d="M910 254 V150" fill="none" stroke="var(--text-muted)" stroke-width="1.3" stroke-dasharray="3 3" marker-end="url(#f2-am)"/>
+        <g font-family="var(--jp)" text-anchor="middle">
+          <text x="110" y="206" font-size="17" font-weight="700" fill="var(--text)">利用者</text>
+        </g>
+        <g font-family="var(--jp)" font-size="12.5" font-weight="700">
+          <text x="638" y="86" text-anchor="middle" fill="var(--text)">承認済みの計画を渡す</text>
+          <text x="638" y="290" text-anchor="middle" fill="var(--text-muted)">保存する</text>
+          <text x="922" y="208" fill="var(--text-muted)">推奨の対応として案内</text>
+        </g>
+        <foreignObject x="270" y="50" width="270" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;box-sizing:border-box;padding:10px 16px;display:flex;flex-direction:column;justify-content:center;font:400 13px/1.45 var(--jp);color:var(--on-dark);overflow-wrap:anywhere;"><b style="font-weight:700;font-size:16px">第 1 層のオーケストレーター</b>refine-ui・implement-ui</div></foreignObject>
+        <foreignObject x="270" y="254" width="270" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;box-sizing:border-box;padding:10px 16px;display:flex;flex-direction:column;justify-content:center;font:400 13px/1.45 var(--jp);color:var(--text-muted);overflow-wrap:anywhere;"><b style="font-weight:700;font-size:16px;color:var(--text)">第 1 層の評価系</b>audit-ui・score-ui・legibility-ui</div></foreignObject>
+        <foreignObject x="740" y="50" width="340" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;box-sizing:border-box;padding:10px 16px;display:flex;flex-direction:column;justify-content:center;font:400 13px/1.45 var(--jp);color:var(--text-muted);overflow-wrap:anywhere;"><b style="font-weight:700;font-size:16px;color:var(--text)">第 2 層のスキル（13 件）</b>arrange-ui・typeset-ui・recolor-ui など</div></foreignObject>
+        <foreignObject x="740" y="254" width="340" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;box-sizing:border-box;padding:10px 16px;display:flex;flex-direction:column;justify-content:center;font:400 13px/1.45 var(--jp);color:var(--text-muted);overflow-wrap:anywhere;"><b style="font-weight:700;font-size:16px;color:var(--text)">評価レポート</b>.design/reports/ に保存</div></foreignObject>
+      </svg>
+      <figcaption><b class="fig-no">FIG. 02</b>第 1 層から第 2 層への委譲</figcaption>
+    </figure>
+    <ul>
+      <li>オーケストレーター（<code>/refine-ui</code> と <code>/implement-ui</code>）は、利用者が承認した計画を第 2 層へ渡します。第 2 層は承認を取り直さずに修正します。承認を 2 回求めないためです。</li>
+      <li>評価系のスキルは、見つけた問題ごとに、直すのに向く第 2 層のスキルを推奨の対応として書きます。その場で直さない P0・P1 の指摘は、プロジェクトのタスク管理へ登録します。タスク管理が無ければ、登録を提案します。</li>
+      <li>直す観点が初めからはっきりしているときは、利用者が第 2 層のスキルを直接呼べます。</li>
+    </ul>
+  </section>
+
+  <section data-block="gates" id="gates">
+    <h2>2 つのゲート</h2>
+    <p>スキルの手順には、2 種類の関門（ゲート）が組み込まれています。DESIGN.md ゲートは、スキルが基準を読まずに作業すること、および修正の後に基準が取り残されることを防ぎます。変更承認ゲートは、スキルが利用者の承認なしにコードを変えることを防ぎます。コードを変えるスキルは、次の順に手順を進めます。</p>
+    <figure class="diagram">
+      <svg viewBox="0 20 1120 190" role="img" aria-label="前段ゲート、診断、変更承認ゲート、実装、検証、後段ゲートの順に進む手順">
+        <defs>
+          <marker id="f3-am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--text-muted)"/></marker>
+        </defs>
+        <rect x="40" y="50" width="140" height="96" fill="var(--zone-2)"/>
+        <rect x="220" y="50" width="140" height="96" fill="var(--zone-1)"/>
+        <rect x="400" y="50" width="140" height="96" fill="var(--text)"/>
+        <rect x="526" y="44" width="12" height="12" fill="var(--accent-on-light)"/>
+        <rect x="580" y="50" width="140" height="96" fill="var(--zone-1)"/>
+        <rect x="760" y="50" width="140" height="96" fill="var(--zone-1)"/>
+        <rect x="940" y="50" width="140" height="96" fill="var(--zone-2)"/>
+        <path d="M180 98 H216" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f3-am)"/>
+        <path d="M360 98 H396" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f3-am)"/>
+        <path d="M540 98 H576" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f3-am)"/>
+        <path d="M720 98 H756" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f3-am)"/>
+        <path d="M900 98 H936" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f3-am)"/>
+        <g font-family="var(--jp)" text-anchor="middle">
+          <text x="290" y="104" font-size="16" font-weight="700" fill="var(--text)">診断</text>
+          <text x="650" y="104" font-size="16" font-weight="700" fill="var(--text)">実装</text>
+          <text x="830" y="104" font-size="16" font-weight="700" fill="var(--text)">検証</text>
+        </g>
+        <foreignObject x="40" y="50" width="140" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;box-sizing:border-box;padding:8px 10px;display:flex;flex-direction:column;justify-content:center;text-align:center;font:400 12.5px/1.4 var(--jp);color:var(--text-muted);overflow-wrap:anywhere;"><b style="font-weight:700;font-size:15px;color:var(--text)">前段ゲート</b>DESIGN.md を読む</div></foreignObject>
+        <foreignObject x="400" y="50" width="140" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;box-sizing:border-box;padding:8px 10px;display:flex;flex-direction:column;justify-content:center;text-align:center;font:400 12.5px/1.4 var(--jp);color:var(--on-dark);overflow-wrap:anywhere;"><b style="font-weight:700;font-size:15px">変更承認ゲート</b>提案と承認</div></foreignObject>
+        <foreignObject x="940" y="50" width="140" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;box-sizing:border-box;padding:8px 10px;display:flex;flex-direction:column;justify-content:center;text-align:center;font:400 12.5px/1.4 var(--jp);color:var(--text-muted);overflow-wrap:anywhere;"><b style="font-weight:700;font-size:15px;color:var(--text)">後段ゲート</b>DESIGN.md との乖離を見る</div></foreignObject>
+        <g font-family="var(--jp)" font-size="12.5" fill="var(--text-muted)">
+          <rect x="40" y="168" width="34" height="14" fill="var(--zone-2)"/><text x="82" y="180">DESIGN.md ゲート</text>
+          <rect x="220" y="168" width="34" height="14" fill="var(--text)"/><text x="262" y="180">変更承認ゲート</text>
+          <rect x="390" y="168" width="34" height="14" fill="var(--zone-1)"/><text x="432" y="180">ゲートの間の作業</text>
+        </g>
+      </svg>
+      <figcaption><b class="fig-no">FIG. 03</b>コードを変えるスキルの手順とゲートの位置</figcaption>
+    </figure>
+    <h3>DESIGN.md ゲート</h3>
+    <table><thead><tr><th style="width:9%">ゲート</th><th style="width:13%">通る時点</th><th style="width:48%">スキルがすること</th><th>持つスキル</th></tr></thead>
+    <tbody>
+      <tr><td>前段</td><td>手順の最初</td><td>DESIGN.md のトークンと設計指針を読み、リファレンスより優先する基準として扱う。DESIGN.md が無いときは <code>/init-design</code> を提案する。<code>/design-ui</code> と <code>/implement-ui</code> は提案で止めず、<code>/init-design</code> へ委譲して基準を先に作る</td><td>DESIGN.md を作る側（<code>init-design</code>・<code>scan-ui</code>・<code>extract-ui</code>）を除くスキル</td></tr>
+      <tr><td>後段</td><td>修正の後</td><td>修正が DESIGN.md のトークンや規約を変えたかを判定し、変えていれば DESIGN.md の更新へ誘導する。色は <code>/recolor-ui</code>、ほかのトークンは <code>/init-design</code> へ誘導する</td><td>値を実際に動かすスキル（第 2 層・<code>recolor-ui</code>・<code>polish-ui</code>）</td></tr>
+    </tbody></table>
+    <p>第 1 層のスキルは前段ゲートだけを持ちます。値の確定を第 2 層へ任せるか、コードを変えないためです。</p>
+    <h3>変更承認ゲート</h3>
+    <p>コード・UI のファイル・DESIGN.md に書き込むスキルは、いきなり修正しません。スキルは、まず改善の提案を表で示し、利用者の承認を得ます。その後の工程は、変更の規模で分かれます。</p>
+    <figure class="diagram">
+      <svg viewBox="0 20 1120 330" role="img" aria-label="改善の提案を承認した後、小規模なら会話内の実装計画を承認して実装と検証へ進み、大規模なら設計と実装計画をそれぞれファイルに残して承認してから実装と検証へ進む">
+        <defs>
+          <marker id="f4-am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--text-muted)"/></marker>
+          <marker id="f4-ak" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--text)"/></marker>
+        </defs>
+        <rect x="260" y="40" width="840" height="120" fill="var(--zone-1)"/>
+        <rect x="260" y="210" width="840" height="120" fill="var(--zone-1)"/>
+        <rect x="260" y="40" width="62" height="22" fill="var(--text)"/>
+        <rect x="260" y="210" width="62" height="22" fill="var(--text)"/>
+        <rect x="40" y="145" width="170" height="80" fill="var(--text)"/>
+        <rect x="196" y="139" width="12" height="12" fill="var(--accent-on-light)"/>
+        <rect x="290" y="72" width="200" height="70" fill="var(--surface)"/>
+        <rect x="790" y="72" width="120" height="70" fill="var(--surface)"/>
+        <rect x="960" y="72" width="120" height="70" fill="var(--surface)"/>
+        <rect x="290" y="242" width="200" height="70" fill="var(--surface)"/>
+        <rect x="540" y="242" width="200" height="70" fill="var(--surface)"/>
+        <rect x="790" y="242" width="120" height="70" fill="var(--surface)"/>
+        <rect x="960" y="242" width="120" height="70" fill="var(--surface)"/>
+        <path d="M210 175 H240 V107 H286" fill="none" stroke="var(--text)" stroke-width="3" marker-end="url(#f4-ak)"/>
+        <path d="M210 195 H240 V277 H286" fill="none" stroke="var(--text)" stroke-width="3" marker-end="url(#f4-ak)"/>
+        <path d="M490 107 H786" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f4-am)"/>
+        <path d="M910 107 H956" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f4-am)"/>
+        <path d="M490 277 H536" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f4-am)"/>
+        <path d="M740 277 H786" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f4-am)"/>
+        <path d="M910 277 H956" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#f4-am)"/>
+        <g font-family="var(--jp)" font-size="12" font-weight="700" fill="var(--on-dark)">
+          <text x="270" y="55.5">小規模</text>
+          <text x="270" y="225.5">大規模</text>
+        </g>
+        <g font-family="var(--jp)" font-size="12.5" font-weight="700" fill="var(--text-muted)" text-anchor="middle">
+          <text x="640" y="99">承認</text>
+          <text x="513" y="269">承認</text>
+          <text x="763" y="269">承認</text>
+        </g>
+        <text x="248" y="190" font-family="var(--jp)" font-size="12.5" font-weight="700" fill="var(--text)">承認</text>
+        <g font-family="var(--jp)" text-anchor="middle">
+          <text x="850" y="113" font-size="16" font-weight="700" fill="var(--text)">実装</text>
+          <text x="1020" y="113" font-size="16" font-weight="700" fill="var(--text)">検証</text>
+          <text x="850" y="283" font-size="16" font-weight="700" fill="var(--text)">実装</text>
+          <text x="1020" y="283" font-size="16" font-weight="700" fill="var(--text)">検証</text>
+        </g>
+        <foreignObject x="40" y="145" width="170" height="80"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;box-sizing:border-box;padding:8px 12px;display:flex;flex-direction:column;justify-content:center;text-align:center;font:400 12.5px/1.4 var(--jp);color:var(--on-dark);overflow-wrap:anywhere;"><b style="font-weight:700;font-size:16px">改善の提案</b>承認を得て次へ</div></foreignObject>
+        <foreignObject x="290" y="72" width="200" height="70"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;box-sizing:border-box;padding:8px 12px;display:flex;flex-direction:column;justify-content:center;text-align:center;font:400 12.5px/1.4 var(--jp);color:var(--text-muted);overflow-wrap:anywhere;"><b style="font-weight:700;font-size:15px;color:var(--text)">実装計画</b>会話の中で示す</div></foreignObject>
+        <foreignObject x="290" y="242" width="200" height="70"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;box-sizing:border-box;padding:8px 12px;display:flex;flex-direction:column;justify-content:center;text-align:center;font:400 12.5px/1.4 var(--jp);color:var(--text-muted);overflow-wrap:anywhere;"><b style="font-weight:700;font-size:15px;color:var(--text)">設計</b>.design/specs/ に保存</div></foreignObject>
+        <foreignObject x="540" y="242" width="200" height="70"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;box-sizing:border-box;padding:8px 12px;display:flex;flex-direction:column;justify-content:center;text-align:center;font:400 12.5px/1.4 var(--jp);color:var(--text-muted);overflow-wrap:anywhere;"><b style="font-weight:700;font-size:15px;color:var(--text)">実装計画</b>.design/plans/ に保存</div></foreignObject>
+      </svg>
+      <figcaption><b class="fig-no">FIG. 04</b>変更承認ゲートの規模による分岐</figcaption>
+    </figure>
+    <p>次の条件のどれかに当てはまる変更は大規模、どれにも当てはまらない変更は小規模です。判定に迷うとき、スキルは大規模として扱います。</p>
+    <table><thead><tr><th>#</th><th>大規模になる条件</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>共通のコンポーネントに手を入れる、または複数の画面に波及する</td></tr>
+      <tr><td>2</td><td>2 つ以上の観点にまたがる（第 1 層が委譲する第 2 層のスキルが 2 件以上になる）</td></tr>
+      <tr><td>3</td><td>レイアウトの再構成やコンポーネントの分割など、構造を変える</td></tr>
+    </tbody></table>
+    <div class="notes">
+      <p><span class="k">例外</span><span>DESIGN.md のトークンだけを変えるときは、画面への波及があっても小規模として扱います。</span></p>
+      <p><span class="k">承認</span><span>スキルが承認とみなすのは、利用者の明示的な肯定だけです。無関係な返答や沈黙は承認とみなしません。利用者は提案の一部だけを承認できます。</span></p>
+      <p><span class="k">省略</span><span>利用者が「確認不要」「そのまま直して」のように承認が要らないことを依頼の中で明示したときだけ、スキルは承認待ちを省きます。</span></p>
+    </div>
+  </section>
+
+  <section data-block="outputs" id="outputs">
+    <h2>成果物の置き場所</h2>
+    <p>スキルが作るファイルは、DESIGN.md を除いて、対象プロジェクトの <code>.design/</code> にまとまります。DESIGN.md だけはルートに置きます。エージェントがルートの DESIGN.md を自動で読むことが、基準を共有する仕組みの要だからです。</p>
+    <pre style="background:var(--zone-1);padding:12px 16px;font-size:13px;overflow-x:auto;margin:8px 0">project-root/
+├── DESIGN.md
+└── .design/
+    ├── specs/yyyy-mm-dd-{name}.md
+    ├── plans/yyyy-mm-dd-{name}.md
+    ├── reports/yyyy-mm-dd-{name}.md
+    ├── reports/yyyy-mm-dd-{name}/NN.png
+    └── preview.html</pre>
+    <table><thead><tr><th>パス</th><th>中身</th><th>作るスキル</th></tr></thead>
+    <tbody>
+      <tr><td><code>DESIGN.md</code></td><td>視覚の基準（デザイントークンと設計指針）</td><td><code>init-design</code>・<code>scan-ui</code>・<code>recolor-ui</code></td></tr>
+      <tr><td><code>.design/specs/</code></td><td>設計（機能設計と改善設計）。<code>/implement-ui</code> が読み込むので、コミットしておく</td><td><code>design-ui</code>・大規模の変更を扱うスキル</td></tr>
+      <tr><td><code>.design/plans/</code></td><td>大規模の変更の実装計画</td><td>大規模の変更を扱うスキル</td></tr>
+      <tr><td><code>.design/reports/</code></td><td>評価レポートと、同じ名前のフォルダに入れたスクリーンショット</td><td><code>audit-ui</code>・<code>score-ui</code>・<code>legibility-ui</code></td></tr>
+      <tr><td><code>.design/preview.html</code></td><td>DESIGN.md の見本帳</td><td><code>preview-ui</code></td></tr>
+    </tbody></table>
+    <h3>評価レポート</h3>
+    <p>評価レポートは、冒頭で結論と次の一手が分かり、その後に根拠と詳細を追える構成です。</p>
+    <table><thead><tr><th>スキル</th><th>評価の枠組み</th><th>冒頭の結論</th></tr></thead>
+    <tbody>
+      <tr><td><code>/audit-ui</code></td><td>アクセシビリティ・パフォーマンス・テーミング・レスポンシブ・アンチパターンの 5 次元（各 4 点、計 20 点）</td><td>総合判定・合計スコア・P0/P1 の件数・次にやること</td></tr>
+      <tr><td><code>/score-ui</code></td><td>ニールセンの 10 のヒューリスティクス（各 4 点、計 40 点）とペルソナテスト</td><td>評価帯・合計スコア・主要な UX リスク・次にやること</td></tr>
+      <tr><td><code>/legibility-ui</code></td><td>見た目と機能の不一致・スコープの不整合など 7 つのレンズ</td><td>総合判定・最も誤解されやすい画面と操作・次にやること</td></tr>
+    </tbody></table>
+    <p>問題の一覧では、問題ごとに根拠・影響・推奨の対応（第 2 層のスキル）・スクリーンショットへのリンクを書きます。スクリーンショットへのリンクにより、レビューの後でも、何を見て何を根拠に判断したかを追えます。</p>
+  </section>
+
+  <footer class="doc-footer foot"><span><b>概要資料</b>ui-design-grounding の使い方と仕組み</span><svg class="dd-logo" role="img" aria-label="NEXTSCAPE"><use href="#dd-logo"/></svg><span>2026-11-16</span></footer>
+</main>
+<script>
+/* 読んでいる章の目次の項目に cur を付ける（サイドバー固定の目次で強調する）。最後まで読み進めたら、最後の章にする */
+(function(){var nav=document.querySelector('nav.doc-toc');if(!nav||!('IntersectionObserver' in window))return;
+var items=nav.querySelectorAll('li'),secs=document.querySelectorAll('section[data-block][id]');if(!items.length||!secs.length)return;
+function mark(id){for(var i=0;i<items.length;i++){var a=items[i].querySelector('a');
+if(a&&a.getAttribute('href')==='#'+id)items[i].classList.add('cur');else{items[i].classList.remove('cur');if(!items[i].getAttribute('class'))items[i].removeAttribute('class');}}}
+function atBottom(){return window.scrollY>0&&window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-2;}
+var last=secs[secs.length-1].id;mark(secs[0].id);
+var io=new IntersectionObserver(function(es){if(atBottom()){mark(last);return;}es.forEach(function(e){if(e.isIntersecting)mark(e.target.id);});},{rootMargin:'-10% 0px -70% 0px'});
+Array.prototype.forEach.call(secs,function(s){io.observe(s);});
+window.addEventListener('scroll',function(){if(atBottom())mark(last);},{passive:true});})();
+</script>
+<script>
+/* dd-shot: スクリーンショット用の測定（#dd-shot-measure）と切り出し位置（#dd-shot-y=<px>） */
+(function(){var h=location.hash,d=document.documentElement,m=/dd-shot-y=(\d+)/.exec(h);
+if(m&&+m[1])document.body.style.transform='translateY(-'+m[1]+'px)';
+if(/dd-shot-measure/.test(h)){d.setAttribute('data-dd-vp',innerWidth+'x'+innerHeight);d.setAttribute('data-dd-h',Math.max(d.scrollHeight,document.body.scrollHeight));
+var bad=[];document.querySelectorAll('figure svg').forEach(function(s,i){s.querySelectorAll('foreignObject > div').forEach(function(x){
+if(x.scrollHeight-x.clientHeight>2||x.scrollWidth-x.clientWidth>2)bad.push(i+1);});});
+d.setAttribute('data-dd-overflow',bad.filter(function(v,i,a){return a.indexOf(v)===i;}).join(','));}})();
+</script>
+<svg id="dd-logo-defs" width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="dd-logo" viewBox="0 0 616.33 80"><path d="M0,1.05v77.84c.05.28.27.5.56.54h14.31s.58-.21.58-.68v-45.03s.49-1.12,1.27-.16,27.8,45.29,27.8,45.29c.14.19.35.31.58.35.4.07,13.11,0,13.11,0,.24.02.46-.16.49-.4.1-.46,0-77.65,0-77.65,0,0-.23-.56-.68-.54s-14.43,0-14.43,0c0,0-.58.26-.54.63s0,44.67,0,44.67c0,0-.61,1.29-1.35,0S13.95.87,13.95.87c0,0-.12-.23-.66-.21S.37.67.37.67l-.37.38Z"/><path d="M78.69.74c-.26,0-.49.12-.49.56v77.4c.17.23.4.4.66.49h42.69s.38.07.79-.56,6.99-11.76,6.99-11.76c0,0,.68-1.38-.54-1.38h-34.17c-.45.05-.86-.24-.96-.68-.16-.77,0-17.7,0-17.7,0,0,0-.46.68-.54s27.03,0,27.03,0c.38-.06.67-.38.68-.77v-12.65s-.12-.68-.68-.68h-27.09s-.57-.07-.57-.57V15.14s.1-.59.59-.59h27.6c.35-.2.64-.49.84-.84.21-.5,6.67-11.63,6.67-11.63,0,0,.33-1.35-.74-1.38s-50,.03-50,.03Z"/><path d="M141.56.6c-.77-.1-.62,1.04-.4,1.57s21.93,36.8,21.93,36.8l-23.61,38.93s-.07,1.04.35,1.24,16.46,0,16.46,0c0,0,.3.07.58-.66.18-.46,14.12-25.25,14.12-25.25.2-.29.59-.36.88-.16.06.04.11.1.16.16.51.71,14.4,25.67,14.4,25.67.14.18.35.29.58.3h16.04s.91-.12.61-1.29c-.11-.41-23.66-39-23.66-39L202,1.98s.46-1.22-.38-1.24-16.18,0-16.18,0c-.27.12-.47.35-.56.63-.12.46-12.88,23.4-12.88,23.4,0,0-.61.89-1.04-.18S157.98.83,157.98.83c0,0,0-.23-.35-.23h-16.07Z"/><path d="M565.5.74c-.26,0-.49.12-.49.56v77.4c.17.23.4.4.66.49h42.69s.38.07.79-.56,6.99-11.76,6.99-11.76c0,0,.68-1.38-.54-1.38h-34.17c-.45.05-.86-.24-.96-.68-.16-.77,0-17.7,0-17.7,0,0,0-.46.68-.54s27.03,0,27.03,0c.38-.06.67-.38.68-.77v-12.65s-.12-.68-.68-.68h-27.06s-.57-.07-.57-.57V15.14s.1-.59.59-.59h27.6c.35-.2.64-.49.84-.84.21-.51,6.64-11.66,6.64-11.66,0,0,.33-1.35-.74-1.38s-49.99.06-49.99.06Z"/><path d="M213.39.97l-.18.33v12.55s.1.46.38.51,19.52,0,19.52,0c.15,0,.28.12.28.27,0,.02,0,.04,0,.06v63.83c.1.27.27.5.49.68.3.21,15.01.07,15.01.07.25-.15.39-.44.33-.74-.12-.46,0-63.75,0-63.75,0,0,.18-.35.43-.3s14.94,0,14.94,0l7.34-12.5s.3-1.19-.28-1.19h-57.98l-.29.17Z"/><path d="M332.7,7.12c-7.78-6.51-17.46-7.82-25.74-6.73-5.99.69-11.57,3.39-15.83,7.65-.46.49-5.59,5.49-5.64,16.82,0,6.85,4.14,14.21,7.09,16.06,1.24.87,2.53,1.67,3.86,2.39,1.52.68,3.09,1.24,4.7,1.68,5.18,1.55,11.23,1.78,15.53,2.69,2.06.59,3.82,1.93,4.93,3.76,1.63,3.36,1.43,7.33-.53,10.51-1.62,2.32-4.23,3.75-7.05,3.88-5.72.58-11.13.56-14.5-1.49-1.86-1.12-3.59-2.43-5.18-3.9-1.69-1.64-3.28-3.39-4.74-5.24,0,0-1.25-1.52-2.29.77-.24.52-5.8,9.72-5.8,9.72,0,0-.38,1.04.11,1.41,3.28,3.23,6.81,6.18,10.56,8.84,4.98,3.48,12.02,4.14,15.48,4.05,3.72.09,7.45-.25,11.09-1.04,3.3-.74,6.43-2.1,9.23-4.01,1.99-1.5,3.73-3.3,5.18-5.33,2.64-3.68,3.96-8.78,3.85-14.1-.02-2.6-.28-5.19-.8-7.73-.75-3.2-2.4-6.11-4.76-8.39-2.23-2.05-4.88-3.57-7.78-4.46-2.65-.94-5.38-1.6-8.16-1.98-3.22-.45-6.87-.41-9.72-1.72-1.71-.79-3.89-1.98-4.85-3.51-.67-1.29-1.07-2.7-1.18-4.14-.3-3.49,1.48-6.83,4.53-8.54,1.34-.85,6.44-2.16,10.86-1.29,2.17.34,4.28.97,6.28,1.86,2,1.04,3.17,2.36,3.58,2.44,0,0,.8.91,1.52.11.18-.2,6.21-10.22,6.21-10.22l-.07-.83Z"/><path d="M400.94,8.71c-2.16-2.24-4.7-4.09-7.5-5.46-2.12-1.16-4.4-2.01-6.76-2.54-2.57-.47-5.18-.71-7.8-.71-4.22-.06-8.41.82-12.25,2.57-11.23,5.25-14.5,13.9-15.48,19.99-1.04,6.71-.85,13.22-.82,18.8,0,7.54.17,13.19.4,13.72.35,2.64.95,5.24,1.78,7.78.98,2.65,2.35,5.13,4.07,7.37,5.43,6.58,16.51,9.57,19.26,9.5,2.13,0,10.48.49,16.57-2.64,1.92-.91,3.74-2.01,5.44-3.3,5.01-4.14,7.84-9.48,7.93-10.12.18-1.28.21-.71-.46-1.12s-11.98-7.25-12.42-7.14-.47.79-.93,1.96c-.21.52-3.31,6.6-8.58,8.02-5,1.37-12.14.7-15.32-5.69-2.96-5.95-2.14-17.5-2.16-20.94,0-6.84-.22-13.94,2.07-18.31,1.67-2.76,4.22-4.87,7.25-5.98,3.45-1.05,7.16-.77,10.42.77,1.04.52,1.99,1.22,2.8,2.07.99,1.19,1.85,2.48,2.57,3.84.58,1.54,1.04,2.5,1.45,2.73h0c.27.06.55.06.83,0,.18-.09.29-.51.46-.72,1.04-1.33,7.5-12.64,7.66-12.98s.1-.79-.46-1.47Z"/><path d="M440.1.89l-27.98,76.77s-.4,1.45.4,1.52,14.81,0,14.81,0c0,0,.42.13.63-.54s18.01-52.37,18.01-52.37c0,0,.42-1.39,1.14-.09.71,1.29,8.45,25.08,8.45,25.08,0,0,.43.93-.75,1.04s-13.13,0-13.13,0c0,0-.29.05-1.04,1.24-.75,1.19-6.14,10.43-6.14,10.43,0,0-.7,1.52.36,1.39.86-.1,24.85,0,24.85,0,.24.04.44.22.52.46.11.4,4.6,13.28,4.6,13.28,0,0,0,.11.36.11h14.69s.77-.29.7-.93S452.28.99,452.28.99c0,0,0-.23-.5-.23h-11.39l-.29.13Z"/><path d="M493.87.99l-.19.57v76.88s.19.65.68.77,14.33-.07,14.33-.07c0,0,.53-.27.53-.68V15.36c-.03-.37.25-.69.62-.72.01,0,.02,0,.03,0,.72-.11,15.67,0,15.67,0,0,0,8.54,1.11,9.11,9.87.57,8.76-6.8,10.83-9.23,11.2-2.11.23-4.24.28-6.37.16,0,0-.46-.11-.88.88-.42.99-6.9,11.39-6.9,11.39,0,0-.54,1.29.23,1.41s20.39,0,20.39,0c2.11-.33,4.14-1.06,5.98-2.13,2.38-1.56,4.57-3.4,6.51-5.49,2.08-2.5,3.65-5.39,4.61-8.5.95-2.8,1.42-5.73,1.38-8.69-.32-3.6-1.43-10.42-6.3-15.95-3.64-4.28-8.7-7.11-14.25-7.98-3.81-.65-9.11-.19-15.28-.23-5.94,0-13.83.27-20.24.11l-.45.31Z"/></symbol></svg>
+<script id="dd-editor">/* design-doc の編集機能。finalize.mjs が HTML の末尾へ埋め込む（手で写さない）。
+   E キー（または左上の鉛筆）で編集に入り、Ctrl+S で保存する。保存した HTML にもこの JS が残るので、開き直せばまた直せる。
+   編集用の部品（バナー・ボタン・CSS）は読み込み時にこの JS が足し、保存のときに外す（data-dd-ui を付けたもの）。
+
+   編集の対象（collect）:
+   - 文字を持つ HTML の要素。文字ノードから親へたどり、太字・色・大きさなどの書式の要素（<b>、この JS が付けた span など）は
+     飛ばして、最初に当たった要素を 1 つの編集欄にする。編集欄の中にある編集欄は外し、外側の 1 つにまとめる。
+   - 見出し・段落・箇条書き・表のセルなどは、空でも対象にする（空のセルに書き足せる）。
+   - data-noedit を付けた要素とその中は対象にしない。data-edit を付けた要素は、文字が無くても対象にする。
+   - script・style・編集用の部品の中は除く。図の <foreignObject> の中の HTML の要素は、本文と同じく対象にする。
+   - SVG の <text>/<tspan> で、子に空白以外の文字ノードを直接持つもの。こちらは contenteditable にせず、
+     クリックした位置に入力欄（.dd-svg-input）を重ねて直す。 */
+(function () {
+  'use strict';
+  if (window.ddEditor) return;
+
+  var UI = 'data-dd-ui';
+  var ZW = String.fromCharCode(0x200b); // 空の箇条書きにカーソルを置くための幅の無い文字
+  var MSG_SVG = '図の文字がはみ出していないか見てください';
+  // 色は資料の :root のトークンを使う。トークンを持たない HTML でも見えるよう、同じ色を控えに書く
+  var ACCENT = 'var(--accent,#d62f6c)';
+  var SUPPORT = 'var(--support,#01a0c4)';
+  var DEEP = 'var(--surface-deep,#0a1f47)';
+  var MUTED = 'var(--text-muted,#6b7280)';
+  var ON = 'var(--on-dark,#fff)';
+  var FONT = 'var(--jp,sans-serif)';
+  // 文字に付ける色。明るい面で読める濃い色（--support-on-light など）を資料が持てば、それを使う。
+  // 面ごとの色の切り替えが要るときは、資料の CSS が持つ
+  var SUPPORT_TEXT = 'var(--support-on-light,' + SUPPORT + ')';
+  var ACCENT_TEXT = 'var(--accent-on-light,' + ACCENT + ')';
+  var FILL = '-webkit-text-fill-color:currentColor!important;';
+  // 登壇用スライド（data-dd-format="deck"）では、太字を <b> で付ける。資料の中の手書きの太字と同じ太さ・色になる
+  var DECK = document.documentElement.getAttribute('data-dd-format') === 'deck';
+  var BOLD_SEL = DECK ? 'b,strong' : '.tc-bold';
+  var TC_COLORS = ['tc-cyan', 'tc-mag', 'tc-ink', 'tc-grey', 'tc-white', 'tc-black'];
+  // 空でも編集の対象にする要素と、編集欄を決めるときに飛ばす書式の要素
+  var BASE = { h1: 1, h2: 1, h3: 1, h4: 1, h5: 1, h6: 1, p: 1, li: 1, td: 1, th: 1, dt: 1, dd: 1, figcaption: 1, blockquote: 1 };
+  var FMT_TAGS = { b: 1, strong: 1, em: 1, i: 1, u: 1, s: 1, small: 1, sub: 1, sup: 1, mark: 1 };
+  var SWATCHES = [
+    ['tc-cyan', SUPPORT, 'シアン'],
+    ['tc-mag', ACCENT, 'マゼンタ'],
+    ['tc-ink', DEEP, '濃紺'],
+    ['tc-black', '#000', '黒'],
+    ['tc-grey', MUTED, 'グレー'],
+    ['tc-white', '#fff', '白（濃い地の上の文字）'],
+  ];
+  var CSS = [
+    '.dd-ed-toggle{position:fixed;top:16px;left:16px;width:42px;height:42px;border-radius:50%;border:none;background:' + ACCENT + ';color:' + ON + ';font-size:20px;line-height:1;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .3s;z-index:10001;box-shadow:0 4px 16px rgb(0 0 0 / .3);}',
+    '.dd-ed-toggle.show,.dd-ed-toggle.active{opacity:1;pointer-events:auto;}',
+    '.dd-ed-toggle.active{background:' + DEEP + ';}',
+    '#editBanner{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:' + ACCENT + ';color:' + ON + ';padding:8px 18px;border-radius:99px;font:700 13px/1.4 ' + FONT + ';z-index:10001;opacity:0;pointer-events:none;transition:opacity .3s;display:flex;align-items:center;gap:11px;white-space:nowrap;max-width:94vw;flex-wrap:wrap;justify-content:center;box-shadow:0 4px 16px rgb(0 0 0 / .3);}',
+    '#editBanner.active{opacity:1;pointer-events:auto;}',
+    '.dd-ed-sep{width:1px;height:20px;background:rgb(255 255 255 / .4);}',
+    '.dd-ed-btn{background:rgb(255 255 255 / .2);border:none;color:' + ON + ';border-radius:7px;padding:3px 10px;cursor:pointer;font:700 13px/1.3 ' + FONT + ';}',
+    '.dd-ed-btn:hover{background:rgb(255 255 255 / .38);}',
+    '.dd-ed-sw{width:21px;height:21px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgb(255 255 255 / .5);cursor:pointer;padding:0;}',
+    '.dd-ed-sw:hover{outline:2px solid #fff;outline-offset:1px;}',
+    '.dd-ed-msg{font-weight:400;}',
+    '.dd-ed-hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:' + DEEP + ';color:' + ON + ';padding:7px 16px;border-radius:99px;font:13px/1.4 ' + FONT + ';z-index:10001;opacity:0;pointer-events:none;transition:opacity .4s;}',
+    '.dd-ed-hint.show{opacity:.92;}',
+    'body.edit-active [contenteditable]{outline:2px dashed color-mix(in srgb,' + ACCENT + ' 60%,transparent);outline-offset:3px;border-radius:3px;}',
+    'body.edit-active [contenteditable]:focus{outline:2px solid ' + ACCENT + ';background:color-mix(in srgb,' + ACCENT + ' 6%,transparent);}',
+    'body.edit-active svg text{cursor:text;}',
+    '.dd-svg-input{position:fixed;z-index:10002;box-sizing:border-box;margin:0;padding:1px 4px;border:2px solid ' + ACCENT + ';border-radius:3px;background:#fff;color:#000;font-family:' + FONT + ';outline:none;box-shadow:0 2px 8px rgb(0 0 0 / .3);}',
+    '.tc-cyan{color:' + SUPPORT_TEXT + '!important;' + FILL + '}',
+    '.tc-mag{color:' + ACCENT_TEXT + '!important;' + FILL + '}',
+    '.tc-ink{color:' + DEEP + '!important;' + FILL + '}',
+    '.tc-grey{color:' + MUTED + '!important;' + FILL + '}',
+    '.tc-black{color:#000!important;-webkit-text-fill-color:#000!important;}',
+    '.tc-white{color:#fff!important;-webkit-text-fill-color:#fff!important;}',
+    '.tc-bold{font-weight:900!important;}',
+    '@media (max-width:640px){.dd-ed-label{display:none;}}',
+    '@media print{[data-dd-ui],.dd-svg-input{display:none!important;}body.edit-active [contenteditable]{outline:none!important;background:none!important;}}',
+  ].join('\n');
+
+  var state = { on: false, dirty: false, fileHandle: null, svg: null, timer: null };
+  var ui = {};
+
+  function ownsText(el) {
+    for (var n = el.firstChild; n; n = n.nextSibling) if (n.nodeType === 3 && n.data.trim()) return true;
+    return false;
+  }
+  function isSvgText(el) {
+    return el instanceof SVGElement && (el.localName === 'text' || el.localName === 'tspan');
+  }
+  // <foreignObject> の中の HTML の要素は、svg の中にあっても本文と同じく contenteditable で直す
+  function inForeign(el) {
+    return !(el instanceof SVGElement) && !!(el.closest && el.closest('foreignObject'));
+  }
+  function inSvg(el) {
+    if (inForeign(el)) return false;
+    return el instanceof SVGElement || !!(el.closest && el.closest('svg'));
+  }
+  function excluded(el) {
+    var t = el.localName;
+    return t === 'script' || t === 'style' || t === 'noscript' || el.hasAttribute(UI) || el.hasAttribute('data-noedit');
+  }
+  // この編集機能が付けた書式の span か（class は tc- で始まるものだけ、style は文字の大きさと太さだけを持つ）
+  function isFmtSpan(el) {
+    if (!el || el.localName !== 'span' || !el.attributes.length) return false;
+    for (var a = 0; a < el.attributes.length; a++) if (el.attributes[a].name !== 'class' && el.attributes[a].name !== 'style') return false;
+    for (var c = 0; c < el.classList.length; c++) if (el.classList[c].indexOf('tc-') !== 0) return false;
+    for (var p = 0; p < el.style.length; p++) if (el.style[p] !== 'font-size' && el.style[p] !== 'font-weight') return false;
+    return true;
+  }
+  function isFmtEl(el) {
+    return !(el instanceof SVGElement) && (FMT_TAGS[el.localName] === 1 || isFmtSpan(el));
+  }
+  function unwrapEl(el) {
+    var p = el.parentNode;
+    while (el.firstChild) p.insertBefore(el.firstChild, el);
+    p.removeChild(el);
+  }
+  function noText(str) { return str.split(ZW).join('').trim() === ''; }
+
+  // 編集の対象を文書順に返す。HTML の要素は contenteditable、SVG の <text>/<tspan> は入力欄で直す
+  function collect(root) {
+    root = root || document.body;
+    var found = [];
+    if (!root || excluded(root)) return found;
+    // body（と html）そのものは対象にしない。直下に文字があっても body を contenteditable にすると全体が 1 つの編集欄になる
+    var add = function (e) { if (e && e !== document.body && e !== document.documentElement && found.indexOf(e) < 0) found.push(e); };
+    var visit = function (n) {
+      if (n.nodeType === 3) {
+        if (noText(n.data)) return;
+        var p = n.parentNode;
+        if (!p || p.nodeType !== 1) return;
+        if (p instanceof SVGElement) { if (isSvgText(p)) add(p); return; }
+        // 書式の要素は飛ばし、その外の要素を編集欄にする（<foreignObject> の外へは出ない）
+        while (isFmtEl(p) && p.parentElement && !(p.parentElement instanceof SVGElement)) p = p.parentElement;
+        add(p);
+        return;
+      }
+      if (n instanceof SVGElement) return;
+      if (n.hasAttribute('data-edit') || (BASE[n.localName] === 1 && !n.firstElementChild && noText(n.textContent))) add(n);
+    };
+    visit(root);
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) { return n.nodeType === 1 && excluded(n) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT; },
+    });
+    for (var n = walker.nextNode(); n; n = walker.nextNode()) visit(n);
+    // 編集欄の中にある編集欄は外し、外側の 1 つにまとめる。SVG の文字はそのまま残す
+    return found.filter(function (e) {
+      if (e instanceof SVGElement) return true;
+      for (var a = e.parentElement; a; a = a.parentElement) if (found.indexOf(a) >= 0) return false;
+      return true;
+    });
+  }
+
+  function el(tag, attrs, text) {
+    var e = document.createElement(tag);
+    for (var k in attrs) if (Object.prototype.hasOwnProperty.call(attrs, k)) e.setAttribute(k, attrs[k]);
+    if (text) e.textContent = text;
+    return e;
+  }
+
+  function build() {
+    var old = document.querySelectorAll('[' + UI + ']');
+    for (var i = 0; i < old.length; i++) old[i].remove();
+
+    var style = el('style', { 'data-dd-ui': '' });
+    style.textContent = CSS;
+    (document.head || document.documentElement).appendChild(style);
+
+    var box = el('div', { 'data-dd-ui': '' });
+    ui.toggle = el('button', { class: 'dd-ed-toggle', type: 'button', title: '編集モード (E)' }, '✎');
+    ui.banner = el('div', { id: 'editBanner' });
+    ui.banner.appendChild(el('span', { class: 'dd-ed-label' }, '編集モード'));
+    ui.banner.appendChild(el('span', { class: 'dd-ed-sep' }));
+    ui.banner.appendChild(fmtButton(el('button', { class: 'dd-ed-btn', type: 'button', title: '太字（選んでから押す）' }, 'B'), applyBold));
+    ui.banner.appendChild(fmtButton(el('button', { class: 'dd-ed-btn', type: 'button', title: '文字を小さく' }, 'A−'), function () { wrap(function (s) { s.style.fontSize = '0.83em'; }); }));
+    ui.banner.appendChild(fmtButton(el('button', { class: 'dd-ed-btn', type: 'button', title: '文字を大きく' }, 'A＋'), function () { wrap(function (s) { s.style.fontSize = '1.2em'; }); }));
+    SWATCHES.forEach(function (sw) {
+      var b = el('button', { class: 'dd-ed-sw', type: 'button', title: sw[2] });
+      b.style.background = sw[1];
+      ui.banner.appendChild(fmtButton(b, function () { wrap(function (s) { s.className = sw[0]; }); }));
+    });
+    ui.banner.appendChild(fmtButton(el('button', { class: 'dd-ed-btn', type: 'button', title: '色と大きさを標準に戻す' }, '標準'), resetFormat));
+    ui.banner.appendChild(el('span', { class: 'dd-ed-sep' }));
+    ui.defaultMsg = window.showSaveFilePicker ? 'Ctrl+S で保存' : 'Ctrl+S でダウンロード保存';
+    ui.msg = el('span', { class: 'dd-ed-msg' }, ui.defaultMsg);
+    ui.banner.appendChild(ui.msg);
+    ui.hint = el('div', { class: 'dd-ed-hint' }, 'E キーで編集 ・ Ctrl+S で保存');
+    box.appendChild(ui.toggle);
+    box.appendChild(ui.banner);
+    box.appendChild(ui.hint);
+    document.body.appendChild(box);
+
+    var hideTimer = null;
+    var show = function () { clearTimeout(hideTimer); ui.toggle.classList.add('show'); };
+    var hide = function () { hideTimer = setTimeout(function () { if (!state.on && !near) ui.toggle.classList.remove('show'); }, 400); };
+    // 左上 80px に入ったら鉛筆を出す。下の要素へのクリックを遮らないよう、見えない領域は置かず座標で見る
+    var near = false;
+    document.addEventListener('mousemove', function (e) {
+      var now = e.clientX < 80 && e.clientY < 80;
+      if (now === near) return;
+      near = now;
+      if (now) show(); else hide();
+    });
+    ui.toggle.addEventListener('mouseenter', show);
+    ui.toggle.addEventListener('mouseleave', hide);
+    ui.toggle.addEventListener('click', toggle);
+  }
+
+  function fmtButton(b, fn) {
+    b.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    b.addEventListener('click', fn);
+    return b;
+  }
+
+  function flash(msg, ms) {
+    if (!ui.msg) return;
+    ui.msg.textContent = msg;
+    clearTimeout(state.timer);
+    state.timer = setTimeout(function () { ui.msg.textContent = ui.defaultMsg; }, ms);
+  }
+
+  function enable() {
+    if (state.on) return;
+    state.on = true;
+    document.body.classList.add('edit-active');
+    collect(document.body).forEach(function (e) { if (!inSvg(e)) e.setAttribute('contenteditable', 'true'); });
+    ui.toggle.classList.add('active', 'show');
+    ui.banner.classList.add('active');
+  }
+  function disable() {
+    closeSvg(true);
+    state.on = false;
+    document.body.classList.remove('edit-active');
+    var eds = document.querySelectorAll('[contenteditable]');
+    for (var i = 0; i < eds.length; i++) eds[i].removeAttribute('contenteditable');
+    ui.toggle.classList.remove('active', 'show');
+    ui.banner.classList.remove('active');
+  }
+  function toggle() { if (state.on) disable(); else enable(); }
+
+  // 書式は選んだ範囲を span で包む
+  function selectionIn() {
+    var sel = window.getSelection();
+    if (!sel || !sel.rangeCount || sel.isCollapsed) return null;
+    var node = sel.getRangeAt(0).commonAncestorContainer;
+    if (node.nodeType === 3) node = node.parentElement;
+    return node && node.closest('[contenteditable="true"]') ? { sel: sel, node: node } : null;
+  }
+  function wrap(decorate, tag) {
+    var s = selectionIn();
+    if (!s) return null;
+    var range = s.sel.getRangeAt(0);
+    var span = document.createElement(tag || 'span');
+    decorate(span);
+    span.appendChild(range.extractContents());
+    range.insertNode(span);
+    var nr = document.createRange();
+    nr.selectNodeContents(span);
+    s.sel.removeAllRanges();
+    s.sel.addRange(nr);
+    state.dirty = true;
+    return span;
+  }
+  // 色と大きさを外す。太字は残す。外した後に属性の無くなった書式の span は、包みごと外す
+  function resetFormat() {
+    var span = wrap(function () {});
+    if (!span) return;
+    var host = span.closest('[contenteditable="true"]');
+    var list = Array.prototype.slice.call(span.querySelectorAll('span'));
+    // 色を付けた span の内側の文字だけを選んだときは、外側の span が書式を持つ。編集欄の手前までさかのぼって外す
+    for (var p = span.parentElement; p && p !== host; p = p.parentElement) if (p.localName === 'span') list.push(p);
+    list.push(span);
+    list.forEach(function (x) {
+      var mine = x === span || isFmtSpan(x);
+      clearFormat(x, mine);
+      if (mine && !x.attributes.length) unwrapEl(x);
+    });
+    if (host) host.normalize();
+  }
+  // この編集機能が付けた色（tc- で始まる class）と文字の大きさだけを外す。太字と、札などの元からの class は残す
+  // 文字の大きさは、この編集機能が付けた span（mine）のものだけを外す。ひな形が元から持つ大きさの指定は残す
+  function clearFormat(x, mine) {
+    var keep = (x.getAttribute('class') || '').split(/\s+/).filter(function (c) { return c && (c.indexOf('tc-') !== 0 || c === 'tc-bold'); });
+    if (keep.length) x.setAttribute('class', keep.join(' ')); else x.removeAttribute('class');
+    if (mine) x.style.fontSize = '';
+    if (x.hasAttribute('style') && !x.getAttribute('style')) x.removeAttribute('style');
+  }
+  function applyBold() {
+    var s = selectionIn();
+    if (!s) return;
+    var host = s.node.closest('[contenteditable="true"]');
+    var bold = s.node.closest(BOLD_SEL);
+    if (bold && bold !== host && host.contains(bold)) {
+      var parent = bold.parentNode;
+      unwrapEl(bold);
+      parent.normalize();
+      state.dirty = true;
+      return;
+    }
+    wrap(function (x) { if (!DECK) x.className = 'tc-bold'; }, DECK ? 'b' : 'span');
+  }
+
+  // 箇条書きの Enter で次の項目、空の項目の Backspace で項目を消す
+  function onListKey(e) {
+    if (!state.on || !e.target.closest) return;
+    var li = e.target.closest('li[contenteditable]');
+    if (!li) return;
+    var empty = li.textContent.split(ZW).join('').trim() === '';
+    var sel = window.getSelection();
+    var range = document.createRange();
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+      e.preventDefault();
+      if (empty) {
+        // 空の項目は消して箇条書きから抜ける（項目が 1 つだけのときは残す）
+        if (li.parentNode && li.parentNode.children.length > 1) { li.remove(); state.dirty = true; } else li.blur();
+        return;
+      }
+      var ni = document.createElement('li');
+      ni.className = li.className;
+      ni.setAttribute('contenteditable', 'true');
+      ni.textContent = ZW;
+      li.after(ni);
+      state.dirty = true;
+      range.selectNodeContents(ni);
+      range.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(range);
+      ni.focus();
+    } else if (e.key === 'Backspace' && empty) {
+      var prev = li.previousElementSibling;
+      e.preventDefault();
+      li.remove();
+      state.dirty = true;
+      if (prev && prev.matches('li[contenteditable]')) {
+        range.selectNodeContents(prev);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        prev.focus();
+      }
+    }
+  }
+
+  // SVG の文字: クリックした文字ノードの上に入力欄を重ね、Enter かフォーカスが外れたら書き戻す。Esc と空の確定はやめる
+  // 文字と <tspan> が混ざった <text> でも、直すのはクリックした文字ノード 1 つだけなので順序が崩れない
+  function textNodes(t) {
+    var out = [];
+    for (var n = t.firstChild; n; n = n.nextSibling) if (n.nodeType === 3 && n.data.trim()) out.push(n);
+    return out;
+  }
+  function rectOf(node) {
+    var r = document.createRange();
+    r.selectNodeContents(node);
+    var b = r.getBoundingClientRect();
+    return b.width || b.height ? b : node.parentNode.getBoundingClientRect();
+  }
+  function pickNode(t, x, y) {
+    var nodes = textNodes(t);
+    if (nodes.length < 2 || (!x && !y)) return nodes[0];
+    var best = nodes[0];
+    var bestD = Infinity;
+    nodes.forEach(function (n) {
+      var b = rectOf(n);
+      var dx = x < b.left ? b.left - x : x > b.right ? x - b.right : 0;
+      var dy = y < b.top ? b.top - y : y > b.bottom ? y - b.bottom : 0;
+      var d = dx * dx + dy * dy;
+      if (d < bestD) { bestD = d; best = n; }
+    });
+    return best;
+  }
+  function place(input, node) {
+    var r = rectOf(node);
+    var h = Math.max(24, r.height + 8);
+    input.style.left = Math.round(r.left - 6) + 'px';
+    input.style.top = Math.round(r.top + r.height / 2 - h / 2) + 'px';
+    input.style.width = Math.round(Math.max(80, r.width + 48)) + 'px';
+    input.style.height = Math.round(h) + 'px';
+    input.style.fontSize = Math.round(Math.max(12, r.height * 0.8)) + 'px';
+  }
+  function openSvg(t, x, y) {
+    closeSvg(true);
+    var node = pickNode(t, x, y);
+    if (!node) return;
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'dd-svg-input';
+    input.value = node.data.trim();
+    place(input, node);
+    var cur = { node: node, input: input, before: input.value, follow: function () { place(input, node); } };
+    state.svg = cur;
+    input.addEventListener('keydown', function (e) {
+      if (e.isComposing) return;
+      if (e.key === 'Enter') { e.preventDefault(); closeSvg(true); }
+      else if (e.key === 'Escape') { e.preventDefault(); closeSvg(false); }
+    });
+    input.addEventListener('blur', function () { if (state.svg === cur) closeSvg(true); });
+    window.addEventListener('scroll', cur.follow, true);
+    window.addEventListener('resize', cur.follow);
+    document.body.appendChild(input);
+    input.focus();
+    input.select();
+  }
+  function closeSvg(commit) {
+    var cur = state.svg;
+    if (!cur) return;
+    state.svg = null;
+    window.removeEventListener('scroll', cur.follow, true);
+    window.removeEventListener('resize', cur.follow);
+    var value = cur.input.value.trim();
+    cur.input.remove();
+    // 空にすると文字ノードが消え、二度とクリックできなくなるので確定しない
+    if (commit && value && value !== cur.before) {
+      var d = cur.node.data;
+      cur.node.data = d.match(/^\s*/)[0] + value + d.match(/\s*$/)[0];
+      state.dirty = true;
+      flash(MSG_SVG, 5000);
+    }
+  }
+  function onClick(e) {
+    if (!state.on || !e.target.closest) return;
+    var t = e.target.closest('text, tspan');
+    if (!t || !isSvgText(t) || !ownsText(t) || t.closest('[' + UI + ']')) return;
+    e.preventDefault();
+    openSvg(t, e.clientX, e.clientY);
+  }
+
+  function emOf(x) { var m = /^([\d.]+)em$/.exec(x.style.fontSize || ''); return m ? parseFloat(m[1]) : null; }
+  function tidyAttrs(x) {
+    if (x.hasAttribute('class') && !x.classList.length) x.removeAttribute('class');
+    if (x.hasAttribute('style') && !x.getAttribute('style').trim()) x.removeAttribute('style');
+  }
+  // 保存する複製の上で、書式の要素を畳む。
+  // 空の書式の要素、太字の入れ子、祖先と同じ色の class、子が 1 つだけの入れ子の span（文字の大きさは掛け合わせる）を畳む。
+  // 登壇用スライドでは、旧形式の太字（span.tc-bold）を <b> に替える
+  function cleanup(root) {
+    var body = root.querySelector('body');
+    if (!body) return;
+    var each = function (sel, fn) { Array.prototype.slice.call(body.querySelectorAll(sel)).forEach(fn); };
+    if (DECK) {
+      each('span.tc-bold', function (x) {
+        if (x.closest('svg')) return;
+        x.classList.remove('tc-bold'); tidyAttrs(x);
+        var b = document.createElement('b');
+        while (x.firstChild) b.appendChild(x.firstChild);
+        if (x.attributes.length) x.appendChild(b); else x.parentNode.replaceChild(b, x);
+      });
+    }
+    var colorSel = TC_COLORS.map(function (c) { return '.' + c; }).join(',');
+    var changed = true;
+    for (var guard = 0; changed && guard < 20; guard++) {
+      changed = false;
+      each('span,b,strong', function (x) {
+        if (!body.contains(x) || x.closest('svg,script,style')) return;
+        var bold = x.localName !== 'span';
+        if (!bold && !isFmtSpan(x)) return;
+        if (!x.querySelector('img,br,svg')) {
+          var txt = x.textContent.split(ZW).join('');
+          if (txt === '') { x.remove(); changed = true; return; }
+          if (!txt.trim()) { unwrapEl(x); changed = true; return; } // 空白だけなら書式だけ外し、空白は残す
+        }
+        if (bold) {
+          var outer = x.parentElement && x.parentElement.closest('b,strong');
+          if (outer && body.contains(outer)) { unwrapEl(x); changed = true; }
+          return;
+        }
+        TC_COLORS.forEach(function (c) {
+          if (!x.classList.contains(c)) return;
+          var anc = x.parentElement && x.parentElement.closest(colorSel);
+          if (anc && anc.classList.contains(c)) { x.classList.remove(c); changed = true; }
+        });
+        var kids = Array.prototype.filter.call(x.childNodes, function (n) { return !(n.nodeType === 3 && n.nodeValue === ''); });
+        var fa = x.style.fontSize;
+        if (kids.length === 1 && isFmtSpan(kids[0]) && x.style.length === (fa ? 1 : 0)) {
+          var inner = kids[0];
+          if (fa) {
+            var a = emOf(x), b2 = emOf(inner);
+            if (!inner.style.fontSize) inner.style.fontSize = fa;
+            else if (a !== null && b2 !== null) inner.style.fontSize = (+(a * b2).toFixed(3)) + 'em';
+          }
+          var innerColor = TC_COLORS.some(function (c) { return inner.classList.contains(c); });
+          Array.prototype.slice.call(x.classList).forEach(function (c) { if (TC_COLORS.indexOf(c) < 0 || !innerColor) inner.classList.add(c); });
+          unwrapEl(x); changed = true; return;
+        }
+        var f = emOf(x);
+        if (f !== null && Math.abs(f - 1) < 0.02) { x.style.removeProperty('font-size'); changed = true; }
+        tidyAttrs(x);
+        if (!x.attributes.length) { unwrapEl(x); changed = true; }
+      });
+    }
+    body.normalize();
+  }
+
+  // 保存用の HTML。生きている DOM は触らず、複製から編集の部品と状態を外す
+  function serialize() {
+    var root = document.documentElement.cloneNode(true);
+    var drop = root.querySelectorAll('[' + UI + '], .dd-svg-input');
+    for (var i = 0; i < drop.length; i++) drop[i].remove();
+    var eds = root.querySelectorAll('[contenteditable]');
+    for (var j = 0; j < eds.length; j++) eds[j].removeAttribute('contenteditable');
+    var act = root.querySelectorAll('.edit-active, body[class=""]');
+    for (var k = 0; k < act.length; k++) {
+      act[k].classList.remove('edit-active');
+      if (!act[k].getAttribute('class')) act[k].removeAttribute('class');
+    }
+    // 箇条書きの足場の文字（ZW）は本文の文字ノードからだけ消す。script の中は触らない
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    var scaffolds = [];
+    for (var n = w.nextNode(); n; n = w.nextNode()) {
+      var p = n.parentNode && n.parentNode.localName;
+      if (p === 'script' || p === 'style' || n.data.indexOf(ZW) < 0) continue;
+      n.data = n.data.split(ZW).join('');
+      if (p === 'li') scaffolds.push(n.parentNode);
+    }
+    // Enter で足したまま何も書かなかった項目は、保存に残さない
+    scaffolds.forEach(function (li) { if (li.parentNode && !li.firstElementChild && !li.textContent.trim()) li.remove(); });
+    cleanup(root);
+    return '<!doctype html>\n' + root.outerHTML;
+  }
+
+  function fileName() {
+    var last = decodeURIComponent(location.pathname.split('/').pop() || '');
+    return /\.html?$/i.test(last) ? last : (document.title || 'document') + '.html';
+  }
+  function download(html) {
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+    a.download = fileName();
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    flash('ダウンロードしました（元のファイルと置き換えてください）', 3000);
+  }
+  async function save() {
+    closeSvg(true);
+    var html = serialize();
+    if (window.showSaveFilePicker) {
+      try {
+        if (!state.fileHandle) {
+          state.fileHandle = await window.showSaveFilePicker({
+            suggestedName: fileName(),
+            types: [{ description: 'HTML', accept: { 'text/html': ['.html'] } }],
+          });
+        }
+        var w = await state.fileHandle.createWritable();
+        await w.write(html);
+        await w.close();
+        state.dirty = false;
+        flash('保存しました', 2000);
+        return;
+      } catch (err) {
+        if (err && err.name === 'AbortError') return;
+      }
+    }
+    download(html);
+    state.dirty = false;
+  }
+
+  function onKey(e) {
+    // 編集中か未保存の直しがあるときだけ Ctrl+S を受ける。それ以外はブラウザの保存に任せる
+    if ((e.ctrlKey || e.metaKey) && !e.altKey && (e.key === 's' || e.key === 'S') && (state.on || state.dirty)) {
+      e.preventDefault();
+      save();
+      return;
+    }
+    if (e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
+    if (e.key !== 'e' && e.key !== 'E') return;
+    var t = e.target;
+    if (t && (t.isContentEditable || /^(input|textarea|select)$/i.test(t.tagName || ''))) return;
+    toggle();
+  }
+
+  function init() {
+    build();
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('keydown', onListKey);
+    document.addEventListener('click', onClick);
+    document.addEventListener('input', function (e) { if (state.on && e.target !== (state.svg && state.svg.input)) state.dirty = true; });
+    window.addEventListener('beforeunload', function (e) { if (state.dirty) { e.preventDefault(); e.returnValue = ''; } });
+    // スクリーンショット（ヘッドレス）には案内を写さない
+    // 登壇用スライドでは、ナビ（deck.js）の案内が編集と保存のキーも伝えるので、ここでは出さない
+    if (DECK) ui.hint.remove();
+    else if (!/Headless/.test(navigator.userAgent)) {
+      ui.hint.classList.add('show');
+      setTimeout(function () { ui.hint.classList.remove('show'); }, 3800);
+    }
+  }
+
+  window.ddEditor = { collect: collect, enable: enable, disable: disable, serialize: serialize };
+  if (document.body) init();
+  else document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+
+</body>
+</html>
