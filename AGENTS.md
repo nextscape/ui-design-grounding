@@ -29,7 +29,7 @@ skills/
     SKILL.md                   ナレッジベースを参照するワークフロー定義
 
 docs/
-  superpowers/                 設計メモ、実装計画
+  superpowers/                 設計メモ（specs/）
 ```
 
 ## 二層構造
